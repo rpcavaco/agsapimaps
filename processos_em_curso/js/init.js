@@ -4,6 +4,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/ContentPane",
 	"dojo/dom",
+	"esri/config",
 	"esri/map", 
 	"esri/geometry/Extent",
 	"esri/urlUtils",
@@ -17,6 +18,7 @@ require([
 	BorderContainer,
 	ContentPane,
 	dom,
+	esriConfig,
 	Map,
 	Extent,
 	urlUtils,
@@ -28,6 +30,15 @@ require([
 
 		parser.parse();
 
+		esriConfig.portalUrl = "https://portalsig.cm-porto.pt/arcgis";
+
+		const webmap = new WebMap({
+		  portalItem: { // autocasts as new PortalItem()
+			id: "343749483d5d4c86b417a8b6f0aec18d" // "Licenciamento em curso"
+		  }
+		});
+
+		/*
 		var webmap = {};
 		webmap.item = {
 			"title":"Soil Survey Map of USA",
@@ -58,6 +69,7 @@ require([
 			},
 			"version": "1.1"
 		};
+		*/
 
 		dom.byId("title").innerHTML = webmap.item.title;
 		dom.byId("subtitle").innerHTML = webmap.item.snippet;
@@ -68,16 +80,16 @@ require([
 
 			//add the scalebar 
 			var scalebar = new Scalebar({
-			map: map,
-			scalebarUnit: "english"
+				map: map,
+				scalebarUnit: "metric"
 			});
 
 			//add the legend. Note that we use the utility method getLegendLayers to get 
 			//the layers to display in the legend from the createMap response.
 			var legendLayers = arcgisUtils.getLegendLayers(response); 
 			var legendDijit = new Legend({
-			map: map,
-			layerInfos: legendLayers
+				map: map,
+				layerInfos: legendLayers
 			},"legend");
 			legendDijit.startup();
 
