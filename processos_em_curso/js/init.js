@@ -5,6 +5,7 @@ require([
 	"dijit/layout/ContentPane",
 	"dojo/dom",
 	"esri/config",
+	"esri/WebMap",
 	"esri/map", 
 	"esri/geometry/Extent",
 	"esri/urlUtils",
@@ -19,6 +20,7 @@ require([
 	ContentPane,
 	dom,
 	esriConfig,
+	WebMap,
 	Map,
 	Extent,
 	urlUtils,
@@ -71,8 +73,10 @@ require([
 		};
 		*/
 
-		dom.byId("title").innerHTML = webmap.item.title;
-		dom.byId("subtitle").innerHTML = webmap.item.snippet;
+		//dom.byId("title").innerHTML = webmap.item.title;
+		//dom.byId("subtitle").innerHTML = webmap.item.snippet;
+		dom.byId("title").innerHTML = "Titulo";
+		dom.byId("subtitle").innerHTML = "Sub-título";
 
 		arcgisUtils.createMap(webmap,"map").then(function(response){
 
