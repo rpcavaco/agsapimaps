@@ -1,105 +1,11 @@
-require([
-	"dojo/parser",
-	"dojo/ready",
-	"dijit/layout/BorderContainer",
-	"dijit/layout/ContentPane",
-	"dojo/dom",
-	"esri/config",
-	"esri/WebMap",
-	"esri/map", 
-	"esri/geometry/Extent",
-	"esri/urlUtils",
-	"esri/arcgis/utils",
-	"esri/dijit/Legend",
-	"esri/dijit/Scalebar",
-	"dojo/domReady!"
-  ], function(
-	parser,
-	ready,
-	BorderContainer,
-	ContentPane,
-	dom,
-	esriConfig,
-	WebMap,
-	Map,
-	Extent,
-	urlUtils,
-	arcgisUtils,
-	Legend,
-	Scalebar
-  ) {
-	ready(function(){
-
-		parser.parse();
-
-		esriConfig.portalUrl = "https://portalsig.cm-porto.pt/arcgis";
-
-		const webmap = new WebMap({
-		  portalItem: { // autocasts as new PortalItem()
-			id: "343749483d5d4c86b417a8b6f0aec18d" // "Licenciamento em curso"
-		  }
-		});
-
-		/*
-		var webmap = {};
-		webmap.item = {
-			"title":"Soil Survey Map of USA",
-			"snippet": "This map shows the Soil Survey Geographic (SSURGO) by the United States Department of Agriculture's Natural Resources Conservation Service.",
-			"extent": [[-139.4916, 10.7191],[-52.392, 59.5199]]
-		};
-
-		webmap.itemData = {
-			"operationalLayers": [{
-				"url": "https://server.arcgisonline.com/ArcGIS/rest/services/Specialty/Soil_Survey_Map/MapServer",
-				"visibility": true,
-				"opacity": 0.75,
-				"title": "Soil Survey Map",
-				"itemId": "204d94c9b1374de9a21574c9efa31164"
-			}],
-			"baseMap": {
-				"baseMapLayers": [{
-					"opacity": 1,
-					"visibility": true,
-					"url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer"
-				},{
-					"isReference": true,
-					"opacity": 1,
-					"visibility": true,
-					"url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Reference_Overlay/MapServer"
-				}],
-				"title": "World_Terrain_Base"
-			},
-			"version": "1.1"
-		};
-		*/
-
-		//dom.byId("title").innerHTML = webmap.item.title;
-		//dom.byId("subtitle").innerHTML = webmap.item.snippet;
-		dom.byId("title").innerHTML = "Titulo";
-		dom.byId("subtitle").innerHTML = "Sub-título";
-
-		arcgisUtils.createMap(webmap,"map").then(function(response){
-
-			var map = response.map;
-
-			//add the scalebar 
-			var scalebar = new Scalebar({
-				map: map,
-				scalebarUnit: "metric"
-			});
-
-			//add the legend. Note that we use the utility method getLegendLayers to get 
-			//the layers to display in the legend from the createMap response.
-			var legendLayers = arcgisUtils.getLegendLayers(response); 
-			var legendDijit = new Legend({
-				map: map,
-				layerInfos: legendLayers
-			},"legend");
-			legendDijit.startup();
-
-		});
-
-
+require(["esri/Map", "esri/views/MapView"], function(Map, MapView) {
+	var map = new Map({
+	  basemap: "topo-vector"
 	});
-
+	var view = new MapView({
+	  container: "viewDiv", // Reference to the view div created in step 5
+	  map: map, // Reference to the map object created before the view
+	  zoom: 4, // Sets zoom level based on level of detail (LOD)
+	  center: [15, 65] // Sets center point of view using longitude,latitude
+	});
   });
