@@ -89,7 +89,7 @@ require([
 	"esri/widgets/ScaleBar",
 	"esri/widgets/CoordinateConversion",
 	//"esri/widgets/Expand",
-	"dgrid/Grid",
+	//"dgrid/Grid",
 	"dojo/query",
 	"dojo/_base/array"
 ], function(
@@ -101,7 +101,7 @@ require([
 	ScaleBar,
 	CoordinateConversion,
 	//Expand,
-	Grid,
+	//Grid,
 	query,
 	array
 ) {
@@ -225,7 +225,7 @@ require([
 
 		if (selLayer!=null) {	
 
-			let hlight, grid;
+			let hlight; //, grid;
 
 			function qryFeats(scrPt) {
 				const pt = view.toMap(scrPt);
@@ -249,10 +249,11 @@ require([
 						);
 						
 						return selLayer.queryRelatedFeatures({
-							outFields: ["*"],
+							outFields: Object.keys(ATTRS_CFG),
 							relationshipId: selLayer.relationships[0].id,
 							objectIds: objectIds
 						});
+
 					}					
 				).then(
 					function(relatedFeatureSetByObjectId){
@@ -281,6 +282,7 @@ require([
 							results.appendChild(gridDiv);
 
 							// destroy current grid if exists
+							/*
 							if (grid) {
 							  grid.destroy();
 							}
@@ -297,6 +299,22 @@ require([
 
 							// add the data to the grid
 							grid.renderArray(rows);
+							*/
+
+							// Listas
+
+							let row, ulEl, liEl;
+							for (let i=0; i<rows.length; i++) {
+								ulEl = document.createElement("ul");
+								gridDiv.appendChild(ulEl);
+								for (let fld in rows[i]) {
+									liEl = document.createElement("li");
+									ulEl.appendChild(liEl);
+									liEl.innerText = String.format("{0}: {1}", fld, rows[i][fld]);
+								}
+								break; // solamente uma row, por enquanto
+							}
+
 						});
 						//clearbutton.style.display = "inline";
 					}
