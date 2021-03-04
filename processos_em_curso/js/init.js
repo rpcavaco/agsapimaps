@@ -310,7 +310,7 @@ require([
 								for (let fld in rows[i]) {
 									liEl = document.createElement("li");
 									ulEl.appendChild(liEl);
-									liEl.innerText = String.format("{0}: {1}", fld, rows[i][fld]);
+									liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
 								}
 								break; // solamente uma row, por enquanto
 							}
