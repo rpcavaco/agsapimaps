@@ -329,15 +329,15 @@ require([
 				if (hlight) {
 					hlight.remove();
 				}
-				if (grid) {
+				/* if (grid) {
 					grid.destroy();
-				}
+				} */
 				//clearbutton.style.display = "none";
 			}
 		
-			selLayer.load().then(function() {
+			/*selLayer.load().then(function() {
 				return g = new Grid();
-			});
+			});*/
 			
 			view.on("click", function(evt) {
 				clearMap();
