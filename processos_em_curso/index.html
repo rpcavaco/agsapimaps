@@ -10,28 +10,39 @@
 	<meta name="description" content="CM-Porto - Operações urbanísticas - processos de licenciamento em curso"> 
 	<meta name="author" content="DMSI-SIG CM-Porto"> 
 
-    <style>
-		html,
-		body,
-		#viewDiv {
-		  padding: 0;
-		  margin: 0;
-		  height: 100%;
-		  width: 100%;
-		}
-	</style>
-
-	<link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+	<link href='shortcut icon' rel='media/fcmp.png' />
+	<link href='media/fcmp.png' rel='icon' type='image/png' />
+	
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="/esri_js_api/4.18/dgrid/css/dgrid.css">
+	<link rel="stylesheet" href="/esri_js_api/4.18/esri/themes/light/main.css" />
 
     <!-- <link rel="stylesheet" href="css/layout.css"/> -->
 
-	<script src="https://js.arcgis.com/4.18/"></script>
+	<script src="/esri_js_api/4.18/init.js"></script>
+	<script src="js/basics.js"></script>
+	<script src="js/cfg.js"></script>
 	<script src="js/init.js"></script>
 
 </head> 
 <body> 
+	<img id="logo" src="media/splash-logo.png" />
 
-	<div id="viewDiv"></div>
+	<div id="titlearea" class="semi-square">
+		<p>Gestão de Operações Urbanísticas</p>
+	</div>
+	
+	<div id="viewDiv">
+		<div class="esri-ui-bottom-right esri-ui-corner">
+			<div id="gridDiv" class="esri-component esri-widget">
+				<h2>Processos em curso</h2>
+				<p>Faça click num lote para saber quais os processos em curso no mesmo.</p>
+				<div id="queryResults"></div>
+				<button id="clearButton" class="esri-component esri-widget">Limpar</button>
+			</div>
+		</div>
+		<img id="loading" src="media/816.gif" />
+	</div>
 
 </body> 
 </html> 
