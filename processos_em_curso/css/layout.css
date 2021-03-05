@@ -74,9 +74,20 @@ body,
 	list-style-type: none;
 }
 
+.float-right {
+	float: right;
+}
+
 li:nth-child(even) { 
 	background-color: #eee; 
 } 
+
+.attrs-list {
+	border-left-width: 2px;
+	border-left-style: solid;
+	border-left-color: #999;
+	padding-left: 8px;
+}
 
 .iconbtn {
 	font-family: "CalciteWebCoreIcons";

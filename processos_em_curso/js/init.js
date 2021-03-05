@@ -325,7 +325,8 @@ require([
 
 									ulEl = document.createElement("ul");
 									gdpages[pg].appendChild(ulEl);
-
+									ulEl.setAttribute("class", "attrs-list");
+									
 									for (let fld in ATTRS_CFG[pg]) {
 
 										liEl = document.createElement("li");
@@ -339,13 +340,27 @@ require([
 										liEl.appendChild(spEl);
 									}
 
-									if (pg == "PAG01") {
-										btElRight = document.createElement("button");
-										gdpages[pg].appendChild(btElRight);
-										btElRight.setAttribute("class", "iconbtn");
-										spEl = document.createElement("span");
-										spEl.setAttribute("class", "right-arrow");
-										btElRight.appendChild(spEl);
+									switch (pg) {
+										case "PAG01":
+											btElRight = document.createElement("button");
+											gdpages[pg].appendChild(btElRight);
+											btElRight.setAttribute("class", "iconbtn float-right");
+											spEl = document.createElement("span");
+											spEl.setAttribute("class", "right-arrow");
+											btElRight.appendChild(spEl);
+											spEl.textContent = "Página seguinte";
+											break;
+
+										case "PAG02":
+											btElRight = document.createElement("button");
+											gdpages[pg].appendChild(btElRight);
+											btElRight.setAttribute("class", "iconbtn float-left");
+											spEl = document.createElement("span");
+											spEl.setAttribute("class", "left-arrow");
+											btElRight.appendChild(spEl);
+											spEl.textContent = "Página anterior";
+											break;
+	
 									}
 
 									break; // solamente uma page, por enquanto
