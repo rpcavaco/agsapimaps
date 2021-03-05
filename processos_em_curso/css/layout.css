@@ -78,11 +78,13 @@ li:nth-child(even) {
 	background-color: #eee; 
 } 
 
-.iconfont {
-	font-family: "CalciteWebCoreIcons"
+.iconbtn {
+	font-family: "CalciteWebCoreIcons";
+	background: transparent;
+	border: none;
 }
 
 .right-arrow::before {
-    content: "\ue607";
+    content: "";
     color: inherit;
 }

@@ -337,15 +337,15 @@ require([
 										spEl.setAttribute("style", "float: right");
 										spEl.textContent = rows[i][fld];
 										liEl.appendChild(spEl);
+									}
 
-										if (pg == "PAG01") {
-											btElRight = document.createElement("button");
-											gdpages[pg].appendChild(btElRight);
-											btElRight.setAttribute("class", "iconfont");
-											spEl = document.createElement("span");
-											spEl.setAttribute("class", "right-arrow");
-											btElRight.appendChild(spEl);
-										}
+									if (pg == "PAG01") {
+										btElRight = document.createElement("button");
+										gdpages[pg].appendChild(btElRight);
+										btElRight.setAttribute("class", "iconbtn");
+										spEl = document.createElement("span");
+										spEl.setAttribute("class", "right-arrow");
+										btElRight.appendChild(spEl);
 									}
 
 									break; // solamente uma page, por enquanto
