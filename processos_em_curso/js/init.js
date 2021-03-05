@@ -248,13 +248,15 @@ require([
 							}
 						);
 
+						/*
 						const flds = [];
 						for (let pg in ATTRS_CFG) {						
 							flds.push.apply(flds, Object.keys(ATTRS_CFG[pg]))
 						} 
+						*/
 						
 						return selLayer.queryRelatedFeatures({
-							outFields: flds,
+							outFields: ["*"],
 							relationshipId: selLayer.relationships[0].id,
 							objectIds: objectIds
 						});

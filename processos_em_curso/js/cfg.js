@@ -29,7 +29,7 @@ var ATTRS_CFG = {
 		"num_conservatoria": "Registo predial",
 		"desc_tipo_oper": "Oper. urbanística",
 		"abc": "Área bruta constr.",
-		"arc": "Área total constr.",
+		"atc": "Área total constr.",
 		"estorcam": "Estim. orçamental",
 		"volum_constr": "Volume construção",
 		"area_implant": "Área implantação"
