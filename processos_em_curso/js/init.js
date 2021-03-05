@@ -277,12 +277,13 @@ require([
 
 							// create a new div for the grid of related features
 							// append to queryResults div inside of the gridDiv
-							const gridDiv = document.createElement("div")
 							const results = document.getElementById("queryResults");
+
+							/*
+							const gridDiv = document.createElement("div")
 							results.appendChild(gridDiv);
 
 							// destroy current grid if exists
-							/*
 							if (grid) {
 							  grid.destroy();
 							}
@@ -303,15 +304,39 @@ require([
 
 							// Listas
 
-							let row, ulEl, liEl;
+							let gridPageDiv;
+							let gdpages = {};
+							for (let pg in ATTRS_CFG) {
+								gridPageDiv = document.createElement("div")
+								gdpages[pg] = gridPageDiv;
+								gridPageDiv.setAttribute("id", "gridpage_"+pg);
+								results.appendChild(gridPageDiv);
+							}
+
+							let row, ulEl, liEl, spEl;
 							for (let i=0; i<rows.length; i++) {
-								ulEl = document.createElement("ul");
-								gridDiv.appendChild(ulEl);
-								for (let fld in rows[i]) {
-									liEl = document.createElement("li");
-									ulEl.appendChild(liEl);
-									liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
+								
+								for (let pg in ATTRS_CFG) {
+
+									ulEl = document.createElement("ul");
+									gdpages[pg].appendChild(ulEl);
+
+									for (let fld in ATTRS_CFG[pg]) {
+
+										liEl = document.createElement("li");
+										ulEl.appendChild(liEl);
+										liEl.setAttribute("class", "nobull");
+										liEl.insertAdjacentHTML('afterBegin', ATTRS_CFG[pg][fld]);
+										//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
+										spEl = document.createElement("span");
+										spEl.setAttribute("style", "float: right");
+										spEl.textContent = rows[i][fld];
+										liEl.appendChild(spEl);
+									}
+
+									break; // solamente uma page, por enquanto
 								}
+
 								break; // solamente uma row, por enquanto
 							}
 

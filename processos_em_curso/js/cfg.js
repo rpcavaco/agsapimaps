@@ -21,7 +21,30 @@ var COORDSDISPLAY_SHOW = true;
 //  A. Lista de atributos
 // 
 var ATTRS_CFG = {
-	"nud_capa": "Processo capa", 
-	"nud_reg": "Processo", 
-	"desc_tipo_proc": "Tipo de processo"
+	"PAG01": {
+		"nud_capa": "Processo", 
+		"nud_reg": "Documento", 
+		"desc_tipo_proc": "Tipo de processo",
+		"desc_oper_urb": "Oper. urbanística",
+		"num_conservatoria": "Registo predial",
+		"desc_tipo_oper": "Oper. urbanística",
+		"abc": "Área bruta constr.",
+		"arc": "Área total constr.",
+		"estorcam": "Estim. orçamental",
+		"volum_constr": "Volume construção",
+		"area_implant": "Área implantação"
+	},
+	"PAG02": {
+		"cercea": "Cércea", 
+		"pisos_abaixo_csol": "Pisos abaixo cot.soleira", 
+		"pisos_acima_csol": "Pisos acima cot.soleira",
+		"prazo": "Prazo",
+		"total": "Total fogos",
+		"aprov_arq_despacho": "Despacho aprovacão arq.ª",
+		"aprov_arq_data_despacho": "Data despacho aprov.arq.ª",
+		"num_titulo": "Número de tí­tulo",
+		"data_emissao": "Data emissão tí­tulo",
+		"data_entrada": "Data entrada",
+		"entrada": "Em 'entrada'"
+	}
 };

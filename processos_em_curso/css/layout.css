@@ -69,3 +69,7 @@ body,
 	width: 130px;
 	z-index: 20;
 }
+
+.nobull {
+	list-style-type: none;
+}
