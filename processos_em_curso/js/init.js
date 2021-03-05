@@ -347,7 +347,7 @@ require([
 										case "PAG01":
 											btElRight = document.createElement("button");
 											gdpages[pg].appendChild(btElRight);
-											btElRight.setAttribute("class", "esri-widget iconbtn float-right");
+											btElRight.setAttribute("class", "iconbtn float-right");
 											spEl = document.createElement("span");
 											spEl.setAttribute("class", "right-arrow");
 											btElRight.appendChild(spEl);
@@ -367,11 +367,21 @@ require([
 										case "PAG02":
 											btElRight = document.createElement("button");
 											gdpages[pg].appendChild(btElRight);
-											btElRight.setAttribute("class", "esri-widget iconbtn float-left");
+											btElRight.setAttribute("class", "iconbtn float-left");
 											spEl = document.createElement("span");
 											spEl.setAttribute("class", "left-arrow");
 											btElRight.appendChild(spEl);
 											spEl.textContent = "Página anterior";
+											attEventHandler(btElRight, 'click', 
+												function(evt) {
+													const el1 = document.getElementById("gridpage_PAG02");
+													const el2 = document.getElementById("gridpage_PAG01");
+													if (el1!=null && el2!=null) {
+														el1.style.display = "none";
+														el2.style.display = "block";
+													}
+												}
+											);
 											break;
 	
 									}

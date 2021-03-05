@@ -93,10 +93,14 @@ li:nth-child(even) {
 	padding-left: 8px;
 }
 
+
 .iconbtn {
 	background-color: #ccc;
 	border: none;
 	font-size: 12px;	
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	line-height: 1.3em;
+
 }
 
 .right-arrow::after {
