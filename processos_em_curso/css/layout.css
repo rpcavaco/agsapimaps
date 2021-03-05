@@ -94,18 +94,21 @@ li:nth-child(even) {
 }
 
 .iconbtn {
-	background: transparent;
+	background-color: #ccc;
 	border: none;
+	font-size: 12px;	
 }
 
 .right-arrow::after {
 	font-family: "CalciteWebCoreIcons";
+	font-size: 16px;	
     content: "";
     color: inherit;
 }
 
 .left-arrow::before {
 	font-family: "CalciteWebCoreIcons";
+	font-size: 16px;	
     content: "";
     color: inherit;
 }

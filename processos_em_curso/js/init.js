@@ -315,6 +315,9 @@ require([
 								gridPageDiv = document.createElement("div")
 								gdpages[pg] = gridPageDiv;
 								gridPageDiv.setAttribute("id", "gridpage_"+pg);
+								if (pg != "PAG01") {
+									gridPageDiv.style.display = "none";
+								}
 								results.appendChild(gridPageDiv);
 							}
 
@@ -349,6 +352,16 @@ require([
 											spEl.setAttribute("class", "right-arrow");
 											btElRight.appendChild(spEl);
 											spEl.textContent = "Página seguinte";
+											attEventHandler(btElRight, 'click', 
+												function(evt) {
+													const el1 = document.getElementById("gridpage_PAG01");
+													const el2 = document.getElementById("gridpage_PAG02");
+													if (el1!=null && el2!=null) {
+														el1.style.display = "none";
+														el2.style.display = "block";
+													}
+												}
+											);
 											break;
 
 										case "PAG02":
