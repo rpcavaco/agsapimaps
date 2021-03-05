@@ -247,9 +247,14 @@ require([
 								hlight = layerView.highlight(objectIds);
 							}
 						);
+
+						const flds = [];
+						for (let pg in ATTRS_CFG) {						
+							flds.push.apply(flds, Object.keys(ATTRS_CFG[pg]))
+						} 
 						
 						return selLayer.queryRelatedFeatures({
-							outFields: Object.keys(ATTRS_CFG),
+							outFields: flds,
 							relationshipId: selLayer.relationships[0].id,
 							objectIds: objectIds
 						});
@@ -305,7 +310,7 @@ require([
 							// Listas
 
 							let gridPageDiv;
-							let gdpages = {};
+							const gdpages = {};
 							for (let pg in ATTRS_CFG) {
 								gridPageDiv = document.createElement("div")
 								gdpages[pg] = gridPageDiv;
