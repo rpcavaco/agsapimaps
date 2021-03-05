@@ -344,7 +344,7 @@ require([
 										case "PAG01":
 											btElRight = document.createElement("button");
 											gdpages[pg].appendChild(btElRight);
-											btElRight.setAttribute("class", "iconbtn float-right");
+											btElRight.setAttribute("class", "esri-widget iconbtn float-right");
 											spEl = document.createElement("span");
 											spEl.setAttribute("class", "right-arrow");
 											btElRight.appendChild(spEl);
@@ -354,7 +354,7 @@ require([
 										case "PAG02":
 											btElRight = document.createElement("button");
 											gdpages[pg].appendChild(btElRight);
-											btElRight.setAttribute("class", "iconbtn float-left");
+											btElRight.setAttribute("class", "esri-widget iconbtn float-left");
 											spEl = document.createElement("span");
 											spEl.setAttribute("class", "left-arrow");
 											btElRight.appendChild(spEl);
@@ -362,8 +362,6 @@ require([
 											break;
 	
 									}
-
-									break; // solamente uma page, por enquanto
 								}
 
 								break; // solamente uma row, por enquanto

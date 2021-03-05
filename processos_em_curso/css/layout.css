@@ -78,6 +78,10 @@ body,
 	float: right;
 }
 
+.float-left {
+	float: left;
+}
+
 li:nth-child(even) { 
 	background-color: #eee; 
 } 
@@ -90,12 +94,18 @@ li:nth-child(even) {
 }
 
 .iconbtn {
-	font-family: "CalciteWebCoreIcons";
 	background: transparent;
 	border: none;
 }
 
-.right-arrow::before {
+.right-arrow::after {
+	font-family: "CalciteWebCoreIcons";
     content: "";
+    color: inherit;
+}
+
+.left-arrow::before {
+	font-family: "CalciteWebCoreIcons";
+    content: "";
     color: inherit;
 }
