@@ -27,24 +27,26 @@ var ATTRS_CFG = {
 		"desc_tipo_proc": "Tipo de processo",
 		"desc_oper_urb": "Oper. urbanística",
 		"num_conservatoria": "Registo predial",
-		"desc_tipo_oper": "Oper. urbanística",
+
+		"num_titulo": "Número de tí­tulo",
+		"data_emissao": "Data emissão tí­tulo",
+		"data_entrada": "Data entrada",
+
+		"aprov_arq_despacho": "Despacho aprovacão arq.ª",
+		"aprov_arq_data_despacho": "Data despacho aprov.arq.ª",
+
+		"entrada": "Em 'entrada'"
+	},
+	"PAG02": {
 		"abc": "Área bruta constr.",
 		"atc": "Área total constr.",
 		"estorcam": "Estim. orçamental",
 		"volum_constr": "Volume construção",
-		"area_implant": "Área implantação"
-	},
-	"PAG02": {
+		"area_implant": "Área implantação",
 		"cercea": "Cércea", 
 		"pisos_abaixo_csol": "Pisos abaixo cot.soleira", 
 		"pisos_acima_csol": "Pisos acima cot.soleira",
 		"prazo": "Prazo",
-		"total": "Total fogos",
-		"aprov_arq_despacho": "Despacho aprovacão arq.ª",
-		"aprov_arq_data_despacho": "Data despacho aprov.arq.ª",
-		"num_titulo": "Número de tí­tulo",
-		"data_emissao": "Data emissão tí­tulo",
-		"data_entrada": "Data entrada",
-		"entrada": "Em 'entrada'"
+		"total": "Total fogos"
 	}
 };
