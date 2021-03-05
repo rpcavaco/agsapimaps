@@ -318,7 +318,7 @@ require([
 								results.appendChild(gridPageDiv);
 							}
 
-							let row, ulEl, liEl, spEl;
+							let ulEl, liEl, spEl, btElRight;
 							for (let i=0; i<rows.length; i++) {
 								
 								for (let pg in ATTRS_CFG) {
@@ -337,6 +337,15 @@ require([
 										spEl.setAttribute("style", "float: right");
 										spEl.textContent = rows[i][fld];
 										liEl.appendChild(spEl);
+
+										if (pg == "PAG01") {
+											btElRight = document.createElement("button");
+											gdpages[pg].appendChild(btElRight);
+											btElRight.setAttribute("class", "iconfont");
+											spEl = document.createElement("span");
+											spEl.setAttribute("class", "right-arrow");
+											btElRight.appendChild(spEl);
+										}
 									}
 
 									break; // solamente uma page, por enquanto

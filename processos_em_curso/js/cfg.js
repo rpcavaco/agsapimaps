@@ -4,7 +4,7 @@
 var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
 var PORTALITEM_ID = "343749483d5d4c86b417a8b6f0aec18d" // Licenciamento em curso
 
-var ATTR_TEXT = "2021 CM-Porto / Coords: Datum 73 / Dados: DM Gestão Urbanística + Dev: DM Sistemas Informação";
+var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / Datum 73";
 
 var LYRS_DA_LEGENDA = [ 2 ];
 var LYR_SELECCAO_INTERACTIVA = 2;
@@ -25,7 +25,7 @@ var ATTRS_CFG = {
 		"nud_capa": "Processo", 
 		"nud_reg": "Documento", 
 		"desc_tipo_proc": "Tipo de processo",
-		"desc_oper_urb": "Oper. urbanística",
+		"desc_oper_urb": "Operação urbanística",
 		"num_conservatoria": "Registo predial",
 
 		"num_titulo": "Número de tí­tulo",
@@ -38,15 +38,15 @@ var ATTRS_CFG = {
 		"entrada": "Em 'entrada'"
 	},
 	"PAG02": {
-		"abc": "Área bruta constr.",
-		"atc": "Área total constr.",
-		"estorcam": "Estim. orçamental",
+		"total": "Número total de fogos",
+		"abc": "Área bruta construção",
+		"atc": "Área total construção",
+		"estorcam": "Estimativa orçamental",
 		"volum_constr": "Volume construção",
 		"area_implant": "Área implantação",
 		"cercea": "Cércea", 
 		"pisos_abaixo_csol": "Pisos abaixo cot.soleira", 
 		"pisos_acima_csol": "Pisos acima cot.soleira",
-		"prazo": "Prazo",
-		"total": "Total fogos"
+		"prazo": "Prazo"
 	}
 };
