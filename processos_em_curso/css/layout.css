@@ -95,9 +95,9 @@ li:nth-child(even) {
 
 
 .iconbtn {
-	background-color: #ccc;
+	background-color: #eee;
 	border: none;
-	font-size: 12px;	
+	font-size: 14px;	
 	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
 	line-height: 1.3em;
 
@@ -106,6 +106,7 @@ li:nth-child(even) {
 .right-arrow::after {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
+	padding-left: 10px;
     content: "";
     color: inherit;
 }
@@ -113,6 +114,7 @@ li:nth-child(even) {
 .left-arrow::before {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
+	padding-right: 10px;
     content: "";
     color: inherit;
 }
