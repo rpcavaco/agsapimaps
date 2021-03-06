@@ -12,15 +12,10 @@ function SwitchingPanel(p_dom_elem, opt_display_attribute_str) {
 	this.dom_elem.style.display = this.vis_display_attribute;
     
 	this.setVisible = function(p_is_visible) {
-		let currently_invisible = (this.dom_elem.style.display == "none");
 		if (p_is_visible) {
-			if (currently_invisible) {
-				this.dom_elem.style.display = this.vis_display_attribute;
-			}
+			this.dom_elem.style.display = this.vis_display_attribute;
 		} else {
-			if (!currently_invisible) {
-				this.dom_elem.style.display = "none";
-			}
+			this.dom_elem.style.display = "none";
 		}
 	}
 }
@@ -54,7 +49,7 @@ function SwitchingPanelCollection(p_collname) {
 			console.trace("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
 		}
-		this.panels[p_panel_key] = SwitchingPanel(p_panel_dom_elem, opt_display_attribute_str);
+		this.panels[p_panel_key] = new SwitchingPanel(p_panel_dom_elem, opt_display_attribute_str);
 		this.panelorder.push(p_panel_key);
 		if (this.active_panel == null) {
 			this.active_panel = this.panels[p_panel_key];
@@ -179,7 +174,7 @@ function RecordPanelSwitcher() {
 			ret = this.records[p_reckey];
 		}
 
-		console.log("_findRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
+		console.log("_findRecord keys:"+Object.keys(this.records)+" key:"+p_reckey+" idx:"+Object.keys(this.records).indexOf(p_reckey)+" ret:"+ret);
 
 		return ret;
 	};
@@ -190,7 +185,7 @@ function RecordPanelSwitcher() {
 			return false;
 		}
 
-		this.records[p_reckey] = SwitchingPanelCollection(p_reckey);
+		this.records[p_reckey] = new SwitchingPanelCollection(p_reckey);
 
 		console.log("newRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
 
