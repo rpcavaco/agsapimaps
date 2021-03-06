@@ -51,7 +51,7 @@ function SwitchingPanelCollection(p_collname) {
 	};
 	this.addPanel = function(p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
 		if (this._findPanel(p_panel_key) != null) {
-			console.warn("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
+			console.trace("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
 		}
 		this.panels[p_panel_key] = SwitchingPanel(p_panel_dom_elem, opt_display_attribute_str);
@@ -66,7 +66,7 @@ function SwitchingPanelCollection(p_collname) {
 	};
 	this.activatePanel = function(p_panel_key) {
 		if (this._findPanel(p_panel_key) == null) {
-			console.warn("SwitchingPanelCollection - activatePanel, missing panel: %s", p_panel_key);
+			console.trace("SwitchingPanelCollection - activatePanel, missing panel: %s", p_panel_key);
 			return false;
 		}
 		for (let k in this.panels) {
@@ -89,7 +89,7 @@ function SwitchingPanelCollection(p_collname) {
 		if (this.active_panel != null) {
 			this.active_panel.setVisible(true);
 		} else {
-			console.warn("SwitchingPanelCollection "+this.collname+" showActivePanel: no active panel.");
+			console.trace("SwitchingPanelCollection "+this.collname+" showActivePanel: no active panel.");
 		}
 	};
 
@@ -184,7 +184,7 @@ function RecordPanelSwitcher() {
 
 	this.newRecord = function(p_reckey) {
 		if (this._findRecord(p_reckey) != null) {
-			console.warn("PanelSwitcher - newRecord, record already exists = %s", p_reckey);
+			console.trace("PanelSwitcher - newRecord, record already exists = %s", p_reckey);
 			return false;
 		}
 
@@ -196,7 +196,7 @@ function RecordPanelSwitcher() {
 	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key) {
 		const rec = this._findRecord(p_reckey);
 		if (rec == null) {
-			console.warn("PanelSwitcher - addPanel, record does not exist = %s", p_collname);
+			console.trace("PanelSwitcher - addPanel, record does not exist = %s", p_reckey);
 			return false;
 		}
 		return rec.addPanel(p_panel_dom_elem, p_panel_key);
@@ -206,7 +206,7 @@ function RecordPanelSwitcher() {
 
 		const rec = this._findRecord(p_reckey)
 		if (rec == null) {
-			console.warn("PanelSwitcher - activatePanel, record does not exist: %s", p_reckey);
+			console.trace("PanelSwitcher - activatePanel, record does not exist: %s", p_reckey);
 			return false;
 		}
 
@@ -228,7 +228,7 @@ function RecordPanelSwitcher() {
 	this.showActivePanel = function(p_reckey) {
 		const rec = this._findRecord(p_reckey)
 		if (rec == null) {
-			console.warn("PanelSwitcher - showActivePanel, record does not exist: %s", p_reckey);
+			console.trace("PanelSwitcher - showActivePanel, record does not exist: %s", p_reckey);
 			return false;
 		}
 

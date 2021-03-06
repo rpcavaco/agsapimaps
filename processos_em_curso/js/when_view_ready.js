@@ -7,7 +7,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 	function qryFeats(scrPt) {
 
 		const pt = p_view.toMap(scrPt);
-		const rec_rps = RecordPanelSwitcher();
+		const rec_rps = new RecordPanelSwitcher();
 
 		p_sellayer.queryObjectIds({
 			geometry: pt,
@@ -84,13 +84,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}*/
 
 					let attrs_per_page_cnt = 0;
-					let max_attrs_per_page = 10;
+					let max_attrs_per_page = 12;
 					let pageDiv = null;
 					let ulEl = null;
 					let pageNum = 0;
 					let reckey, pagekey;
 
-					let liEl, spEl, btEl;
+					let liEl, spEl, btEl, val;
 
 					for (let i=0; i<rows.length; i++) {
 						
@@ -100,11 +100,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						
 						for (let fld in ATTRS_CFG) {
 
+							val = rows[i][fld];
+							if (val == null || val.length==0) {
+								continue;
+							}
+
 							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
 								if (pageDiv) {
 									rec_rps.addPanel(reckey, pageDiv, rec_rps.pageKey(pageNum+1));
 									pageNum++;
 									pagekey = rec_rps.pageKey(pageNum+1);
+									attrs_per_page_cnt = 0;
 								}
 								pageDiv = document.createElement("div");	
 								resultsDiv.appendChild(pageDiv);				
@@ -120,7 +126,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
 							spEl = document.createElement("span");
 							spEl.setAttribute("style", "float: right");
-							spEl.textContent = rows[i][fld];
+							spEl.textContent = val;
 							liEl.appendChild(spEl);
 
 							attrs_per_page_cnt++;
