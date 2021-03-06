@@ -179,6 +179,8 @@ function RecordPanelSwitcher() {
 			ret = this.records[p_reckey];
 		}
 
+		console.log("_findRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
+
 		return ret;
 	};
 
@@ -189,6 +191,8 @@ function RecordPanelSwitcher() {
 		}
 
 		this.records[p_reckey] = SwitchingPanelCollection(p_reckey);
+
+		console.log("newRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
 
 		return true;
 	};

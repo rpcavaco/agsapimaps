@@ -107,7 +107,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
 								if (pageDiv) {
-									rec_rps.addPanel(reckey, pageDiv, rec_rps.pageKey(pageNum+1));
+									rec_rps.addPanel(reckey, pageDiv, pagekey);
 									pageNum++;
 									pagekey = rec_rps.pageKey(pageNum+1);
 									attrs_per_page_cnt = 0;
