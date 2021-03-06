@@ -39,7 +39,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 			}					
 		).then(
-			function(relatedFeatureSetByObjectId){
+			function(relatedFeatureSetByObjectId) {
 			
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
@@ -171,15 +171,12 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				}); // .forEach(function(objectId){
 					
-			}).catch(
-				function(error) {
-					console.error(error);
-				}
-			); // function(relatedFeatureSetByObjectId){
-				// >>>>>>>>>>>>>>>>>>>>>>>>
-
-				//clearbutton.style.display = "inline";
-		}
+			}
+		).catch(
+			function(error) {
+				console.error(error);
+			}
+		); // function(relatedFeatureSetByObjectId){
 	}
 
 	function clearMap(){
