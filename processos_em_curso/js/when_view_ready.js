@@ -3,10 +3,10 @@
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 	let hlight; //, grid;
-	let rps = RecordPanelSwitcher();
 
 	function qryFeats(scrPt) {
 		const pt = p_view.toMap(scrPt);
+		const rps = RecordPanelSwitcher();
 		p_sellayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
@@ -44,6 +44,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
 
+				rps.clear();
+
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
 
@@ -59,6 +61,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 
 					const resultsDiv = document.getElementById(p_griddiv);
+
+					while (resultsDiv.firstChild) {
+						resultsDiv.removeChild(resultsDiv.firstChild);
+					}
+				  
 
 					// Listas
 
