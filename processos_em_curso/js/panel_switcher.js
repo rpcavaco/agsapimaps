@@ -12,10 +12,15 @@ function SwitchingPanel(p_dom_elem, opt_display_attribute_str) {
 	this.dom_elem.style.display = this.vis_display_attribute;
     
 	this.setVisible = function(p_is_visible) {
+		let currently_invisible = (this.dom_elem.style.display == "none");
 		if (p_is_visible) {
-			this.dom_elem.style.display = this.vis_display_attribute;
+			if (currently_invisible) {
+				this.dom_elem.style.display = this.vis_display_attribute;
+			}
 		} else {
-			this.dom_elem.style.display = "none";
+			if (!currently_invisible) {
+				this.dom_elem.style.display = "none";
+			}
 		}
 	}
 }
@@ -24,7 +29,9 @@ function SwitchingPanelCollection(p_collname) {
 
     this.collname = p_collname;
 	this.panels = {};
+	this.panelorder = [];
 	this.active_panel = null;
+	this.iterator_current_key = null;
 	this._findPanel = function(p_panel_key) {
 		if (Object.keys(this.panels).indexOf(p_panel_key) < 0) {
 			return null;
@@ -34,12 +41,27 @@ function SwitchingPanelCollection(p_collname) {
 	/*this.getPanel = function(p_panel_key) {
 		return this._findPanel(p_panel_key)
 	};*/
+	this.clear = function() {
+		if (this.panelorder.length > 0) {
+			this.panels = {};
+			this.panelorder = [];
+			this.active_panel = null;
+			this.iterator_current_key = null;
+		}
+	};
 	this.addPanel = function(p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
 		if (this._findPanel(p_panel_key) != null) {
 			console.warn("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
 		}
 		this.panels[p_panel_key] = SwitchingPanel(p_panel_dom_elem, opt_display_attribute_str);
+		this.panelorder.push(p_panel_key);
+		if (this.active_panel == null) {
+			this.active_panel = this.panels[p_panel_key];
+			this.active_panel.setVisible(true);
+		} else {
+			this.active_panel.setVisible(false);
+		}
 		return true;
 	};
 	this.activatePanel = function(p_panel_key) {
@@ -63,90 +85,195 @@ function SwitchingPanelCollection(p_collname) {
 		}
 		return true;
 	};
-	/*this.showActive = function(p_do_show) {
+	this.showActivePanel = function() {
 		if (this.active_panel != null) {
-			this.active_panel.setVisible(p_do_show);
-		}
-	}*/
-}
-
-var PanelSwitcherSingleton = {
-
-	collections: {
-		"non_excluding": {
-
-		}
-	},
-
-	_findColl: function(p_collname, opt_mutual_excluding_group) {
-		ret = null;
-		if (opt_mutual_excluding_group) {
-			if (Object.keys(this.collections).indexOf(opt_mutual_excluding_group) >= 0) {
-				if (Object.keys(this.collections[opt_mutual_excluding_group]).indexOf(p_collname) >= 0) {
-					ret = this.collections[opt_mutual_excluding_group][p_collname];
-				}
-			}
+			this.active_panel.setVisible(true);
 		} else {
-			if (Object.keys(this.collections["non_excluding"]).indexOf(p_collname) >= 0) {
-				ret = this.collections["non_excluding"][p_collname];
+			console.warn("SwitchingPanelCollection "+this.collname+" showActivePanel: no active panel.");
+		}
+	};
+
+	// iterator
+
+	this.resetIteration = function() {
+		this.iterator_current_key = null;
+	};
+
+	this.getCurrentIteration = function() {
+		let ret = null;
+
+		if (this.iterator_current_key != null) {
+			idx = this.panelorder.indexOf(this.iterator_current_key);
+			if (idx >= 0) {
+				rec = this._findPanel(this.iterator_current_key)
+				if (rec != null) {
+					ret = {
+						is_first: idx == 0,
+						is_last: idx == this.panelorder.length-1,
+						key: key,
+						content: this._findPanel(key)
+					}
+				}
 			}
 		}
 
 		return ret;
+	};
 
-	},
-
-	newCollection: function(p_collname, opt_mutual_excluding_group) {
-		if (this._findColl(p_collname, opt_mutual_excluding_group) != null) {
-			console.warn("PanelSwitcher - newCollection, collection already exists: %s, mutual excl.group: %s", p_collname, opt_mutual_excluding_group);
-			return false;
-		}
-		if (opt_mutual_excluding_group) {
-			if (Object.keys(this.collections).indexOf(opt_mutual_excluding_group) < 0) {
-				console.warn("PanelSwitcher - newCollection, no mutual excl.group: %s", opt_mutual_excluding_group);
-				return false;
-			}
-			this.collections[opt_mutual_excluding_group][p_collname] = SwitchingPanelCollection(p_collname);
+	this.iterateNext = function() {
+		let idx, key, ret = null;
+		if (this.iterator_current_key == null) {
+			idx = 0;
 		} else {
-			this.collections["non_excluding"][p_collname] = SwitchingPanelCollection(p_collname);
+			idx = this.panelorder.indexOf(this.iterator_current_key) + 1;
 		}
-		return true;
-	},
 
-	addPanel: function(p_collname, p_panel_dom_elem, p_panel_key, opt_mutual_excluding_group) {
-		const coll = this._findColl(p_collname, opt_mutual_excluding_group)
-		if (coll == null) {
-			console.warn("PanelSwitcher - addPanel, collection does not exist: %s, mutual excl.group: %s", p_collname, opt_mutual_excluding_group);
+		if (idx < this.panelorder.length) {
+			this.iterator_current_key = this.panelorder[idx];
+		}
+
+		return this.getCurrentIterationRecord();
+	};
+}
+
+
+function RecordPanelSwitcher() {
+
+	/*
+	Class for switching pages of record oriented content.
+	Each "record" is a collection of one or more "pages".
+	Only one "page", from either of the existing "records", is visible at any time. 
+	*/
+
+	this.recordorder = [],
+	this.iterator_current_key = null,
+	this.records = {
+	};
+
+	this.recKey = function(p_recnum) {
+		const rn = formatPaddingDigits(p_recnum,0,4)	
+		return "rec" + rn;
+	};
+
+	this.isRecKey = function(p_key) {
+		return p_key.indexOf("rec") == 0;
+	};
+
+	this.pageKey = function(p_pgnum) {
+		const rn = formatPaddingDigits(p_pgnum,0,4)	
+		return "page" + rn;
+	};
+
+	this.clear = function() {
+		if (this.recordorder.length > 0) {
+			this.records = {};
+			this.recordorder = [];
+			this.iterator_current_key = null;
+		}
+	};
+
+	this._findRecord = function(p_reckey) {
+		ret = null;
+
+		if (Object.keys(this.records).indexOf(p_reckey) >= 0) {
+			ret = this.records[p_reckey];
+		}
+
+		return ret;
+	};
+
+	this.newRecord = function(p_reckey) {
+		if (this._findRecord(p_reckey) != null) {
+			console.warn("PanelSwitcher - newRecord, record already exists = %s", p_reckey);
 			return false;
 		}
-		return coll.addPanel(p_panel_dom_elem, p_panel_key);
-	},
 
-	activatePanel: function(p_collname, p_panel_key, opt_mutual_excluding_group) {
+		this.records[p_reckey] = SwitchingPanelCollection(p_reckey);
 
-		const coll = this._findColl(p_collname, opt_mutual_excluding_group)
-		if (coll == null) {
-			console.warn("PanelSwitcher - activatePanel, collection does not exist: %s, mutual excl.group: %s", p_collname, opt_mutual_excluding_group);
+		return true;
+	};
+
+	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key) {
+		const rec = this._findRecord(p_reckey);
+		if (rec == null) {
+			console.warn("PanelSwitcher - addPanel, record does not exist = %s", p_collname);
+			return false;
+		}
+		return rec.addPanel(p_panel_dom_elem, p_panel_key);
+	};
+
+	this.activatePanel = function(p_reckey, p_panel_key) {
+
+		const rec = this._findRecord(p_reckey)
+		if (rec == null) {
+			console.warn("PanelSwitcher - activatePanel, record does not exist: %s", p_reckey);
 			return false;
 		}
 
 		let ret = false;
-		let tmp_coll = null;
-		if (opt_mutual_excluding_group != null && opt_mutual_excluding_group != "non_excluding") {
-			for (let tmp_coll_key in this.collections[opt_mutual_excluding_group]) {
-				tmp_coll = this.collections[tmp_coll_key];
-				if (tmp_coll_key == p_collname) {
-					tmp_coll.activatePanel(p_panel_key);
-				} else {
-					tmp_coll.deactivateAllPanels();
-				}
+		let tmp_rec = null;
+
+		for (let tmp_rec_key in this.records) {
+			tmp_rec = this.records[tmp_rec_key];
+			if (tmp_rec_key == p_reckey) {
+				tmp_rec.activatePanel(p_panel_key);
+			} else {
+				tmp_rec.deactivateAllPanels();
 			}
-		} else {
-			ret = coll.activatePanel(p_panel_key);
 		}
 
 		return ret;
-	}
+	};
 
+	this.showActivePanel = function(p_reckey) {
+		const rec = this._findRecord(p_reckey)
+		if (rec == null) {
+			console.warn("PanelSwitcher - showActivePanel, record does not exist: %s", p_reckey);
+			return false;
+		}
+
+		rec.showActivePanel();
+	};
+
+	this.resetIteration = function() {
+		this.iterator_current_key = null;
+	};
+
+	this.getCurrentIteration = function() {
+
+		let ret = null;
+
+		if (this.iterator_current_key != null) {
+			idx = this.recordorder.indexOf(this.iterator_current_key);
+			if (idx >= 0) {
+				rec = this._findRecord(this.iterator_current_key)
+				if (rec != null) {
+					ret = {
+						is_first: (idx == 0),
+						is_last: (idx == this.recordorder.length-1),
+						reckey: this.iterator_current_key,
+						content: rec
+					}
+				}
+			}
+		}
+
+		return ret;
+	};
+
+	this.iterateNext = function() {
+		let idx = null;
+		if (this.iterator_current_key == null) {
+			idx = 0;
+		} else {
+			idx = this.recordorder.indexOf(this.iterator_current_key) + 1;
+		}
+
+		if (idx < this.recordorder.length) {
+			this.iterator_current_key = this.recordorder[idx];
+		}
+
+		return this.getCurrentIterationRecord();
+	}
 
 };

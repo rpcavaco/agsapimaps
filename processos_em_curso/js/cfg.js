@@ -21,32 +21,29 @@ var COORDSDISPLAY_SHOW = true;
 //  A. Lista de atributos
 // 
 var ATTRS_CFG = {
-	"PAG01": {
-		"nud_capa": "Processo", 
-		"nud_reg": "Documento", 
-		"desc_tipo_proc": "Tipo de processo",
-		"desc_oper_urb": "Operação urbanística",
-		"num_conservatoria": "Registo predial",
+	"nud_capa": "Processo", 
+	"nud_reg": "Documento", 
+	"desc_tipo_proc": "Tipo de processo",
+	"desc_oper_urb": "Operação urbanística",
+	"num_conservatoria": "Registo predial",
 
-		"num_titulo": "Número de tí­tulo",
-		"data_emissao": "Data emissão tí­tulo",
-		"data_entrada": "Data entrada",
+	"num_titulo": "Número de tí­tulo",
+	"data_emissao": "Data emissão tí­tulo",
+	"data_entrada": "Data entrada",
 
-		"aprov_arq_despacho": "Despacho aprovacão arq.ª",
-		"aprov_arq_data_despacho": "Data despacho aprov.arq.ª",
+	"aprov_arq_despacho": "Despacho aprovacão arq.ª",
+	"aprov_arq_data_despacho": "Data despacho aprov.arq.ª",
 
-		"entrada": "Em 'entrada'"
-	},
-	"PAG02": {
-		"total": "Número total de fogos",
-		"abc": "Área bruta construção",
-		"atc": "Área total construção",
-		"estorcam": "Estimativa orçamental",
-		"volum_constr": "Volume construção",
-		"area_implant": "Área implantação",
-		"cercea": "Cércea", 
-		"pisos_abaixo_csol": "Pisos abaixo cot.soleira", 
-		"pisos_acima_csol": "Pisos acima cot.soleira",
-		"prazo": "Prazo"
-	}
+	"entrada": "Em 'entrada'",
+
+	"total": "Número total de fogos",
+	"abc": "Área bruta construção",
+	"atc": "Área total construção",
+	"estorcam": "Estimativa orçamental",
+	"volum_constr": "Volume construção",
+	"area_implant": "Área implantação",
+	"cercea": "Cércea", 
+	"pisos_abaixo_csol": "Pisos abaixo cot.soleira", 
+	"pisos_acima_csol": "Pisos acima cot.soleira",
+	"prazo": "Prazo"
 };

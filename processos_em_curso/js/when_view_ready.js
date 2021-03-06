@@ -1,7 +1,9 @@
 
+
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 	let hlight; //, grid;
+	let rps = RecordPanelSwitcher();
 
 	function qryFeats(scrPt) {
 		const pt = p_view.toMap(scrPt);
@@ -41,6 +43,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 			
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
+
+				PanelSwitcherSingleton.createRecordsCollection();
 				
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -56,36 +60,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						return;
 					}
 
-					// create a new div for the grid of related features
-					// append to queryResults div inside of the gridDiv
-					const results = document.getElementById(p_griddiv);
-
-					/*
-					const gridDiv = document.createElement("div")
-					results.appendChild(gridDiv);
-
-					// destroy current grid if exists
-					if (grid) {
-					grid.destroy();
-					}
-					// create new grid to hold the results of the query
-					grid = new Grid({
-					columns: Object.keys(rows[0]).map(function(fieldName) {
-						return {
-						label: fieldName,
-						field: fieldName,
-						sortable: true
-						};
-					})
-					}, gridDiv);
-
-					// add the data to the grid
-					grid.renderArray(rows);
-					*/
+					const resultsDiv = document.getElementById(p_griddiv);
 
 					// Listas
 
-					let gridPageDiv;
+					/*let gridPageDiv;
 					const gdpages = {};
 					for (let pg in ATTRS_CFG) {
 						gridPageDiv = document.createElement("div")
@@ -95,85 +74,112 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							gridPageDiv.style.display = "none";
 						}
 						results.appendChild(gridPageDiv);
-					}
+					}*/
 
-					let ulEl, liEl, spEl, btElRight;
+					let attrs_per_page_cnt = 0;
+					let max_attrs_per_page = 10;
+					let pageDiv = null;
+					let ulEl = null;
+					let pageNum = 0;
+					let reckey, pagekey;
+
+					let liEl, spEl, btEl;
+
 					for (let i=0; i<rows.length; i++) {
 						
-						for (let pg in ATTRS_CFG) {
+						reckey = rps.recKey(i+1);
+						pagekey = rps.pageKey(pageNum+1)
+						rps.newRecord(reckey);
+						
+						for (let fld in ATTRS_CFG) {
 
-							ulEl = document.createElement("ul");
-							gdpages[pg].appendChild(ulEl);
-							ulEl.setAttribute("class", "attrs-list");
+							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
+								if (pageDiv) {
+									rps.addPanel(reckey, pageDiv, rps.pageKey(pageNum+1));
+									pageNum++;
+									pagekey = rps.pageKey(pageNum+1);
+								}
+								pageDiv = document.createElement("div");	
+								resultsDiv.appendChild(pageDiv);				
+								ulEl = document.createElement("ul");
+								pageDiv.appendChild(ulEl);				
+								ulEl.setAttribute("class", "attrs-list");
+							}
 							
-							for (let fld in ATTRS_CFG[pg]) {
+							liEl = document.createElement("li");
+							ulEl.appendChild(liEl);
+							liEl.setAttribute("class", "nobull");
+							liEl.insertAdjacentHTML('afterBegin', ATTRS_CFG[fld]);
+							//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
+							spEl = document.createElement("span");
+							spEl.setAttribute("style", "float: right");
+							spEl.textContent = rows[i][fld];
+							liEl.appendChild(spEl);
 
-								liEl = document.createElement("li");
-								ulEl.appendChild(liEl);
-								liEl.setAttribute("class", "nobull");
-								liEl.insertAdjacentHTML('afterBegin', ATTRS_CFG[pg][fld]);
-								//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
-								spEl = document.createElement("span");
-								spEl.setAttribute("style", "float: right");
-								spEl.textContent = rows[i][fld];
-								liEl.appendChild(spEl);
-							}
-
-							switch (pg) {
-								case "PAG01":
-									btElRight = document.createElement("button");
-									gdpages[pg].appendChild(btElRight);
-									btElRight.setAttribute("class", "iconbtn float-right");
-									spEl = document.createElement("span");
-									spEl.setAttribute("class", "right-arrow");
-									btElRight.appendChild(spEl);
-									spEl.textContent = "Página seguinte";
-									attEventHandler(btElRight, 'click', 
-										function(evt) {
-											const el1 = document.getElementById("gridpage_PAG01");
-											const el2 = document.getElementById("gridpage_PAG02");
-											if (el1!=null && el2!=null) {
-												el1.style.display = "none";
-												el2.style.display = "block";
-											}
-										}
-									);
-									break;
-
-								case "PAG02":
-									btElRight = document.createElement("button");
-									gdpages[pg].appendChild(btElRight);
-									btElRight.setAttribute("class", "iconbtn float-left");
-									spEl = document.createElement("span");
-									spEl.setAttribute("class", "left-arrow");
-									btElRight.appendChild(spEl);
-									spEl.textContent = "Página anterior";
-									attEventHandler(btElRight, 'click', 
-										function(evt) {
-											const el1 = document.getElementById("gridpage_PAG02");
-											const el2 = document.getElementById("gridpage_PAG01");
-											if (el1!=null && el2!=null) {
-												el1.style.display = "none";
-												el2.style.display = "block";
-											}
-										}
-									);
-									break;
-
-							}
 						}
 
-						break; // solamente uma row, por enquanto
 					}
 
-				});
+					rps.resetIteration(); 
+					let recpanelcoll = rps.iterateNext();
+					while (recpanelcoll) {
+						let recPanels = recpanelcoll.content;
+						recPanels.resetIteration(); 
+						let recpanel = recPanels.iterateNext();
+						while (recpanel) {
+							if (!recpanel.is_first) {
+								btEl = document.createElement("button");
+								gdpages[pg].appendChild(btEl);
+								btEl.setAttribute("class", "iconbtn float-left");
+								spEl = document.createElement("span");
+								spEl.setAttribute("class", "left-arrow");
+								btEl.appendChild(spEl);
+								spEl.textContent = "Página anterior";
+								attEventHandler(btEl, 'click', 
+									function(evt) {
+										const el1 = document.getElementById("gridpage_PAG02");
+										const el2 = document.getElementById("gridpage_PAG01");
+										if (el1!=null && el2!=null) {
+											el1.style.display = "none";
+											el2.style.display = "block";
+										}
+									}
+								);
+							}
+							if (!recpanel.is_last) {
+								btEl = document.createElement("button");
+								gdpages[pg].appendChild(btEl);
+								btEl.setAttribute("class", "iconbtn float-right");
+								spEl = document.createElement("span");
+								spEl.setAttribute("class", "right-arrow");
+								btEl.appendChild(spEl);
+								spEl.textContent = "Página seguinte";
+								attEventHandler(btEl, 'click', 
+									function(evt) {
+										const el1 = document.getElementById("gridpage_PAG01");
+										const el2 = document.getElementById("gridpage_PAG02");
+										if (el1!=null && el2!=null) {
+											el1.style.display = "none";
+											el2.style.display = "block";
+										}
+									}
+								);
+							}
+							recpanel = recPanels.iterateNext();
+						}
+						recpanelcoll = rps.iterateNext();
+					}
+				}); // .forEach(function(objectId){
+					
+			}).catch(
+				function(error) {
+					console.error(error);
+				}
+			); // function(relatedFeatureSetByObjectId){
+				// >>>>>>>>>>>>>>>>>>>>>>>>
+
 				//clearbutton.style.display = "inline";
-			}
-		).catch(
-			function(error) {
-				console.error(error);
-			}
-		);
+		}
 	}
 
 	function clearMap(){

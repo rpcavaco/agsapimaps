@@ -108,8 +108,6 @@ require([
 	var titlefader = new DivFader("titlearea", 120.0);
 	titlefader.hideMessage(true);
 
-	// PanelSwitcherSingleton();
-
 	// ========================================================================
 	//  Mapa base e MapView 
 	// ========================================================================
@@ -221,15 +219,15 @@ require([
 });	
 */
 	view.when(function() {
-		console.assert(p_sellayer!=null, "selLayer está indefinida, popup desativado");		
-		console.assert(typeof when_view_ready=='undefined', "função when_view_ready está indefinida, popup desativado");		
 
-		if (p_sellayer!=null && typeof when_view_ready!='undefined') {	
+		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
+		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		
+
+		if (selLayer!=null && typeof when_view_ready === 'function') {	
 			when_view_ready(view, selLayer, "queryResults");
 		}
-	}
-
-
+		
+	});
 	
 	
 	// ========================================================================
