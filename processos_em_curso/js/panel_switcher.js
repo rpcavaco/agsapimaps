@@ -55,7 +55,7 @@ function SwitchingPanelCollection(p_collname) {
 			this.active_panel = this.panels[p_panel_key];
 			this.active_panel.setVisible(true);
 		} else {
-			this.active_panel.setVisible(false);
+			this.panels[p_panel_key].setVisible(false);
 		}
 		return true;
 	};

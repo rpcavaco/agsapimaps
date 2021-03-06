@@ -100,9 +100,21 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						
 						for (let fld in ATTRS_CFG) {
 
-							val = rows[i][fld];
-							if (val == null || val.length==0) {
+							let lbl = ATTRS_CFG[fld][0];
+							let fmt = ATTRS_CFG[fld][1];
+							let preval = rows[i][fld];
+
+							if (preval == null || preval.length==0) {
 								continue;
+							}
+
+							switch (fmt) {
+								case 'date':
+									d = new Date(0);
+									val = d.setUTCSeconds(preval / 1000):
+
+								default:
+									val = preval;
 							}
 
 							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
@@ -122,7 +134,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							liEl = document.createElement("li");
 							ulEl.appendChild(liEl);
 							liEl.setAttribute("class", "nobull");
-							liEl.insertAdjacentHTML('afterBegin', ATTRS_CFG[fld]);
+							liEl.insertAdjacentHTML('afterBegin', lbl);
 							//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
 							spEl = document.createElement("span");
 							spEl.setAttribute("style", "float: right");
@@ -131,6 +143,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 							attrs_per_page_cnt++;
 						}
+						// todo - não fazer se n houver conteudo
+						rec_rps.addPanel(reckey, pageDiv, pagekey);
+
 					}
 
 					rec_rps.resetIteration(); 
@@ -142,7 +157,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						while (recpanel) {
 							if (!recpanel.is_first) {
 								btEl = document.createElement("button");
-								gdpages[pg].appendChild(btEl);
+								pageDiv.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
@@ -161,7 +176,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							}
 							if (!recpanel.is_last) {
 								btEl = document.createElement("button");
-								gdpages[pg].appendChild(btEl);
+								pageDiv.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
