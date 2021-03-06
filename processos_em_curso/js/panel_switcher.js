@@ -72,7 +72,7 @@ function SwitchingPanelCollection(p_collname) {
 
 var PanelSwitcherSingleton = {
 
-	collections = {
+	collections: {
 		"non_excluding": {
 
 		}
