@@ -3,10 +3,11 @@
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 	let hlight; //, grid;
+	var PEC_RPS = RecordPanelSwitcher();
 
 	function qryFeats(scrPt) {
+
 		const pt = p_view.toMap(scrPt);
-		const rps = RecordPanelSwitcher();
 		p_sellayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
@@ -44,7 +45,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
 
-				rps.clear();
+				PEC_RPS.clear();
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -92,17 +93,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					for (let i=0; i<rows.length; i++) {
 						
-						reckey = rps.recKey(i+1);
-						pagekey = rps.pageKey(pageNum+1)
-						rps.newRecord(reckey);
+						reckey = PEC_RPS.recKey(i+1);
+						pagekey = PEC_RPS.pageKey(pageNum+1)
+						PEC_RPS.newRecord(reckey);
 						
 						for (let fld in ATTRS_CFG) {
 
 							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
 								if (pageDiv) {
-									rps.addPanel(reckey, pageDiv, rps.pageKey(pageNum+1));
+									PEC_RPS.addPanel(reckey, pageDiv, PEC_RPS.pageKey(pageNum+1));
 									pageNum++;
-									pagekey = rps.pageKey(pageNum+1);
+									pagekey = PEC_RPS.pageKey(pageNum+1);
 								}
 								pageDiv = document.createElement("div");	
 								resultsDiv.appendChild(pageDiv);				
@@ -123,8 +124,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						}
 					}
 
-					rps.resetIteration(); 
-					let recpanelcoll = rps.iterateNext();
+					PEC_RPS.resetIteration(); 
+					let recpanelcoll = PEC_RPS.iterateNext();
 					while (recpanelcoll) {
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
@@ -170,15 +171,15 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							}
 							recpanel = recPanels.iterateNext();
 						}
-						recpanelcoll = rps.iterateNext();
+						recpanelcoll = PEC_RPS.iterateNext();
 					}
 				}); // .forEach(function(objectId){
 					
 			}
-		).catch(
+		/*).catch(
 			function(error) {
 				console.error(error);
-			}
+			}*/
 		); // function(relatedFeatureSetByObjectId){
 	}
 
