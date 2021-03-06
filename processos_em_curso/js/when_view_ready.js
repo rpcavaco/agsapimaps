@@ -26,13 +26,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				);
 
-				const flds = [];
+				/*const flds = [];
 				for (let pg in ATTRS_CFG) {						
 					flds.push.apply(flds, Object.keys(ATTRS_CFG[pg]))
-				} 
+				} */
 				
 				return p_sellayer.queryRelatedFeatures({
-					outFields: flds,
+					outFields:  ["*"],
 					relationshipId: p_sellayer.relationships[0].id,
 					objectIds: objectIds
 				});
@@ -44,8 +44,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
 
-				PanelSwitcherSingleton.createRecordsCollection();
-				
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
 
@@ -115,9 +113,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							spEl.setAttribute("style", "float: right");
 							spEl.textContent = rows[i][fld];
 							liEl.appendChild(spEl);
-
 						}
-
 					}
 
 					rps.resetIteration(); 
