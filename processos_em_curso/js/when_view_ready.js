@@ -3,11 +3,12 @@
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 	let hlight; //, grid;
-	var PEC_RPS = RecordPanelSwitcher();
 
 	function qryFeats(scrPt) {
 
 		const pt = p_view.toMap(scrPt);
+		const rec_rps = RecordPanelSwitcher();
+
 		p_sellayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
@@ -45,7 +46,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
 
-				PEC_RPS.clear();
+				rec_rps.clear();
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -93,17 +94,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					for (let i=0; i<rows.length; i++) {
 						
-						reckey = PEC_RPS.recKey(i+1);
-						pagekey = PEC_RPS.pageKey(pageNum+1)
-						PEC_RPS.newRecord(reckey);
+						reckey = rec_rps.recKey(i+1);
+						pagekey = rec_rps.pageKey(pageNum+1)
+						rec_rps.newRecord(reckey);
 						
 						for (let fld in ATTRS_CFG) {
 
 							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
 								if (pageDiv) {
-									PEC_RPS.addPanel(reckey, pageDiv, PEC_RPS.pageKey(pageNum+1));
+									rec_rps.addPanel(reckey, pageDiv, rec_rps.pageKey(pageNum+1));
 									pageNum++;
-									pagekey = PEC_RPS.pageKey(pageNum+1);
+									pagekey = rec_rps.pageKey(pageNum+1);
 								}
 								pageDiv = document.createElement("div");	
 								resultsDiv.appendChild(pageDiv);				
@@ -121,11 +122,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							spEl.setAttribute("style", "float: right");
 							spEl.textContent = rows[i][fld];
 							liEl.appendChild(spEl);
+
+							attrs_per_page_cnt++;
 						}
 					}
 
-					PEC_RPS.resetIteration(); 
-					let recpanelcoll = PEC_RPS.iterateNext();
+					rec_rps.resetIteration(); 
+					let recpanelcoll = rec_rps.iterateNext();
 					while (recpanelcoll) {
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
@@ -139,7 +142,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página anterior";
-								attEventHandler(btEl, 'click', 
+								/*attEventHandler(btEl, 'click', 
 									function(evt) {
 										const el1 = document.getElementById("gridpage_PAG02");
 										const el2 = document.getElementById("gridpage_PAG01");
@@ -148,7 +151,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 											el2.style.display = "block";
 										}
 									}
-								);
+								);*/
 							}
 							if (!recpanel.is_last) {
 								btEl = document.createElement("button");
@@ -158,7 +161,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página seguinte";
-								attEventHandler(btEl, 'click', 
+								/*attEventHandler(btEl, 'click', 
 									function(evt) {
 										const el1 = document.getElementById("gridpage_PAG01");
 										const el2 = document.getElementById("gridpage_PAG02");
@@ -167,11 +170,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 											el2.style.display = "block";
 										}
 									}
-								);
+								);*/
 							}
 							recpanel = recPanels.iterateNext();
 						}
-						recpanelcoll = PEC_RPS.iterateNext();
+						recpanelcoll = rec_rps.iterateNext();
 					}
 				}); // .forEach(function(objectId){
 					

@@ -273,7 +273,7 @@ function RecordPanelSwitcher() {
 			this.iterator_current_key = this.recordorder[idx];
 		}
 
-		return this.getCurrentIterationRecord();
+		return this.getCurrentIteration();
 	}
 
 };
