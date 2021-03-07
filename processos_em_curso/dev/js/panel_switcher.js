@@ -213,16 +213,21 @@ function RecordPanelSwitcher() {
 			return false;
 		}
 
+		console.log("activatePanel 216 reckey:", p_reckey, "panlekey:", p_panel_key);
+
 		let ret = false;
 		let tmp_rec = null;
 
 		for (let tmp_rec_key in this.records) {
+
 			tmp_rec = this.records[tmp_rec_key];
-			if (tmp_rec_key == p_reckey) {
+			console.log("activatePanel 224 tmp_rec.key:", tmp_rec.key, "reckey:", p_reckey);
+			if (tmp_rec.key == p_reckey) {
 				tmp_rec.activatePanel(p_panel_key);
 			} else {
 				tmp_rec.deactivateAllPanels();
 			}
+
 		}
 
 		return ret;
