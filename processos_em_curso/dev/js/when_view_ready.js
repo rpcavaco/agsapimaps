@@ -149,8 +149,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					}
 
+					console.log("   152");
+
 					rec_rps.resetIteration(); 
 					let recpanelcoll = rec_rps.iterateNext();
+					console.log(recpanelcoll);
 					while (recpanelcoll) {
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 

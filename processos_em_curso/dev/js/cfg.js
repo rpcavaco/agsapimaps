@@ -5,10 +5,10 @@ var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
 var PORTALITEM_ID = "25f42060fa80453fba15320eb85d7b25" // Processos em curso prod
 
 var VIEW_EXTENT = {
-	xmin: -46900.0,
-	ymin: 162000.0,
-	xmax: -34700.0, 
-	ymax: 170000.0,
+	xmin: -41600.0,
+	ymin: 165400.0,
+	xmax: -40000.0, 
+	ymax: 166600.0,
 	spatialReference: {
 		wkid: 102161
 	}
