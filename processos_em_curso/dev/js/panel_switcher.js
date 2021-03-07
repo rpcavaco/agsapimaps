@@ -186,6 +186,7 @@ function RecordPanelSwitcher() {
 		}
 
 		this.records[p_reckey] = new SwitchingPanelCollection(p_reckey);
+		this.recordorder.push(p_reckey);
 
 		console.log("newRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
 
@@ -262,8 +263,6 @@ function RecordPanelSwitcher() {
 			}
 		}
 
-		console.log("getCurrentIteration, iterator_current_key:", this.iterator_current_key);
-
 		return ret;
 	};
 
@@ -274,6 +273,8 @@ function RecordPanelSwitcher() {
 		} else {
 			idx = this.recordorder.indexOf(this.iterator_current_key) + 1;
 		}
+
+		console.log("iterateNext, idx:", idx, "recordorder.len:", this.recordorder.length);
 
 		if (idx < this.recordorder.length) {
 			this.iterator_current_key = this.recordorder[idx];
