@@ -157,17 +157,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					while (recpanelcoll) {
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
-						let recpanel = recPanels.iterateNext();
-						while (recpanel) {
-							if (!recpanel.is_first) {
+						let recpaneliter = recPanels.iterateNext();
+						while (recpaneliter) {
+							if (!recpaneliter.is_first) {
 								btEl = document.createElement("button");
-								recpanel.content.dom_elem.appendChild(btEl);
+								recpaneliter.content.dom_elem.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página anterior";
-								console.log("167:", recpanelcoll.reckey, recpanel.key);
+								console.log("167:", recpanelcoll.reckey, recpaneliter.key);
 								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
 									attEventHandler(p_btEl, 'click', 
@@ -175,17 +175,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
 									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpanel.key);
+								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.nextkey);
 							}
-							if (!recpanel.is_last) {
+							if (!recpaneliter.is_last) {
 								btEl = document.createElement("button");
-								recpanel.content.dom_elem.appendChild(btEl);
+								recpaneliter.content.dom_elem.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página seguinte";
-								console.log("184:", recpanelcoll.reckey, recpanel.key);
+								console.log("184:", recpanelcoll.reckey, recpaneliter.key);
 								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
 									attEventHandler(p_btEl, 'click', 
@@ -193,9 +193,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
 									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpanel.key);
+								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.prevkey);
 							}
-							recpanel = recPanels.iterateNext();
+							recpaneliter = recPanels.iterateNext();
 						}
 						recpanelcoll = rec_rps.iterateNext();
 					}

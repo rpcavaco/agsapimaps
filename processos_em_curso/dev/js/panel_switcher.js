@@ -95,19 +95,25 @@ function SwitchingPanelCollection(p_collname) {
 	};
 
 	this.getCurrentIteration = function() {
-		let ret = null;
+		let ret = null, idx, rec, prevkey=null, nextkey=null;
 
 		if (this.iterator_current_key != null) {
 			idx = this.panelorder.indexOf(this.iterator_current_key);
-			if (idx >= 0) {
-				rec = this._findPanel(this.iterator_current_key)
-				if (rec != null) {
-					ret = {
-						is_first: (idx == 0),
-						is_last: (idx == (this.panelorder.length-1)),
-						key: this.iterator_current_key,
-						content: this._findPanel(this.iterator_current_key)
-					}
+			rec = this._findPanel(this.iterator_current_key)
+			if (idx < (this.panelorder.length-1)) {
+				nextkey = this.panelorder[idx + 1];
+			}
+			if (idx > 0) {
+				prevkey = this.panelorder[idx - 1];
+			}
+			if (rec != null) {
+				ret = {
+					is_first: (idx == 0),
+					is_last: (idx == (this.panelorder.length-1)),
+					key: this.iterator_current_key,
+					prevkey: prevkey,
+					nextkey: nextkey,
+					content: rec
 				}
 			}
 		}
@@ -116,16 +122,17 @@ function SwitchingPanelCollection(p_collname) {
 	};
 
 	this.iterateNext = function() {
-		let idx, key, ret = null;
+		let idx, nextidx, a = null, b = null;
 		if (this.iterator_current_key == null) {
 			idx = 0;
 		} else {
 			idx = this.panelorder.indexOf(this.iterator_current_key) + 1;
 		}
+		nextidx = idx + 1;
 
 		if (idx < this.panelorder.length) {
 			this.iterator_current_key = this.panelorder[idx];
-			ret = this.getCurrentIteration();
+			a = this.getCurrentIteration();
 		} else {
 			this.iterator_current_key = null;
 		}
@@ -222,8 +229,8 @@ function RecordPanelSwitcher() {
 
 			tmp_rec = this.records[tmp_rec_key];
 			console.log(tmp_rec);
-			console.log("activatePanel 224 tmp_rec.key:", tmp_rec_key, "tmp_rec.key:", tmp_rec.key, "reckey:", p_reckey);
-			if (tmp_rec.key == p_reckey) {
+			console.log("activatePanel 224 tmp_rec.key:", tmp_rec_key, "reckey:", p_panel_key);
+			if (tmp_rec_key == p_reckey) {
 				tmp_rec.activatePanel(p_panel_key);
 			} else {
 				tmp_rec.deactivateAllPanels();
