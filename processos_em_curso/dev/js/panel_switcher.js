@@ -242,10 +242,15 @@ function RecordPanelSwitcher() {
 
 		let ret = null;
 
+		console.log("getCurrentIteration, iterator_current_key:", this.iterator_current_key);
+
 		if (this.iterator_current_key != null) {
 			idx = this.recordorder.indexOf(this.iterator_current_key);
+			console.log("getCurrentIteration, idx:", idx);
+
 			if (idx >= 0) {
 				rec = this._findRecord(this.iterator_current_key)
+				console.log("getCurrentIteration, rec:", rec);
 				if (rec != null) {
 					ret = {
 						is_first: (idx == 0),
@@ -256,6 +261,8 @@ function RecordPanelSwitcher() {
 				}
 			}
 		}
+
+		console.log("getCurrentIteration, iterator_current_key:", this.iterator_current_key);
 
 		return ret;
 	};
@@ -271,6 +278,8 @@ function RecordPanelSwitcher() {
 		if (idx < this.recordorder.length) {
 			this.iterator_current_key = this.recordorder[idx];
 		}
+
+		console.log("iterateNext, iterator_current_key:", this.iterator_current_key);
 
 		return this.getCurrentIteration();
 	}
