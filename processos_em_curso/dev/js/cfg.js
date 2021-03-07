@@ -31,7 +31,7 @@ var ATTRS_CFG = {
 	"data_emissao":  ["Data emissão tí­tulo", 'date'],
 	"data_entrada":  ["Data entrada", 'date'],
 
-	"aprov_arq_despacho":  ["Despacho aprovacão arq.ª", null],
+	"aprov_arq_despacho":  ["Despacho aprovação arq.ª", null],
 	"aprov_arq_data_despacho":  ["Data despacho aprov.arq.ª", 'date'],
 
 	"entrada":  ["Em 'entrada'", null],

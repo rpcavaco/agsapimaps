@@ -110,8 +110,10 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 							switch (fmt) {
 								case 'date':
+									console.log('date fld:'+fld);
 									d = new Date(0);
-									val = d.setUTCSeconds(preval / 1000):
+									val = d.setUTCSeconds(preval / 1000);
+									break;
 
 								default:
 									val = preval;
