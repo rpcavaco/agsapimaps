@@ -84,6 +84,7 @@ require([
 	"esri/config",
 	"esri/WebMap",
 	"esri/views/MapView",
+	"esri/geometry/Extent",
 	"esri/core/watchUtils",
 	"esri/widgets/LayerList",
 	"esri/widgets/ScaleBar",
@@ -96,6 +97,7 @@ require([
 	esriConfig, 
 	WebMap,
 	MapView,
+	Extent,
 	watchUtils,
 	LayerList,
 	ScaleBar,
@@ -120,7 +122,8 @@ require([
 	});
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
-		map: webmap // Reference to the map object created before the view
+		map: webmap, // Reference to the map object created before the view
+		extent: new Extent(VIEW_EXTENT)
 	});
 	// ========================================================================
 

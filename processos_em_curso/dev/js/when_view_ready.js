@@ -110,9 +110,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 							switch (fmt) {
 								case 'date':
-									console.log('date fld:'+fld);
 									d = new Date(0);
-									val = d.setUTCSeconds(preval / 1000);
+									d.setUTCSeconds(preval / 1000);
+									val = d.toLocaleDateString();
 									break;
 
 								default:
@@ -137,7 +137,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							ulEl.appendChild(liEl);
 							liEl.setAttribute("class", "nobull");
 							liEl.insertAdjacentHTML('afterBegin', lbl);
-							//liEl.innerText = String.format("{0}: {1}", ATTRS_CFG[fld], rows[i][fld]);
 							spEl = document.createElement("span");
 							spEl.setAttribute("style", "float: right");
 							spEl.textContent = val;
@@ -159,41 +158,39 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						while (recpanel) {
 							if (!recpanel.is_first) {
 								btEl = document.createElement("button");
-								pageDiv.appendChild(btEl);
+								recpanel.content.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página anterior";
-								/*attEventHandler(btEl, 'click', 
-									function(evt) {
-										const el1 = document.getElementById("gridpage_PAG02");
-										const el2 = document.getElementById("gridpage_PAG01");
-										if (el1!=null && el2!=null) {
-											el1.style.display = "none";
-											el2.style.display = "block";
+								console.log("167:", recpanelcoll.reckey, recpanel.key);
+								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
+									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
+									attEventHandler(p_btEl, 'click', 
+										function(evt) {
+											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
-									}
-								);*/
+									);							
+								})(btEl, rec_rps, recpanelcoll.reckey, recpanel.key);
 							}
 							if (!recpanel.is_last) {
 								btEl = document.createElement("button");
-								pageDiv.appendChild(btEl);
+								recpanel.content.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página seguinte";
-								/*attEventHandler(btEl, 'click', 
-									function(evt) {
-										const el1 = document.getElementById("gridpage_PAG01");
-										const el2 = document.getElementById("gridpage_PAG02");
-										if (el1!=null && el2!=null) {
-											el1.style.display = "none";
-											el2.style.display = "block";
+								console.log("184:", recpanelcoll.reckey, recpanel.key);
+								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
+									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
+									attEventHandler(p_btEl, 'click', 
+										function(evt) {
+											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
-									}
-								);*/
+									);							
+								})(btEl, rec_rps, recpanelcoll.reckey, recpanel.key);
 							}
 							recpanel = recPanels.iterateNext();
 						}
