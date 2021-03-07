@@ -103,10 +103,10 @@ function SwitchingPanelCollection(p_collname) {
 				rec = this._findPanel(this.iterator_current_key)
 				if (rec != null) {
 					ret = {
-						is_first: idx == 0,
-						is_last: idx == this.panelorder.length-1,
-						key: key,
-						content: this._findPanel(key)
+						is_first: (idx == 0),
+						is_last: (idx == (this.panelorder.length-1)),
+						key: this.iterator_current_key,
+						content: this._findPanel(this.iterator_current_key)
 					}
 				}
 			}
@@ -127,7 +127,7 @@ function SwitchingPanelCollection(p_collname) {
 			this.iterator_current_key = this.panelorder[idx];
 		}
 
-		return this.getCurrentIterationRecord();
+		return this.getCurrentIteration();
 	};
 }
 
@@ -255,7 +255,7 @@ function RecordPanelSwitcher() {
 				if (rec != null) {
 					ret = {
 						is_first: (idx == 0),
-						is_last: (idx == this.recordorder.length-1),
+						is_last: (idx == (this.recordorder.length-1)),
 						reckey: this.iterator_current_key,
 						content: rec
 					}
