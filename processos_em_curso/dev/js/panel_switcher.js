@@ -219,16 +219,12 @@ function RecordPanelSwitcher() {
 			return false;
 		}
 
-		console.log("activatePanel 216 reckey:", p_reckey, "panlekey:", p_panel_key);
-
 		let ret = false;
 		let tmp_rec = null;
 
 		for (let tmp_rec_key in this.records) {
 
 			tmp_rec = this.records[tmp_rec_key];
-			console.log(tmp_rec);
-			console.log("activatePanel 224 tmp_rec.key:", tmp_rec_key, "reckey:", p_panel_key);
 			if (tmp_rec_key == p_reckey) {
 				tmp_rec.activatePanel(p_panel_key);
 			} else {
@@ -256,24 +252,25 @@ function RecordPanelSwitcher() {
 
 	this.getCurrentIteration = function() {
 
-		let ret = null;
-
-		console.log("getCurrentIteration, iterator_current_key:", this.iterator_current_key);
+		let ret = null, rec, prevreckey=null, nextreckey=null;
 
 		if (this.iterator_current_key != null) {
 			idx = this.recordorder.indexOf(this.iterator_current_key);
-			console.log("getCurrentIteration, idx:", idx);
-
-			if (idx >= 0) {
-				rec = this._findRecord(this.iterator_current_key)
-				console.log("getCurrentIteration, rec:", rec);
-				if (rec != null) {
-					ret = {
-						is_first: (idx == 0),
-						is_last: (idx == (this.recordorder.length-1)),
-						reckey: this.iterator_current_key,
-						content: rec
-					}
+			rec = this._findRecord(this.iterator_current_key)
+			if (idx < (this.recordorder.length-1)) {
+				nextreckey = this.recordorder[idx + 1];
+			}
+			if (idx > 0) {
+				prevreckey = this.recordorder[idx - 1];
+			}		
+			if (rec != null) {
+				ret = {
+					is_first: (idx == 0),
+					is_last: (idx == (this.recordorder.length-1)),
+					reckey: this.iterator_current_key,
+					prevreckey: prevreckey,
+					nextreckey: nextreckey,
+					content: rec
 				}
 			}
 		}
@@ -282,6 +279,7 @@ function RecordPanelSwitcher() {
 	};
 
 	this.iterateNext = function() {
+
 		let idx = null;
 		let ret = null;
 		if (this.iterator_current_key == null) {
@@ -290,17 +288,12 @@ function RecordPanelSwitcher() {
 			idx = this.recordorder.indexOf(this.iterator_current_key) + 1;
 		}
 
-		console.log("iterateNext, idx:", idx, "recordorder.len:", this.recordorder.length);
-
 		if (idx < this.recordorder.length) {
 			this.iterator_current_key = this.recordorder[idx];
 			ret = this.getCurrentIteration();
 		} else {
 			this.iterator_current_key = null;
 		}
-
-		console.log("iterateNext, iterator_current_key:", this.iterator_current_key);
-
 
 		return ret;
 	}

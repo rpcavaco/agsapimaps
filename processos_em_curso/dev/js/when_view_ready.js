@@ -69,20 +69,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				  
 
-					// Listas
-
-					/*let gridPageDiv;
-					const gdpages = {};
-					for (let pg in ATTRS_CFG) {
-						gridPageDiv = document.createElement("div")
-						gdpages[pg] = gridPageDiv;
-						gridPageDiv.setAttribute("id", "gridpage_"+pg);
-						if (pg != "PAG01") {
-							gridPageDiv.style.display = "none";
-						}
-						results.appendChild(gridPageDiv);
-					}*/
-
 					let attrs_per_page_cnt = 0;
 					let max_attrs_per_page = 12;
 					let pageDiv = null;
@@ -149,16 +135,51 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					}
 
-					console.log("   152");
-
 					rec_rps.resetIteration(); 
 					let recpanelcoll = rec_rps.iterateNext();
-					console.log(recpanelcoll);
 					while (recpanelcoll) {
+
+						// inserir botões de navegação entre registos
+						if (!recpanelcoll.is_first) {
+							btEl = document.createElement("button");
+							recpanelcoll.content.dom_elem.appendChild(btEl);
+							btEl.setAttribute("class", "iconbtn float-left");
+							spEl = document.createElement("span");
+							spEl.setAttribute("class", "left-arrow");
+							btEl.appendChild(spEl);
+							spEl.textContent = "Rec anterior";
+							(function(p_btEl, p_rec_rps, p_reckey) {
+								attEventHandler(p_btEl, 'click', 
+									function(evt) {
+										p_rec_rps.showActivePanel(p_reckey);
+									}
+								);							
+							})(btEl, rec_rps, recpanelcoll.prevreckey);
+						}
+						if (!recpanelcoll.is_last) {
+							btEl = document.createElement("button");
+							recpanelcoll.content.dom_elem.appendChild(btEl);
+							btEl.setAttribute("class", "iconbtn float-right");
+							spEl = document.createElement("span");
+							spEl.setAttribute("class", "right-arrow");
+							btEl.appendChild(spEl);
+							spEl.textContent = "Rec seguinte";
+							(function(p_btEl, p_rec_rps, p_reckey) {
+								attEventHandler(p_btEl, 'click', 
+									function(evt) {
+										p_rec_rps.activatePanel(p_reckey);
+									}
+								);							
+							})(btEl, rec_rps, recpanelcoll.nextreckey);
+						}
+
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
 						let recpaneliter = recPanels.iterateNext();
+
 						while (recpaneliter) {
+
+							// inserir botões de navegação entre páginas do mesmo registo
 							if (!recpaneliter.is_first) {
 								btEl = document.createElement("button");
 								recpaneliter.content.dom_elem.appendChild(btEl);
@@ -167,15 +188,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página anterior";
-								console.log("167:", recpanelcoll.reckey, recpaneliter.key);
 								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
-									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
 									attEventHandler(p_btEl, 'click', 
 										function(evt) {
 											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
 									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.nextkey);
+								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.prevkey);
 							}
 							if (!recpaneliter.is_last) {
 								btEl = document.createElement("button");
@@ -185,7 +204,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página seguinte";
-								console.log("184:", recpanelcoll.reckey, recpaneliter.key);
 								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
 									attEventHandler(p_btEl, 'click', 
@@ -193,7 +211,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 											p_rec_rps.activatePanel(p_reckey, p_panelkey);
 										}
 									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.prevkey);
+								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.nextkey);
 							}
 							recpaneliter = recPanels.iterateNext();
 						}
