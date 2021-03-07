@@ -125,9 +125,12 @@ function SwitchingPanelCollection(p_collname) {
 
 		if (idx < this.panelorder.length) {
 			this.iterator_current_key = this.panelorder[idx];
+			ret = this.getCurrentIteration();
+		} else {
+			this.iterator_current_key = null;
 		}
 
-		return this.getCurrentIteration();
+		return ret;
 	};
 }
 
@@ -268,6 +271,7 @@ function RecordPanelSwitcher() {
 
 	this.iterateNext = function() {
 		let idx = null;
+		let ret = null;
 		if (this.iterator_current_key == null) {
 			idx = 0;
 		} else {
@@ -278,11 +282,15 @@ function RecordPanelSwitcher() {
 
 		if (idx < this.recordorder.length) {
 			this.iterator_current_key = this.recordorder[idx];
+			ret = this.getCurrentIteration();
+		} else {
+			this.iterator_current_key = null;
 		}
 
 		console.log("iterateNext, iterator_current_key:", this.iterator_current_key);
 
-		return this.getCurrentIteration();
+
+		return ret;
 	}
 
 };

@@ -161,7 +161,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						while (recpanel) {
 							if (!recpanel.is_first) {
 								btEl = document.createElement("button");
-								recpanel.content.appendChild(btEl);
+								recpanel.content.dom_elem.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
@@ -179,7 +179,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							}
 							if (!recpanel.is_last) {
 								btEl = document.createElement("button");
-								recpanel.content.appendChild(btEl);
+								recpanel.content.dom_elem.appendChild(btEl);
 								btEl.setAttribute("class", "iconbtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
