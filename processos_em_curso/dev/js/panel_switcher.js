@@ -221,7 +221,8 @@ function RecordPanelSwitcher() {
 		for (let tmp_rec_key in this.records) {
 
 			tmp_rec = this.records[tmp_rec_key];
-			console.log("activatePanel 224 tmp_rec.key:", tmp_rec.key, "reckey:", p_reckey);
+			console.log(tmp_rec);
+			console.log("activatePanel 224 tmp_rec.key:", tmp_rec_key, "tmp_rec.key:", tmp_rec.key, "reckey:", p_reckey);
 			if (tmp_rec.key == p_reckey) {
 				tmp_rec.activatePanel(p_panel_key);
 			} else {
