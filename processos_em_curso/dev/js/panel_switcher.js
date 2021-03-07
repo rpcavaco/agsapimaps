@@ -122,17 +122,16 @@ function SwitchingPanelCollection(p_collname) {
 	};
 
 	this.iterateNext = function() {
-		let idx, nextidx, a = null, b = null;
+		let idx, ret=null;
 		if (this.iterator_current_key == null) {
 			idx = 0;
 		} else {
 			idx = this.panelorder.indexOf(this.iterator_current_key) + 1;
 		}
-		nextidx = idx + 1;
 
 		if (idx < this.panelorder.length) {
 			this.iterator_current_key = this.panelorder[idx];
-			a = this.getCurrentIteration();
+			ret = this.getCurrentIteration();
 		} else {
 			this.iterator_current_key = null;
 		}
