@@ -75,18 +75,24 @@ function SwitchingPanelCollection(p_collname) {
 		}
 		return true;
 	};
-	this.deactivateAllPanels = function() {
+	this.hideAllPanels = function() {
 		for (let k in this.panels) {
 			this._findPanel(k).setVisible(false);
 		}
 		return true;
 	};
-	this.showActivePanel = function() {
+	this._showActivePanel = function(p_do_show) {
 		if (this.active_panel != null) {
 			this.active_panel.setVisible(true);
 		} else {
 			console.trace("SwitchingPanelCollection "+this.collname+" showActivePanel: no active panel.");
 		}
+	};
+	this.showActivePanel = function() {
+		this._showActivePanel(true);
+	};
+	this.hideActivePanel = function() {
+		this._showActivePanel(false);
 	};
 
 	// iterator
@@ -208,7 +214,7 @@ function RecordPanelSwitcher() {
 			return false;
 		}
 		let first_isvisible = true;
-		if (Object.keys(this.records).length > 0) {
+		if (Object.keys(this.records).length > 1) {
 			// subsequent records first page is active but not visible
 			first_isvisible = false;
 		}
@@ -233,7 +239,7 @@ function RecordPanelSwitcher() {
 			if (tmp_rec_key == p_reckey) {
 				tmp_rec.activatePanel(p_panel_key);
 			} else {
-				tmp_rec.deactivateAllPanels();
+				tmp_rec.hideAllPanels();
 			}
 
 		}
@@ -354,7 +360,11 @@ function RecordPanelSwitcher() {
 	};
 
 	this.rotateNext = function() {
-		let ret = this.doRotate(true);
+		let ret = this.getCurrentRotation();
+		if (ret) {
+			ret.content.hideActivePanel();
+		}
+		ret = this.doRotate(true);
 		if (ret) {
 			console.log("rotateNext show");
 			ret.content.showActivePanel();
@@ -362,7 +372,11 @@ function RecordPanelSwitcher() {
 	};
 
 	this.rotatePrev = function() {
-		let ret = this.doRotate(false);
+		let ret = this.getCurrentRotation();
+		if (ret) {
+			ret.content.hideActivePanel();
+		}
+		ret = this.doRotate(false);
 		if (ret) {
 			console.log("rotatePrev show");
 			ret.content.showActivePanel();
