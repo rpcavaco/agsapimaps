@@ -327,61 +327,57 @@ function RecordPanelSwitcher() {
 		}
 	};
 
+	this.rotateToEnd = function() {
+		if (this.recordorder.length > 0) {
+			this.rotator_current_key = this.recordorder.length-1;
+		}
+	};
+
 	this.getCurrentRotation = function() {
 		return this._getCurrentRecord(false);
 	};
 
-	this.doRotate = function(p_forward) {
-
-		let idx = null;
-		let ret = null;
-		if (this.rotator_current_key == null) {
-			idx = 0;
-		} else {
-			idx = this.recordorder.indexOf(this.rotator_current_key) - 1;
-		}
-
-		if (p_forward) {
-			idx++;
-		} else {
-			idx--;
-		}
-
-		if (idx >= this.recordorder.length) {
-			idx = 0;
-		} else if (idx<0) {
-			idx = this.recordorder.length-1;
-		}
-
-		this.rotator_current_key = this.recordorder[idx];
-		ret = this.getCurrentRotation();
-
-		return ret;
-	};
-
 	this.rotateNext = function() {
 		let ret = this.getCurrentRotation();
-		if (ret) {
+		if (ret == null) {
+			console.warn("RecordPanelSwitcher: rotateNext failed, no 'current rotation' before rotate");
+		} else {
 			ret.content.hideActivePanel();
-		}
-		ret = this.doRotate(true);
-		if (ret) {
 			console.log("rotateNext show");
 			console.log(ret.content);
-			ret.content.showActivePanel();
+			if (ret.nextreckey!=null) {
+				this.rotator_current_key = ret.nextreckey;
+			} else {
+				this.resetRotation(); 
+			}
+			ret = this.getCurrentRotation();
+			if (ret == null) {
+				console.warn("RecordPanelSwitcher: rotateNext failed, no 'current rotation' after rotate");
+			} else {
+				ret.content.showActivePanel();
+			}
 		}
 	};
 
 	this.rotatePrev = function() {
 		let ret = this.getCurrentRotation();
-		if (ret) {
+		if (ret == null) {
+			console.warn("RecordPanelSwitcher: rotatePrev failed, no 'current rotation' before rotate");
+		} else {
 			ret.content.hideActivePanel();
-		}
-		ret = this.doRotate(false);
-		if (ret) {
 			console.log("rotatePrev show");
 			console.log(ret.content);
-			ret.content.showActivePanel();
+			if (ret.prevreckey!=null) {
+				this.rotator_current_key = ret.prevreckey;
+			} else {
+				this.rotateToEnd(); 
+			}
+			ret = this.getCurrentRotation();
+			if (ret == null) {
+				console.warn("RecordPanelSwitcher: rotatePrev failed, no 'current rotation' after rotate");
+			} else {
+				ret.content.showActivePanel();
+			}
 		}
 	};
 };

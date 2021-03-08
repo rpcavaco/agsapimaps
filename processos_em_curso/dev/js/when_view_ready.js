@@ -78,40 +78,43 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					let liEl, spEl, btEl, val;
 
-					// inserir botões de navegação entre registos
-					navDiv = document.createElement("div");
-					resultsDiv.appendChild(navDiv);
-					
-					btEl = document.createElement("button");
-					navDiv.appendChild(btEl);
-					btEl.setAttribute("class", "iconbtn float-left");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "left-arrow");
-					btEl.appendChild(spEl);
-					//spEl.textContent = "Rec anterior";
-					(function(p_btEl, p_rec_rps) {
-						attEventHandler(p_btEl, 'click', 
-							function(evt) {
-								p_rec_rps.rotatePrev();
-							}
-						);							
-					})(btEl, rec_rps);
+					if (rows.length>1) {
 
-					btEl = document.createElement("button");
-					navDiv.appendChild(btEl);
-					btEl.setAttribute("class", "iconbtn float-right");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "right-arrow");
-					btEl.appendChild(spEl);
-					// spEl.textContent = "Rec seguinte";
-					(function(p_btEl, p_rec_rps) {
-						attEventHandler(p_btEl, 'click', 
-							function(evt) {
-								p_rec_rps.rotateNext();
-							}
-						);							
-					})(btEl, rec_rps);							
+						// inserir botões de navegação entre registos
+						navDiv = document.createElement("div");
+						resultsDiv.appendChild(navDiv);
+						
+						btEl = document.createElement("button");
+						navDiv.appendChild(btEl);
+						btEl.setAttribute("class", "iconbtn");
+						spEl = document.createElement("span");
+						spEl.setAttribute("class", "left-arrow");
+						btEl.appendChild(spEl);
+						//spEl.textContent = "Rec anterior";
+						(function(p_btEl, p_rec_rps) {
+							attEventHandler(p_btEl, 'click', 
+								function(evt) {
+									p_rec_rps.rotatePrev();
+								}
+							);							
+						})(btEl, rec_rps);
 
+						btEl = document.createElement("button");
+						navDiv.appendChild(btEl);
+						btEl.setAttribute("class", "iconbtn float-right");
+						spEl = document.createElement("span");
+						spEl.setAttribute("class", "right-arrow");
+						btEl.appendChild(spEl);
+						// spEl.textContent = "Rec seguinte";
+						(function(p_btEl, p_rec_rps) {
+							attEventHandler(p_btEl, 'click', 
+								function(evt) {
+									p_rec_rps.rotateNext();
+								}
+							);							
+						})(btEl, rec_rps);	
+						
+					}
 
 					for (let i=0; i<rows.length; i++) {
 						
