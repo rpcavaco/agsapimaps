@@ -97,7 +97,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						navInnerDiv = document.createElement("div");
 						navDiv.appendChild(navInnerDiv);
-						navInnerDiv.setAttribute("class", "graybtn-back");
+						navInnerDiv.setAttribute("class", "graybtn-back just-right");
 						navInnerDiv.style.width = "200px";
 						
 						btEl = document.createElement("button");
@@ -233,7 +233,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							if (!recpaneliter.is_first) {
 								btEl = document.createElement("button");
 								pgNavDiv.appendChild(btEl);
-								btEl.setAttribute("class", "graybtn float-left");
+								btEl.setAttribute("class", "graybtn float-left btn-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
@@ -249,7 +249,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							if (!recpaneliter.is_last) {
 								btEl = document.createElement("button");
 								pgNavDiv.appendChild(btEl);
-								btEl.setAttribute("class", "graybtn float-right");
+								btEl.setAttribute("class", "graybtn float-right btn-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
@@ -269,10 +269,10 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				}); // .forEach(function(objectId){
 					
 			}
-		/*).catch(
+		).catch(
 			function(error) {
 				console.error(error);
-			}*/
+			}
 		); // function(relatedFeatureSetByObjectId){
 	}
 

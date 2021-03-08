@@ -123,7 +123,8 @@ require([
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
 		map: webmap, // Reference to the map object created before the view
-		extent: new Extent(VIEW_EXTENT)
+		extent: new Extent(VIEW_EXTENT),
+		highlightOptions: HIGHLIGHT_OPTS	
 	});
 	// ========================================================================
 

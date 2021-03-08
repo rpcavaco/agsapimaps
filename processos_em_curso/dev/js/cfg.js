@@ -23,6 +23,13 @@ var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
 
 var TITLE_FADING_MSECS = 200;
+
+var HIGHLIGHT_OPTS = {
+	color: [255, 255, 0, 1],
+	haloOpacity: 0.9,
+	fillOpacity: 0.2
+  }		
+
 //  ===========================================================================
 
 

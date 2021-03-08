@@ -82,6 +82,14 @@ body,
 	float: left;
 }
 
+.just-right {
+	margin-left: auto;
+}
+
+.just-left {
+	margin-right: auto;
+}
+
 li:nth-child(even) { 
 	background-color: #eee; 
 } 
@@ -100,6 +108,7 @@ li:nth-child(even) {
 	font-size: 14px;	
 	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
 	line-height: 1.3em;
+	padding: 4px 16px 4px 4px;
 }
 
 .graybtn-back {
@@ -115,14 +124,22 @@ li:nth-child(even) {
 	background: transparent;
 }
 
+.btn-left {
+	padding: 4px 16px 4px 4px;
+}
+
+.btn-right {
+	padding: 4px 4px 4px 16px;
+}
+
 .navdiv {
-	border-bottom: "grey 1px dotted";
-	padding-bottom: "10px"
+	border-bottom: grey 1px dotted;
+	padding-bottom: 10px
 }
 
 .pagenavdiv {
-	border-top: "grey 1px dotted";
-	padding-top: "10px"
+	border-top: grey 1px dotted;
+	padding-top: 10px
 }
 
 .right-arrow::after {
