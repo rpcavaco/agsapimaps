@@ -68,7 +68,7 @@ function SwitchingPanelCollection(p_collname) {
 		for (let k in this.panels) {
 			if (k == p_panel_key) {
 				this._findPanel(k).setVisible(true);
-				this.active_panel = k;
+				this.active_panel = this._findPanel(k);
 			} else {
 				this._findPanel(k).setVisible(false);
 			}
@@ -367,6 +367,7 @@ function RecordPanelSwitcher() {
 		ret = this.doRotate(true);
 		if (ret) {
 			console.log("rotateNext show");
+			console.log(ret.content);
 			ret.content.showActivePanel();
 		}
 	};
@@ -379,6 +380,7 @@ function RecordPanelSwitcher() {
 		ret = this.doRotate(false);
 		if (ret) {
 			console.log("rotatePrev show");
+			console.log(ret.content);
 			ret.content.showActivePanel();
 		}
 	};

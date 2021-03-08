@@ -71,7 +71,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					let attrs_per_page_cnt = 0;
 					let max_attrs_per_page = 12;
-					let pageDiv = null;
+					let navDiv, pageDiv = null;
 					let ulEl = null;
 					let pageNum = 0;
 					let reckey, pagekey;
@@ -79,9 +79,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let liEl, spEl, btEl, val;
 
 					// inserir botões de navegação entre registos
+					navDiv = document.createElement("div");
+					resultsDiv.appendChild(navDiv);
 					
 					btEl = document.createElement("button");
-					resultsDiv.appendChild(btEl);
+					navDiv.appendChild(btEl);
 					btEl.setAttribute("class", "iconbtn float-left");
 					spEl = document.createElement("span");
 					spEl.setAttribute("class", "left-arrow");
@@ -96,7 +98,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					})(btEl, rec_rps);
 
 					btEl = document.createElement("button");
-					resultsDiv.appendChild(btEl);
+					navDiv.appendChild(btEl);
 					btEl.setAttribute("class", "iconbtn float-right");
 					spEl = document.createElement("span");
 					spEl.setAttribute("class", "right-arrow");
@@ -211,7 +213,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								btEl.appendChild(spEl);
 								spEl.textContent = "Página seguinte";
 								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
-									console.log("p_reckey, p_panelkey:", p_reckey, p_panelkey);
 									attEventHandler(p_btEl, 'click', 
 										function(evt) {
 											p_rec_rps.activatePanel(p_reckey, p_panelkey);
