@@ -347,7 +347,7 @@ function RecordPanelSwitcher() {
 		if (ret == null) {
 			console.warn("RecordPanelSwitcher: rotateNext failed, no 'current rotation' before rotate");
 		} else {
-			ret.content.hideActivePanel();
+			ret.content.hideAllPanels();
 			console.log("rotateNext show");
 			console.log(ret.content);
 			if (ret.nextreckey!=null) {
@@ -369,7 +369,7 @@ function RecordPanelSwitcher() {
 		if (ret == null) {
 			console.warn("RecordPanelSwitcher: rotatePrev failed, no 'current rotation' before rotate");
 		} else {
-			ret.content.hideActivePanel();
+			ret.content.hideAllPanels();
 			console.log("rotatePrev show");
 			console.log(ret.content);
 			if (ret.prevreckey!=null) {
