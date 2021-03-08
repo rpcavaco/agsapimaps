@@ -107,7 +107,7 @@ require([
 	query,
 	array
 ) {
-	var titlefader = new DivFader("titlearea", 120.0);
+	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
 	titlefader.hideMessage(true);
 
 	// ========================================================================

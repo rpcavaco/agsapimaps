@@ -21,6 +21,8 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
+
+var TITLE_FADING_MSECS = 200;
 //  ===========================================================================
 
 

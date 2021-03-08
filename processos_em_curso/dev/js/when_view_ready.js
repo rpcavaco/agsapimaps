@@ -48,8 +48,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
-				const maxh = "200px";
-				const minh = "260px";
+				const exph = "380px";
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -86,7 +85,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						if (mainmsgDiv) {
 							mainmsgDiv.style.display = "none"
 						}
-						resultsDiv.style.height = minh;						
+						resultsDiv.style.height = exph;						
 					}
 
 					if (rows.length>1) {
@@ -97,10 +96,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						navInnerDiv = document.createElement("div");
 						resultsDiv.appendChild(navInnerDiv);
+						navInnerDiv.setAttribute("class", "graybtn");
 						
 						btEl = document.createElement("button");
-						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "graybtn");
+						navInnerDiv.appendChild(btEl);
+						//btEl.setAttribute("class", "graybtn");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "left-arrow");
 						btEl.appendChild(spEl);
@@ -118,13 +118,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						spEl = document.createElement("span");
 						spEl.setAttribute("id", "rec-nav-nums");
-						spEl.setAttribute("class", "graybtn");
-						navDiv.appendChild(spEl);
+						//spEl.setAttribute("class", "graybtn");
+						navInnerDiv.appendChild(spEl);
 						spEl.textContent = String.format(registos_fmt, 1, rows.length);
 
 						btEl = document.createElement("button");
-						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "graybtn");
+						navInnerDiv.appendChild(btEl);
+						//btEl.setAttribute("class", "graybtn");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "right-arrow");
 						btEl.appendChild(spEl);
@@ -141,9 +141,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							);							
 						})(btEl, rec_rps, rows.length);	
 
-						// expandir gridDiv
-						resultsDiv.style.height = maxh;
-						
 					}
 
 					let ulEl, liEl, val;
@@ -212,7 +209,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						}
 	
 					} // for row in  rows
-
 					// atualizar mensagem "1 de n registos"
 
 					rec_rps.resetIteration(); 
