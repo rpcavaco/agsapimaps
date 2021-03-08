@@ -69,11 +69,10 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				  
 
-					let attrs_per_page_cnt = 0;
+					let attrs_per_page_cnt;
 					let max_attrs_per_page = 12;
-					let navDiv, pageDiv = null;
-					let ulEl = null;
-					let pageNum = 0;
+					let navDiv, pageDiv;
+					let ulEl, pageNum;
 					let reckey, pagekey;
 
 					let liEl, spEl, btEl, val;
@@ -120,6 +119,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						
 						reckey = rec_rps.recKey(i+1);
 						pageNum = 0;
+						ulEl = null;
+						pageDiv = null;
+						attrs_per_page_cnt = 0;
+						pageNum = 0;
+
 						pagekey = rec_rps.pageKey(pageNum+1)
 						rec_rps.newRecord(reckey);
 						
@@ -173,7 +177,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						if (pageDiv != null) {
 							rec_rps.addPanel(reckey, pageDiv, pagekey);
 						}
-					}
+	
+					} // for row in  rows
 
 					// atualizar mensagem "1 de n registos"
 
