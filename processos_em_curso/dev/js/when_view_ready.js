@@ -131,7 +131,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							attrs_per_page_cnt++;
 						}
 						// todo - não fazer se n houver conteudo
-						rec_rps.addPanel(reckey, pageDiv, pagekey);
+						if (pageDiv != null) {
+							rec_rps.addPanel(reckey, pageDiv, pagekey);
+						}
 
 					}
 
@@ -140,44 +142,44 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					while (recpanelcoll) {
 
 						// inserir botões de navegação entre registos
-						if (!recpanelcoll.is_first) {
-							btEl = document.createElement("button");
-							recpanelcoll.content.dom_elem.appendChild(btEl);
-							btEl.setAttribute("class", "iconbtn float-left");
-							spEl = document.createElement("span");
-							spEl.setAttribute("class", "left-arrow");
-							btEl.appendChild(spEl);
-							spEl.textContent = "Rec anterior";
-							(function(p_btEl, p_rec_rps, p_reckey) {
-								attEventHandler(p_btEl, 'click', 
-									function(evt) {
-										p_rec_rps.showActivePanel(p_reckey);
-									}
-								);							
-							})(btEl, rec_rps, recpanelcoll.prevreckey);
-						}
-						if (!recpanelcoll.is_last) {
-							btEl = document.createElement("button");
-							recpanelcoll.content.dom_elem.appendChild(btEl);
-							btEl.setAttribute("class", "iconbtn float-right");
-							spEl = document.createElement("span");
-							spEl.setAttribute("class", "right-arrow");
-							btEl.appendChild(spEl);
-							spEl.textContent = "Rec seguinte";
-							(function(p_btEl, p_rec_rps, p_reckey) {
-								attEventHandler(p_btEl, 'click', 
-									function(evt) {
-										p_rec_rps.activatePanel(p_reckey);
-									}
-								);							
-							})(btEl, rec_rps, recpanelcoll.nextreckey);
-						}
+						btEl = document.createElement("button");
+						resultsDiv.appendChild(btEl);
+						btEl.setAttribute("class", "iconbtn float-left");
+						spEl = document.createElement("span");
+						spEl.setAttribute("class", "left-arrow");
+						btEl.appendChild(spEl);
+						//spEl.textContent = "Rec anterior";
+						(function(p_btEl, p_rec_rps) {
+							attEventHandler(p_btEl, 'click', 
+								function(evt) {
+									p_rec_rps.rotatePrev();
+								}
+							);							
+						})(btEl, rec_rps);
 
+						btEl = document.createElement("button");
+						resultsDiv.appendChild(btEl);
+						btEl.setAttribute("class", "iconbtn float-right");
+						spEl = document.createElement("span");
+						spEl.setAttribute("class", "right-arrow");
+						btEl.appendChild(spEl);
+						// spEl.textContent = "Rec seguinte";
+						(function(p_btEl, p_rec_rps) {
+							attEventHandler(p_btEl, 'click', 
+								function(evt) {
+									p_rec_rps.rotateNext();
+								}
+							);							
+						})(btEl, rec_rps);
+							
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
 						let recpaneliter = recPanels.iterateNext();
+						let recpanel_count = 0;
 
-						while (recpaneliter) {
+						while (recpaneliter && recpanel_count < 50) {
+
+							recpanel_count++;
 
 							// inserir botões de navegação entre páginas do mesmo registo
 							if (!recpaneliter.is_first) {

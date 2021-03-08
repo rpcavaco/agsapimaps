@@ -151,6 +151,7 @@ function RecordPanelSwitcher() {
 
 	this.recordorder = [],
 	this.iterator_current_key = null,
+	this.rotator_current_key = null,
 	this.records = {
 	};
 
@@ -183,8 +184,6 @@ function RecordPanelSwitcher() {
 			ret = this.records[p_reckey];
 		}
 
-		console.log("_findRecord keys:"+Object.keys(this.records)+" key:"+p_reckey+" idx:"+Object.keys(this.records).indexOf(p_reckey)+" ret:"+ret);
-
 		return ret;
 	};
 
@@ -196,8 +195,6 @@ function RecordPanelSwitcher() {
 
 		this.records[p_reckey] = new SwitchingPanelCollection(p_reckey);
 		this.recordorder.push(p_reckey);
-
-		console.log("newRecord keys:"+Object.keys(this.records)+" key:"+p_reckey);
 
 		return true;
 	};
@@ -250,13 +247,19 @@ function RecordPanelSwitcher() {
 		this.iterator_current_key = null;
 	};
 
-	this.getCurrentIteration = function() {
+	this._getCurrentRecord = function(p_is_iteration_or_rotation) {
 
-		let ret = null, rec, prevreckey=null, nextreckey=null;
+		let ret = null, rec, currkey, prevreckey=null, nextreckey=null;
 
-		if (this.iterator_current_key != null) {
-			idx = this.recordorder.indexOf(this.iterator_current_key);
-			rec = this._findRecord(this.iterator_current_key)
+		if (p_is_iteration_or_rotation) {
+			currkey = this.iterator_current_key;
+		} else {
+			currkey = this.rotator_current_key;
+		}
+
+		if (currkey != null) {
+			idx = this.recordorder.indexOf(currkey);
+			rec = this._findRecord(currkey)
 			if (idx < (this.recordorder.length-1)) {
 				nextreckey = this.recordorder[idx + 1];
 			}
@@ -267,7 +270,7 @@ function RecordPanelSwitcher() {
 				ret = {
 					is_first: (idx == 0),
 					is_last: (idx == (this.recordorder.length-1)),
-					reckey: this.iterator_current_key,
+					reckey: currkey,
 					prevreckey: prevreckey,
 					nextreckey: nextreckey,
 					content: rec
@@ -276,6 +279,10 @@ function RecordPanelSwitcher() {
 		}
 
 		return ret;
+	};
+
+	this.getCurrentIteration = function() {
+		return this._getCurrentRecord(true);
 	};
 
 	this.iterateNext = function() {
@@ -296,6 +303,53 @@ function RecordPanelSwitcher() {
 		}
 
 		return ret;
-	}
+	};
 
+	// rotation
+
+	this.resetRotation = function() {
+		if (this.recordorder.length > 0) {
+			this.rotator_current_key = this.recordorder[0];
+		}
+	};
+
+	this.getCurrentRotation = function() {
+		return this._getCurrentRecord(false);
+	};
+
+	this.doRotate = function(p_forward) {
+
+		let idx = null;
+		let ret = null;
+		if (this.rotator_current_key == null) {
+			idx = 0;
+		} else {
+			idx = this.recordorder.indexOf(this.rotator_current_key) - 1;
+		}
+
+		if (p_forward) {
+			idx++;
+		} else {
+			idx--;
+		}
+
+		if (idx >= this.recordorder.length) {
+			idx = 0;
+		} else if (idx<0) {
+			idx = this.recordorder.length-1;
+		}
+
+		this.rotator_current_key = this.recordorder[idx];
+		ret = this.getCurrentRotation();
+
+		return ret;
+	};
+
+	this.rotateNext = function() {
+		this.doRotate(true);
+	};
+
+	this.rotatePrev = function() {
+		this.doRotate(false);
+	};
 };
