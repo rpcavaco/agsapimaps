@@ -44,7 +44,7 @@ function SwitchingPanelCollection(p_collname) {
 			this.iterator_current_key = null;
 		}
 	};
-	this.addPanel = function(p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
+	this.addPanel = function(p_panel_dom_elem, p_panel_key, b_first_isvisible, opt_display_attribute_str) {
 		if (this._findPanel(p_panel_key) != null) {
 			console.trace("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
@@ -53,7 +53,7 @@ function SwitchingPanelCollection(p_collname) {
 		this.panelorder.push(p_panel_key);
 		if (this.active_panel == null) {
 			this.active_panel = this.panels[p_panel_key];
-			this.active_panel.setVisible(true);
+			this.active_panel.setVisible(b_first_isvisible);
 		} else {
 			this.panels[p_panel_key].setVisible(false);
 		}
@@ -199,13 +199,18 @@ function RecordPanelSwitcher() {
 		return true;
 	};
 
-	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key) {
+	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
 		const rec = this._findRecord(p_reckey);
 		if (rec == null) {
 			console.trace("PanelSwitcher - addPanel, record does not exist = %s", p_reckey);
 			return false;
 		}
-		return rec.addPanel(p_panel_dom_elem, p_panel_key);
+		let first_isvisible = true;
+		if (Object.keys(this.records).length > 0) {
+			// subsequent records first page is active but not visible
+			first_isvisible = false;
+		}
+		return rec.addPanel(p_panel_dom_elem, p_panel_key, first_isvisible, opt_display_attribute_str);
 	};
 
 	this.activatePanel = function(p_reckey, p_panel_key) {

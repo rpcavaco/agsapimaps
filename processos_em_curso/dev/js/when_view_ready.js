@@ -78,9 +78,43 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					let liEl, spEl, btEl, val;
 
+					// inserir botões de navegação entre registos
+					
+					btEl = document.createElement("button");
+					resultsDiv.appendChild(btEl);
+					btEl.setAttribute("class", "iconbtn float-left");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "left-arrow");
+					btEl.appendChild(spEl);
+					//spEl.textContent = "Rec anterior";
+					(function(p_btEl, p_rec_rps) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.rotatePrev();
+							}
+						);							
+					})(btEl, rec_rps);
+
+					btEl = document.createElement("button");
+					resultsDiv.appendChild(btEl);
+					btEl.setAttribute("class", "iconbtn float-right");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "right-arrow");
+					btEl.appendChild(spEl);
+					// spEl.textContent = "Rec seguinte";
+					(function(p_btEl, p_rec_rps) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.rotateNext();
+							}
+						);							
+					})(btEl, rec_rps);							
+
+
 					for (let i=0; i<rows.length; i++) {
 						
 						reckey = rec_rps.recKey(i+1);
+						pageNum = 0;
 						pagekey = rec_rps.pageKey(pageNum+1)
 						rec_rps.newRecord(reckey);
 						
@@ -136,37 +170,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						}
 					}
 
-					// inserir botões de navegação entre registos
-					
-					btEl = document.createElement("button");
-					resultsDiv.appendChild(btEl);
-					btEl.setAttribute("class", "iconbtn float-left");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "left-arrow");
-					btEl.appendChild(spEl);
-					//spEl.textContent = "Rec anterior";
-					(function(p_btEl, p_rec_rps) {
-						attEventHandler(p_btEl, 'click', 
-							function(evt) {
-								p_rec_rps.rotatePrev();
-							}
-						);							
-					})(btEl, rec_rps);
-
-					btEl = document.createElement("button");
-					resultsDiv.appendChild(btEl);
-					btEl.setAttribute("class", "iconbtn float-right");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "right-arrow");
-					btEl.appendChild(spEl);
-					// spEl.textContent = "Rec seguinte";
-					(function(p_btEl, p_rec_rps) {
-						attEventHandler(p_btEl, 'click', 
-							function(evt) {
-								p_rec_rps.rotateNext();
-							}
-						);							
-					})(btEl, rec_rps);							
+					// atualizar mensagem "1 de n registos"
 
 					rec_rps.resetIteration(); 
 					let recpanelcoll = rec_rps.iterateNext();
