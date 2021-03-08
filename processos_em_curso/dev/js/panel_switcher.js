@@ -45,6 +45,7 @@ function SwitchingPanelCollection(p_collname) {
 		}
 	};
 	this.addPanel = function(p_panel_dom_elem, p_panel_key, b_first_isvisible, opt_display_attribute_str) {
+		console.log("adding panel:"+p_panel_key+" b_first_isvisible:"+b_first_isvisible)
 		if (this._findPanel(p_panel_key) != null) {
 			console.trace("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
@@ -200,6 +201,7 @@ function RecordPanelSwitcher() {
 	};
 
 	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
+		console.log("adding record panel, rec:"+p_reckey+" pan.key:"+p_panel_key)
 		const rec = this._findRecord(p_reckey);
 		if (rec == null) {
 			console.trace("PanelSwitcher - addPanel, record does not exist = %s", p_reckey);
@@ -210,6 +212,7 @@ function RecordPanelSwitcher() {
 			// subsequent records first page is active but not visible
 			first_isvisible = false;
 		}
+		console.log("     first_isvisible:",first_isvisible);
 		return rec.addPanel(p_panel_dom_elem, p_panel_key, first_isvisible, opt_display_attribute_str);
 	};
 
@@ -351,10 +354,18 @@ function RecordPanelSwitcher() {
 	};
 
 	this.rotateNext = function() {
-		this.doRotate(true);
+		let ret = this.doRotate(true);
+		if (ret) {
+			console.log("rotateNext show");
+			ret.content.showActivePanel();
+		}
 	};
 
 	this.rotatePrev = function() {
-		this.doRotate(false);
+		let ret = this.doRotate(false);
+		if (ret) {
+			console.log("rotatePrev show");
+			ret.content.showActivePanel();
+		}
 	};
 };
