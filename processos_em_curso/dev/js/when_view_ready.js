@@ -47,6 +47,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				// Create a grid with the data
 
 				rec_rps.clear();
+				let registos_fmt = "Registo {0} de {1}"
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -79,6 +80,10 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					if (rows.length>0) {
 						// expandir gridDiv
+						const mainmsgDiv = document.getElementById("mainmsg");
+						if (mainmsgDiv) {
+							mainmsgDiv.style.display = "none"
+						}
 						resultsDiv.style.height = "240px";						
 					}
 
@@ -90,18 +95,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						
 						btEl = document.createElement("button");
 						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "iconbtn");
+						btEl.setAttribute("class", "graybtn float-right");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "left-arrow");
 						btEl.appendChild(spEl);
-						//spEl.textContent = "Rec anterior";
 						(function(p_btEl, p_rec_rps, p_nrows) {
 							attEventHandler(p_btEl, 'click', 
 								function(evt) {
 									const num = p_rec_rps.rotatePrev();
 									const el = document.getElementById("rec-nav-nums");
 									if (el) {
-										el.textContent = num + " de "+p_nrows;
+										el.textContent = String.format(registos_fmt, num, p_nrows);
 									}
 								}
 							);							
@@ -109,12 +113,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						spEl = document.createElement("span");
 						spEl.setAttribute("id", "rec-nav-nums");
+						spEl.setAttribute("class", "graybtn float-right");
 						navDiv.appendChild(spEl);
-						spEl.textContent = "1 de "+rows.length;
+						spEl.textContent = String.format(registos_fmt, 1, rows.length);
 
 						btEl = document.createElement("button");
 						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "iconbtn float-right");
+						btEl.setAttribute("class", "graybtn float-right");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "right-arrow");
 						btEl.appendChild(spEl);
@@ -125,7 +130,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 									const num = p_rec_rps.rotateNext();
 									const el = document.getElementById("rec-nav-nums");
 									if (el) {
-										el.textContent = num + " de "+p_nrows;
+										el.textContent = String.format(registos_fmt, num, p_nrows);
 									}
 								}
 							);							
@@ -222,7 +227,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							if (!recpaneliter.is_first) {
 								btEl = document.createElement("button");
 								recpaneliter.content.dom_elem.appendChild(btEl);
-								btEl.setAttribute("class", "iconbtn float-left");
+								btEl.setAttribute("class", "graybtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
 								btEl.appendChild(spEl);
@@ -238,7 +243,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							if (!recpaneliter.is_last) {
 								btEl = document.createElement("button");
 								recpaneliter.content.dom_elem.appendChild(btEl);
-								btEl.setAttribute("class", "iconbtn float-right");
+								btEl.setAttribute("class", "graybtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");
 								btEl.appendChild(spEl);
@@ -276,6 +281,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 			}
 			resultsDiv.style.removeProperty('height');
 		}
+		const mainmsgDiv = document.getElementById("mainmsg");
+		if (mainmsgDiv) {
+			mainmsgDiv.style.display = "block"
+		}
+
 
 		/* if (grid) {
 			grid.destroy();
