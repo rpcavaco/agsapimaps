@@ -45,7 +45,7 @@ function SwitchingPanelCollection(p_collname) {
 		}
 	};
 	this.addPanel = function(p_panel_dom_elem, p_panel_key, b_first_isvisible, opt_display_attribute_str) {
-		console.log("adding panel:"+p_panel_key+" b_first_isvisible:"+b_first_isvisible)
+		console.log("adding panel:"+p_panel_key+" b_first_isvisible:"+b_first_isvisible+" act.panel:"+this.active_panel)
 		if (this._findPanel(p_panel_key) != null) {
 			console.trace("SwitchingPanelCollection - addPanel, panel already exists: %s", p_panel_key);
 			return false;
@@ -54,6 +54,7 @@ function SwitchingPanelCollection(p_collname) {
 		this.panelorder.push(p_panel_key);
 		if (this.active_panel == null) {
 			this.active_panel = this.panels[p_panel_key];
+			console.log("setting active, with vis:"+b_first_isvisible);
 			this.active_panel.setVisible(b_first_isvisible);
 		} else {
 			this.panels[p_panel_key].setVisible(false);
@@ -269,6 +270,10 @@ function RecordPanelSwitcher() {
 			currkey = this.iterator_current_key;
 		} else {
 			currkey = this.rotator_current_key;
+			if (currkey == null) {
+				this.rotator_current_key = this.recordorder[0];
+				currkey = this.rotator_current_key;
+			}
 		}
 
 		if (currkey != null) {
