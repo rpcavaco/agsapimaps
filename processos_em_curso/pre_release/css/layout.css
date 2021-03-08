@@ -1,63 +1,159 @@
-html,body {
-  height:100%;
-  width:100%;
-  margin:0;
-  padding:0;
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
 }
 
-body {
-  background-color:#FFF;
-  overflow:hidden;
-  font-family:"Helvetica";
+.esri-legend__message {
+	display: none;
 }
 
-#header {
-  border:solid 1px #A8A8A8;
-  overflow:hidden;
-  background-color:#999;
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#C0C0C0));
-  background: -moz-linear-gradient(top,  #fff,  #C0C0C0);
-  height:65px;
-  margin: 5px 5px;
+#loading {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
 }
 
-.roundedCorners {
-  -o-border-radius:4px;
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
-  border-radius:4px;
+#gridDiv {
+	/* position: absolute; */
+	padding: 10px;
+	margin-right: 20px;
+	margin-bottom: 40px;
+	width: 470px;
 }
 
-.shadow {
-  box-shadow:4px 4px 8px #adadad;
-  -webkit-box-shadow:4px 4px 8px #adadad;
-  -moz-box-shadow:4px 4px 8px #adadad;
-  -o-box-shadow:4px 4px 8px #adadad;
+#clearButton {
+	margin-top:5px;
+	display: none;
 }
-#title{
-  padding-top:2px;
-  padding-left:10px;
-  color:#000;
-  font-size:18pt;
-  text-align:left;
-  text-shadow: 0px 1px 0px #e5e5ee;
-  font-weight:700;
+
+.dgrid {
+	height: auto !important;
 }
-#subtitle {
-  font-size:small;
-  padding-left:40px;
-  text-shadow: 0px 1px 0px #e5e5ee;
-  color:#000;
+.dgrid .dgrid-scroller {
+	position: relative;
+	max-height: 200px;
+	overflow: auto;
 }
-#rightPane{
-  background-color:#E8E8E8;
-  border:solid 2px #B8B8B8;
-  margin:5px; 
-  width:20%;
+
+#titlearea {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -20% 0 0 -30%;
+	height: 80px;
+	background-color: rgba(24, 68, 155, 0.85);
+	box-shadow: 0 1px 5px rgba(0,0,0,1);
+	font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #fff;
+	font-size: 24px;
+	text-align: center;
+	z-index: 1;	
+
 }
-#map {
-  background-color:#FFF;
-  border:solid 2px #B8B8B8;
-  margin:5px;
-  padding:0;
+
+#titlearea p {
+	margin: 20px 20px 0 20px;
+	font-size: 36px;	
+}	
+
+#logo {
+	position: absolute;
+	top: 12px;
+	left: 60px;
+	width: 130px;
+	z-index: 20;
+}
+
+.nobull {
+	list-style-type: none;
+}
+
+.float-right {
+	float: right;
+}
+
+.float-left {
+	float: left;
+}
+
+.just-right {
+	margin-left: auto;
+}
+
+.just-left {
+	margin-right: auto;
+}
+
+li:nth-child(even) { 
+	background-color: #eee; 
+} 
+
+.attrs-list {
+	border-left-width: 2px;
+	border-left-style: solid;
+	border-left-color: #999;
+	padding-left: 8px;
+}
+
+
+.graybtn {
+	background-color: #eee;
+	border: none;
+	font-size: 14px;	
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	line-height: 1.3em;
+	padding: 4px 16px 4px 4px;
+}
+
+.graybtn-back {
+	background-color: #eee;
+	border: none;
+	font-size: 14px;	
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	line-height: 1.3em;
+}
+
+.graybtn-back button {
+	border: none;
+	background: transparent;
+}
+
+.btn-left {
+	padding: 4px 16px 4px 4px;
+}
+
+.btn-right {
+	padding: 4px 4px 4px 16px;
+}
+
+.navdiv {
+	border-bottom: grey 1px dotted;
+	padding-bottom: 10px
+}
+
+.pagenavdiv {
+	border-top: grey 1px dotted;
+	padding-top: 10px
+}
+
+.right-arrow::after {
+	font-family: "CalciteWebCoreIcons";
+	font-size: 16px;	
+	padding-left: 10px;
+    content: "";
+    color: inherit;
+}
+
+.left-arrow::before {
+	font-family: "CalciteWebCoreIcons";
+	font-size: 16px;	
+	padding-right: 10px;
+    content: "";
+    color: inherit;
 }

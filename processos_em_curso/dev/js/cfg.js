@@ -2,7 +2,7 @@
 //  Configuração geral
 //  ---------------------------------------------------------------------------
 var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
-var PORTALITEM_ID = "25f42060fa80453fba15320eb85d7b25" // Processos em curso prod
+var PORTALITEM_ID = "8c75c44b8e734aa5aba643598f3c8c9e";
 
 var VIEW_EXTENT = {
 	xmin: -41600.0,

@@ -90,6 +90,7 @@ require([
 	"esri/widgets/ScaleBar",
 	"esri/widgets/CoordinateConversion",
 	//"esri/widgets/Expand",
+	//"dgrid/Grid",
 	"dojo/query",
 	"dojo/_base/array"
 ], function(
@@ -102,10 +103,11 @@ require([
 	ScaleBar,
 	CoordinateConversion,
 	//Expand,
+	//Grid,
 	query,
 	array
 ) {
-	var titlefader = new DivFader("titlearea", 120.0);
+	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
 	titlefader.hideMessage(true);
 
 	// ========================================================================
@@ -121,7 +123,8 @@ require([
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
 		map: webmap, // Reference to the map object created before the view
-		extent: new Extent(VIEW_EXTENT)
+		extent: new Extent(VIEW_EXTENT),
+		highlightOptions: HIGHLIGHT_OPTS	
 	});
 	// ========================================================================
 
@@ -203,7 +206,6 @@ require([
 	// ========================================================================
 
 
-	// TODO: frente de trabalho
 	view.popup.autoOpenEnabled = false;
 /*view.on("click", function(event) {
   // Get the coordinates of the click on the view
@@ -220,22 +222,16 @@ require([
   });
 });	
 */
-
 	view.when(function() {
-		
+
 		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
-		if (selLayer!=null) {	
-		
-			/*selLayer.queryObjectIds({
-			  geometry: point,
-			  spatialRelationship: "intersects",
-			  returnGeometry: false,
-			  outFields: ["*"]
-			})	*/
-			
+		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		
+
+		if (selLayer!=null && typeof when_view_ready === 'function') {	
+			when_view_ready(view, selLayer, "queryResults");
 		}
-	}); 
-	
+		
+	});
 	
 	
 	// ========================================================================
@@ -243,15 +239,15 @@ require([
 	//		- mostrar / esconder o GIF do "carregamento em curso"
 	//		- editar a "attribution"
 	// ========================================================================
-    /*watchUtils.whenTrue(view, "updating", function(evt) {
+    watchUtils.whenTrue(view, "updating", function(evt) {
 		document.getElementById("loading").style.display = "block";
-    });	*/
+    });
 	
 	// Final de uma atualização da view (ocorre em vários momentos antes do final do carregamento de todos os elementos)
     watchUtils.whenFalse(view, "updating", function(evt) {
 		var divattr = query('.esri-attribution__powered-by');
 		changeAtrribution(divattr);
-		//document.getElementById("loading").style.display = "none";
+		document.getElementById("loading").style.display = "none";
     });	
 	// ========================================================================
 	
