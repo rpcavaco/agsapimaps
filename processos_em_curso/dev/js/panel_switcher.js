@@ -334,7 +334,7 @@ function RecordPanelSwitcher() {
 
 	this.rotateToEnd = function() {
 		if (this.recordorder.length > 0) {
-			this.rotator_current_key = this.recordorder.length-1;
+			this.rotator_current_key = this.recordorder[this.recordorder.length-1];
 		}
 	};
 

@@ -98,6 +98,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							);							
 						})(btEl, rec_rps);
 
+						spEl = document.createElement("span");
+						spEl.setAttribute("id", "rec-nav-nums");
+						navDiv.appendChild(spEl);
+						spEl.textContent = "1 de "+rows.length;
+
 						btEl = document.createElement("button");
 						navDiv.appendChild(btEl);
 						btEl.setAttribute("class", "iconbtn float-right");
@@ -112,6 +117,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								}
 							);							
 						})(btEl, rec_rps);	
+
+						// expandir gridDiv
+						resultsDiv.style.height = "360px";
 						
 					}
 
@@ -246,6 +254,14 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 		if (hlight) {
 			hlight.remove();
 		}
+		const resultsDiv = document.getElementById(p_griddiv);
+		if (resultsDiv) {
+			while (resultsDiv.firstChild) {
+				resultsDiv.removeChild(resultsDiv.firstChild);
+			}
+			resultsDiv.style.removeProperty('height');
+		}
+
 		/* if (grid) {
 			grid.destroy();
 		} */
