@@ -343,13 +343,11 @@ function RecordPanelSwitcher() {
 	};
 
 	this.rotateNext = function() {
-		let ret = this.getCurrentRotation();
+		let num=-1, ret = this.getCurrentRotation();
 		if (ret == null) {
 			console.warn("RecordPanelSwitcher: rotateNext failed, no 'current rotation' before rotate");
 		} else {
 			ret.content.hideAllPanels();
-			console.log("rotateNext show");
-			console.log(ret.content);
 			if (ret.nextreckey!=null) {
 				this.rotator_current_key = ret.nextreckey;
 			} else {
@@ -361,17 +359,17 @@ function RecordPanelSwitcher() {
 			} else {
 				ret.content.showActivePanel();
 			}
+			num = this.recordorder.indexOf(this.rotator_current_key) + 1;
 		}
+		return num;
 	};
 
 	this.rotatePrev = function() {
-		let ret = this.getCurrentRotation();
+		let num=-1, ret = this.getCurrentRotation();
 		if (ret == null) {
 			console.warn("RecordPanelSwitcher: rotatePrev failed, no 'current rotation' before rotate");
 		} else {
 			ret.content.hideAllPanels();
-			console.log("rotatePrev show");
-			console.log(ret.content);
 			if (ret.prevreckey!=null) {
 				this.rotator_current_key = ret.prevreckey;
 			} else {
@@ -383,6 +381,8 @@ function RecordPanelSwitcher() {
 			} else {
 				ret.content.showActivePanel();
 			}
+			num = this.recordorder.indexOf(this.rotator_current_key) + 1;
 		}
+		return num;
 	};
 };

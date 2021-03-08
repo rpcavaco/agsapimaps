@@ -72,10 +72,15 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let attrs_per_page_cnt;
 					let max_attrs_per_page = 12;
 					let navDiv, pageDiv;
-					let ulEl, pageNum;
+					let pageNum;
 					let reckey, pagekey;
 
-					let liEl, spEl, btEl, val;
+					let spEl, btEl;
+
+					if (rows.length>0) {
+						// expandir gridDiv
+						resultsDiv.style.height = "240px";						
+					}
 
 					if (rows.length>1) {
 
@@ -90,13 +95,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						spEl.setAttribute("class", "left-arrow");
 						btEl.appendChild(spEl);
 						//spEl.textContent = "Rec anterior";
-						(function(p_btEl, p_rec_rps) {
+						(function(p_btEl, p_rec_rps, p_nrows) {
 							attEventHandler(p_btEl, 'click', 
 								function(evt) {
-									p_rec_rps.rotatePrev();
+									const num = p_rec_rps.rotatePrev();
+									const el = document.getElementById("rec-nav-nums");
+									if (el) {
+										el.textContent = num + " de "+p_nrows;
+									}
 								}
 							);							
-						})(btEl, rec_rps);
+						})(btEl, rec_rps, rows.length);
 
 						spEl = document.createElement("span");
 						spEl.setAttribute("id", "rec-nav-nums");
@@ -110,18 +119,24 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						spEl.setAttribute("class", "right-arrow");
 						btEl.appendChild(spEl);
 						// spEl.textContent = "Rec seguinte";
-						(function(p_btEl, p_rec_rps) {
+						(function(p_btEl, p_rec_rps, p_nrows) {
 							attEventHandler(p_btEl, 'click', 
 								function(evt) {
-									p_rec_rps.rotateNext();
+									const num = p_rec_rps.rotateNext();
+									const el = document.getElementById("rec-nav-nums");
+									if (el) {
+										el.textContent = num + " de "+p_nrows;
+									}
 								}
 							);							
-						})(btEl, rec_rps);	
+						})(btEl, rec_rps, rows.length);	
 
 						// expandir gridDiv
-						resultsDiv.style.height = "360px";
+						resultsDiv.style.height = "300px";
 						
 					}
+
+					let ulEl, liEl, val;
 
 					for (let i=0; i<rows.length; i++) {
 						
