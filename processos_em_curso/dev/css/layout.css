@@ -24,7 +24,7 @@ body,
 	padding: 10px;
 	margin-right: 20px;
 	margin-bottom: 40px;
-	max-width: 100%;
+	width: 470px;
 }
 
 #clearButton {
@@ -100,7 +100,18 @@ li:nth-child(even) {
 	font-size: 14px;	
 	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
 	line-height: 1.3em;
+}
 
+.graybtn-back {
+	background-color: #eee;
+	border: none;
+	font-size: 14px;	
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	line-height: 1.3em;
+}
+
+.graybtn-back button {
+	border: none;
 }
 
 .right-arrow::after {

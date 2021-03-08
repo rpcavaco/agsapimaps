@@ -96,7 +96,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						navInnerDiv = document.createElement("div");
 						resultsDiv.appendChild(navInnerDiv);
-						navInnerDiv.setAttribute("class", "graybtn");
+						navInnerDiv.setAttribute("class", "graybtn-back");
 						
 						btEl = document.createElement("button");
 						navInnerDiv.appendChild(btEl);
