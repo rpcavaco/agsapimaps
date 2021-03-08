@@ -48,7 +48,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
-				const exph = "380px";
+				const exph = "350px";
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -93,10 +93,12 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						// inserir botões de navegação entre registos
 						navDiv = document.createElement("div");
 						resultsDiv.appendChild(navDiv);
+						navDiv.setAttribute("class", "navdiv");
 
 						navInnerDiv = document.createElement("div");
-						resultsDiv.appendChild(navInnerDiv);
+						navDiv.appendChild(navInnerDiv);
 						navInnerDiv.setAttribute("class", "graybtn-back");
+						navInnerDiv.style.width = "200px";
 						
 						btEl = document.createElement("button");
 						navInnerDiv.appendChild(btEl);
@@ -143,7 +145,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					}
 
-					let ulEl, liEl, val;
+					let ulEl, liEl, val, pgNavDiv;
 
 					for (let i=0; i<rows.length; i++) {
 						
@@ -223,11 +225,14 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						while (recpaneliter && recpanel_count < 50) {
 
 							recpanel_count++;
+							pgNavDiv = document.createElement("div");
+							recpaneliter.content.dom_elem.appendChild(pgNavDiv);
+							pgNavDiv.setAttribute("class", "pagenavdiv");
 
 							// inserir botões de navegação entre páginas do mesmo registo
 							if (!recpaneliter.is_first) {
 								btEl = document.createElement("button");
-								recpaneliter.content.dom_elem.appendChild(btEl);
+								pgNavDiv.appendChild(btEl);
 								btEl.setAttribute("class", "graybtn float-left");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "left-arrow");
@@ -243,7 +248,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							}
 							if (!recpaneliter.is_last) {
 								btEl = document.createElement("button");
-								recpaneliter.content.dom_elem.appendChild(btEl);
+								pgNavDiv.appendChild(btEl);
 								btEl.setAttribute("class", "graybtn float-right");
 								spEl = document.createElement("span");
 								spEl.setAttribute("class", "right-arrow");

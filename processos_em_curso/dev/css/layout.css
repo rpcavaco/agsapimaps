@@ -112,6 +112,17 @@ li:nth-child(even) {
 
 .graybtn-back button {
 	border: none;
+	background: transparent;
+}
+
+.navdiv {
+	border-bottom: "grey 1px dotted";
+	padding-bottom: "10px"
+}
+
+.pagenavdiv {
+	border-top: "grey 1px dotted";
+	padding-top: "10px"
 }
 
 .right-arrow::after {
