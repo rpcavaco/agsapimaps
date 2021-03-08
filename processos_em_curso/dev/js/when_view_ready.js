@@ -47,7 +47,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				// Create a grid with the data
 
 				rec_rps.clear();
-				let registos_fmt = "Registo {0} de {1}"
+				let registos_fmt = "Processo {0} de {1}"
+				const maxh = "200px";
+				const minh = "260px";
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -72,7 +74,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 					let attrs_per_page_cnt;
 					let max_attrs_per_page = 12;
-					let navDiv, pageDiv;
+					let navDiv, navInnerDiv, pageDiv;
 					let pageNum;
 					let reckey, pagekey;
 
@@ -84,7 +86,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						if (mainmsgDiv) {
 							mainmsgDiv.style.display = "none"
 						}
-						resultsDiv.style.height = "240px";						
+						resultsDiv.style.height = minh;						
 					}
 
 					if (rows.length>1) {
@@ -92,10 +94,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						// inserir botões de navegação entre registos
 						navDiv = document.createElement("div");
 						resultsDiv.appendChild(navDiv);
+
+						navInnerDiv = document.createElement("div");
+						resultsDiv.appendChild(navInnerDiv);
 						
 						btEl = document.createElement("button");
 						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "graybtn float-right");
+						btEl.setAttribute("class", "graybtn");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "left-arrow");
 						btEl.appendChild(spEl);
@@ -113,13 +118,13 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 						spEl = document.createElement("span");
 						spEl.setAttribute("id", "rec-nav-nums");
-						spEl.setAttribute("class", "graybtn float-right");
+						spEl.setAttribute("class", "graybtn");
 						navDiv.appendChild(spEl);
 						spEl.textContent = String.format(registos_fmt, 1, rows.length);
 
 						btEl = document.createElement("button");
 						navDiv.appendChild(btEl);
-						btEl.setAttribute("class", "graybtn float-right");
+						btEl.setAttribute("class", "graybtn");
 						spEl = document.createElement("span");
 						spEl.setAttribute("class", "right-arrow");
 						btEl.appendChild(spEl);
@@ -137,7 +142,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						})(btEl, rec_rps, rows.length);	
 
 						// expandir gridDiv
-						resultsDiv.style.height = "300px";
+						resultsDiv.style.height = maxh;
 						
 					}
 
