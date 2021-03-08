@@ -134,44 +134,44 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						if (pageDiv != null) {
 							rec_rps.addPanel(reckey, pageDiv, pagekey);
 						}
-
 					}
+
+					// inserir botões de navegação entre registos
+					
+					btEl = document.createElement("button");
+					resultsDiv.appendChild(btEl);
+					btEl.setAttribute("class", "iconbtn float-left");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "left-arrow");
+					btEl.appendChild(spEl);
+					//spEl.textContent = "Rec anterior";
+					(function(p_btEl, p_rec_rps) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.rotatePrev();
+							}
+						);							
+					})(btEl, rec_rps);
+
+					btEl = document.createElement("button");
+					resultsDiv.appendChild(btEl);
+					btEl.setAttribute("class", "iconbtn float-right");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "right-arrow");
+					btEl.appendChild(spEl);
+					// spEl.textContent = "Rec seguinte";
+					(function(p_btEl, p_rec_rps) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.rotateNext();
+							}
+						);							
+					})(btEl, rec_rps);							
 
 					rec_rps.resetIteration(); 
 					let recpanelcoll = rec_rps.iterateNext();
 					while (recpanelcoll) {
 
-						// inserir botões de navegação entre registos
-						btEl = document.createElement("button");
-						resultsDiv.appendChild(btEl);
-						btEl.setAttribute("class", "iconbtn float-left");
-						spEl = document.createElement("span");
-						spEl.setAttribute("class", "left-arrow");
-						btEl.appendChild(spEl);
-						//spEl.textContent = "Rec anterior";
-						(function(p_btEl, p_rec_rps) {
-							attEventHandler(p_btEl, 'click', 
-								function(evt) {
-									p_rec_rps.rotatePrev();
-								}
-							);							
-						})(btEl, rec_rps);
-
-						btEl = document.createElement("button");
-						resultsDiv.appendChild(btEl);
-						btEl.setAttribute("class", "iconbtn float-right");
-						spEl = document.createElement("span");
-						spEl.setAttribute("class", "right-arrow");
-						btEl.appendChild(spEl);
-						// spEl.textContent = "Rec seguinte";
-						(function(p_btEl, p_rec_rps) {
-							attEventHandler(p_btEl, 'click', 
-								function(evt) {
-									p_rec_rps.rotateNext();
-								}
-							);							
-						})(btEl, rec_rps);
-							
 						let recPanels = recpanelcoll.content;
 						recPanels.resetIteration(); 
 						let recpaneliter = recPanels.iterateNext();
