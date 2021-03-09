@@ -1,7 +1,9 @@
 
 require([
 	"esri/Map",
+	"esri/Basemap",
 	"esri/layers/MapImageLayer",
+	"esri/layers/FeatureLayer",
 	"esri/views/MapView",
 	"esri/geometry/Extent",
 	"esri/core/watchUtils",
@@ -12,7 +14,9 @@ require([
 	//"dgrid/Grid",
 ], function(
 	Map,
+	Basemap,
 	MapImageLayer,
+	FeatureLayer,
 	MapView,
 	Extent,
 	watchUtils,
@@ -28,7 +32,7 @@ require([
 	var basemap = new Basemap({
 		baseLayers: [
 		  new MapImageLayer({
-			url: "https://portalsig.cm-porto.pt/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
+			url: MAPLAYERS["base"],
 			title: "Basemap"
 		  })
 		],
@@ -40,20 +44,29 @@ require([
 	//  Layers, mapa base e MapView 
 	// ========================================================================
 
-	const layerDict = {}, layerorder = [], layers = [];
+	const layerDict = {}, mlayerorder = [], mlayers = [], flayers=[];
+	
 	for (let lkey in MAPLAYERS) {
-		layerorder.push(lkey);
+		if (lkey == "base") {
+			continue;
+		}
+		mlayerorder.push(lkey);
 	}
-	layerorder.sort();
+	mlayerorder.sort();
 
-	for (let i=0; i<layerorder.length; i++) {
-		layerDict[layerorder[i]] = new MapImageLayer({ url: MAPLAYERS[layerorder[i]] });
-		layers.push(layerDict[layerorder[i]]);
+	for (let lkey in FEATLAYERS) {
+		flayers.push(lkey);
+		layerDict[lkey] = new FeatureLayer({ url: FEATLAYERS[lkey] })
+	}
+
+	for (let i=0; i<mlayerorder.length; i++) {
+		layerDict[mlayerorder[i]] = new MapImageLayer({ url: FEATLAYERS[mlayerorder[i]] });
+		mlayers.push(layerDict[mlayerorder[i]]);
 	}
 
 	const the_map = new Map({
 		basemap: basemap,
-		layers: layers
+		mlayers: layers
 	});
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
@@ -71,7 +84,7 @@ require([
 	// ------------------------------------------------------------------------	
 
 	let selLayer = null;
-	if (layerorder.indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
+	if (Object.keys(layerDict).indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
 		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada no mapa.");
 	} else {		
 		selLayer = layerDict[LYR_SELECCAO_INTERACTIVA_KEY];

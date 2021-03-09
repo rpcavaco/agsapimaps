@@ -16,7 +16,12 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-	"lotesProcEmCurso": "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer/4"
+	"base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
+	"procEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer"
+}
+
+var FEATLAYERS = {
+	"lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer/4"
 }
 
 var LYR_SELECCAO_INTERACTIVA_KEY = "lotesProcEmCurso";
