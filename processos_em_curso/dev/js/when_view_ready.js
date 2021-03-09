@@ -1,16 +1,20 @@
 
 function valCount(p_rows, p_attrs_cfg) {
-	let valcount = 0;
-	for (let i=0; i<p_rows.length; i++) {                       
-		for (let fld in p_attrs_cfg) {
-			let preval = p_rows[i][fld];
-			if (preval == null || preval.length==0) {
-				continue;
-			}
-			valcount++;
-		}
-	}	
-	return valcount;
+    let maxcnt=0, valcount;
+    for (let i=0; i<p_rows.length; i++) {  
+        valcount = 0;
+        for (let fld in p_attrs_cfg) {
+            let preval = p_rows[i][fld];
+            if (preval == null || preval.length==0) {
+                continue;
+            }
+            valcount++;
+        }
+        if (valcount > maxcnt) {
+            maxcnt = valcount;
+        }
+    }   
+    return maxcnt;
 }
 
 function when_view_ready(p_view, p_sellayer, p_griddiv) {

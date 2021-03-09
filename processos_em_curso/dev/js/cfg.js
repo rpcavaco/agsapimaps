@@ -58,7 +58,7 @@ var HIGHLIGHT_OPTS = {
 var ALT_EXPANSAO_PAINEL_DADOS = [
 	//até num linhas, altura
 	[5, "180px"], 
-	[10, "260px"], 
+	[10, "280px"], 
 	[20, "320px"] 
 ];
 //  ===========================================================================
