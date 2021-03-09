@@ -1,4 +1,17 @@
 
+function valCount(p_rows, p_attrs_cfg) {
+	let valcount = 0;
+	for (let i=0; i<p_rows.length; i++) {                       
+		for (let fld in p_attrs_cfg) {
+			let preval = rows[i][fld];
+			if (preval == null || preval.length==0) {
+				continue;
+			}
+			valcount++;
+		}
+	}	
+	return valcount;
+}
 
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
@@ -48,8 +61,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
-				const exph = ALT_EXPANSAO_PAINEL_DADOS;
-				const exph_low = ALT_EXPANSAO_PAINEL_DADOS_LOW;
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -78,7 +89,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let pageNum;
 					let reckey, pagekey;
 
-					let spEl, btEl;
+					let spEl, btEl, valcount, heightv;
 
 					if (rows.length>0) {
 						
@@ -88,12 +99,15 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							mainmsgDiv.style.display = "none"
 						}
 
+						valcount = valCount(rows, ATTRS_CFG);
+
 						// expandir gridDiv
-						if (rows.length>5) {
-							resultsDiv.style.height = exph;		
-						} else {
-							resultsDiv.style.height = exph_low;		
+						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS; i++) {
+							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] <= valcount) {
+								heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
+							}
 						}
+						resultsDiv.style.height = heightv;		
 						
 						// abrir espaço para inserir botões de navegação entre registos
 						navDiv = document.createElement("div");

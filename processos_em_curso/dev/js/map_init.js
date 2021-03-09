@@ -44,7 +44,8 @@ require([
 	//  Layers, mapa base e MapView 
 	// ========================================================================
 
-	const layerDict = {}, layerorder = [], layers = [], flayers=[], lyrcfg;
+	const layerDict = {}, layerorder = [], layers = [], flayers=[];
+	let lyrcfg;
 	
 	for (let lkey in MAPLAYERS) {
 		if (lkey == "base") {

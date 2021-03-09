@@ -55,9 +55,12 @@ var HIGHLIGHT_OPTS = {
 	fillOpacity: 0.2
   }		
 
-var ALT_EXPANSAO_PAINEL_DADOS_LOW = "180px";  
-var ALT_EXPANSAO_PAINEL_DADOS = "290px";  
-
+var ALT_EXPANSAO_PAINEL_DADOS = [
+	//até num linhas, altura
+	[5, "180px"], 
+	[10, "260px"], 
+	[20, "320px"] 
+];
 //  ===========================================================================
 
 
