@@ -3,7 +3,7 @@ function valCount(p_rows, p_attrs_cfg) {
 	let valcount = 0;
 	for (let i=0; i<p_rows.length; i++) {                       
 		for (let fld in p_attrs_cfg) {
-			let preval = rows[i][fld];
+			let preval = p_rows[i][fld];
 			if (preval == null || preval.length==0) {
 				continue;
 			}
@@ -89,7 +89,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let pageNum;
 					let reckey, pagekey;
 
-					let spEl, btEl, valcount, heightv;
+					let spEl, btEl, valcount, heightv=null;
 
 					if (rows.length>0) {
 						
@@ -99,13 +99,17 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							mainmsgDiv.style.display = "none"
 						}
 
-						valcount = valCount(rows, ATTRS_CFG);
-
 						// expandir gridDiv
-						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS; i++) {
-							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] <= valcount) {
+						valcount = valCount(rows, ATTRS_CFG);
+						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
+							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
 								heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
+								break;
 							}
+						}
+						if (heightv == null) {
+							// se heightv nao tiver sido definida, colocar valor mais alto
+							heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
 						}
 						resultsDiv.style.height = heightv;		
 						
@@ -126,7 +130,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						navInnerDiv = document.createElement("div");
 						navDiv.appendChild(navInnerDiv);
 						navInnerDiv.setAttribute("class", "graybtn-back just-right");
-						navInnerDiv.style.width = "200px";
+						navInnerDiv.style.width = "190px";
 						
 						btEl = document.createElement("button");
 						navInnerDiv.appendChild(btEl);
