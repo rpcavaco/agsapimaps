@@ -44,23 +44,32 @@ require([
 	//  Layers, mapa base e MapView 
 	// ========================================================================
 
-	const layerDict = {}, layerorder = [], layers = [], flayers=[];
+	const layerDict = {}, layerorder = [], layers = [], flayers=[], lyrcfg;
 	
 	for (let lkey in MAPLAYERS) {
 		if (lkey == "base") {
 			continue;
 		}
-		layerDict[lkey] = new MapImageLayer({ url: MAPLAYERS[lkey] });
+		if (LYR_TITLES[lkey] === undefined) {
+			lyrcfg = { id: lkey, url: MAPLAYERS[lkey] };
+		} else {
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: MAPLAYERS[lkey] };
+		}
+		layerDict[lkey] = new MapImageLayer(lyrcfg);
 		layerorder.push(lkey);
 	}
 
 	for (let lkey in FEATLAYERS) {
-		layerorder.push(lkey);
 		flayers.push(lkey);
-		layerDict[lkey] = new FeatureLayer({ url: FEATLAYERS[lkey] })
+		if (LYR_TITLES[lkey] === undefined) {
+			lyrcfg = { id: lkey, url: FEATLAYERS[lkey] };
+		} else {
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: FEATLAYERS[lkey] };
+		}
+		layerDict[lkey] = new FeatureLayer(lyrcfg);
+		layerorder.push(lkey);
 	}
 	layerorder.sort();
-	console.log("layerorder:", layerorder);
 
 	for (let i=0; i<layerorder.length; i++) {
 		layers.push(layerDict[layerorder[i]]);

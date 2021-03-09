@@ -21,7 +21,11 @@ var MAPLAYERS = {
 }
 
 var FEATLAYERS = {
-	"lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer/0"
+	"lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer"
+}
+
+var LYR_TITLES = {
+	"lyr00_lotesProcEmCurso": "Lotes com processos em curso"
 }
 
 var LYR_SELECCAO_INTERACTIVA_KEY = "lyr00_lotesProcEmCurso";
@@ -52,7 +56,7 @@ var HIGHLIGHT_OPTS = {
   }		
 
 var ALT_EXPANSAO_PAINEL_DADOS_LOW = "180px";  
-var ALT_EXPANSAO_PAINEL_DADOS = "260px";  
+var ALT_EXPANSAO_PAINEL_DADOS = "290px";  
 
 //  ===========================================================================
 
