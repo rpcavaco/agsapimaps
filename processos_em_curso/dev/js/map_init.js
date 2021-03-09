@@ -25,6 +25,17 @@ require([
 	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
 	titlefader.hideMessage(true);
 
+	var basemap = new Basemap({
+		baseLayers: [
+		  new MapImageLayer({
+			url: "https://portalsig.cm-porto.pt/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
+			title: "Basemap"
+		  })
+		],
+		title: "basemap",
+		id: "basemap"
+	});
+
 	// ========================================================================
 	//  Layers, mapa base e MapView 
 	// ========================================================================
@@ -41,7 +52,7 @@ require([
 	}
 
 	const the_map = new Map({
-		//basemap: "satellite",
+		basemap: basemap,
 		layers: layers
 	});
 	const view = new MapView({
