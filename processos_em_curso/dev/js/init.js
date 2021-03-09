@@ -110,6 +110,7 @@ require([
 	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
 	titlefader.hideMessage(true);
 
+	/*
 	// ========================================================================
 	//  Mapa base e MapView 
 	// ========================================================================
@@ -158,7 +159,17 @@ require([
 		}
 	});
 	view.ui.add(layerList, "top-right");
+	// ========================================================================
+	*/
 	
+	let mapInitItems;
+	if (MAP_MODE == "WEBMAP") {
+		mapInitItems = webmapInit();
+	}
+	webmap = mapInitItems[0];
+	view = mapInitItems[1];
+	singleSelLayer = mapInitItems[2];
+	layerList = mapInitItems[3];
 
 	// ------------------------------------------------------------------------
 	//  Display de coordenadas e barra de escala

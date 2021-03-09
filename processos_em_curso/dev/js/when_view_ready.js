@@ -56,7 +56,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					// get the attributes of the FeatureSet
 					const relatedFeatureSet = relatedFeatureSetByObjectId[objectId];
 					const rows = relatedFeatureSet.features.map(function(feature) {
-						console.log(feature.attributes);
+						// console.log(feature.attributes);
 						return feature.attributes;
 					});
 

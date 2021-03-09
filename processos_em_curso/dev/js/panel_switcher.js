@@ -206,7 +206,6 @@ function RecordPanelSwitcher() {
 	};
 
 	this.addPanel = function(p_reckey, p_panel_dom_elem, p_panel_key, opt_display_attribute_str) {
-		console.log("adding record panel, rec:"+p_reckey+" pan.key:"+p_panel_key)
 		const rec = this._findRecord(p_reckey);
 		if (rec == null) {
 			console.error("PanelSwitcher - addPanel, record does not exist = %s", p_reckey);
@@ -217,7 +216,6 @@ function RecordPanelSwitcher() {
 			// subsequent records first page is active but not visible
 			first_isvisible = false;
 		}
-		console.log("     first_isvisible:",first_isvisible);
 		return rec.addPanel(p_panel_dom_elem, p_panel_key, first_isvisible, opt_display_attribute_str);
 	};
 
