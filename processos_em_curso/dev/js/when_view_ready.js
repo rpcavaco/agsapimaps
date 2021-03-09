@@ -45,11 +45,22 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				);
 
-				/*const flds = [];
-				for (let pg in ATTRS_CFG) {						
-					flds.push.apply(flds, Object.keys(ATTRS_CFG[pg]))
-				} */
-				
+                // pan se demasiadamente proximo do painel de dados
+                const gdiv = document.getElementById("gridDiv");
+                if (gdiv) {
+                    const sty = window.getComputedStyle(gdiv);
+                    const gdiv_w = parseInt(sty.width, 10);
+                    const hlim = p_view.size[0] - gdiv_w;
+                    if (scrPt.x > hlim) {
+                        const newPt = {
+                            x: scrPt.x + (p_view.size[0] / 6),
+                            y: scrPt.y,
+                        }
+                        const newMapPt = p_view.toMap(newPt);
+                        p_view.goTo(newMapPt);
+                    }
+                }
+                   				
 				return p_sellayer.queryRelatedFeatures({
 					outFields:  ["*"],
 					relationshipId: p_sellayer.relationships[0].id,
