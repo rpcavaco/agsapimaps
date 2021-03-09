@@ -48,7 +48,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
-				const exph = "350px";
+				const exph = ALT_EXPANSAO_PAINEL_DADOS;
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -85,15 +85,21 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						if (mainmsgDiv) {
 							mainmsgDiv.style.display = "none"
 						}
-						resultsDiv.style.height = exph;						
+						resultsDiv.style.height = exph;		
+						
+						// abrir espaço para inserir botões de navegação entre registos
+						navDiv = document.createElement("div");
+						resultsDiv.appendChild(navDiv);
+						navDiv.setAttribute("class", "navdiv");
+						
 					}
 
 					if (rows.length>1) {
 
 						// inserir botões de navegação entre registos
-						navDiv = document.createElement("div");
+						/*navDiv = document.createElement("div");
 						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");
+						navDiv.setAttribute("class", "navdiv");*/
 
 						navInnerDiv = document.createElement("div");
 						navDiv.appendChild(navInnerDiv);

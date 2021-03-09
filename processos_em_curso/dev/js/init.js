@@ -88,11 +88,9 @@ require([
 	"esri/core/watchUtils",
 	"esri/widgets/LayerList",
 	"esri/widgets/ScaleBar",
-	"esri/widgets/CoordinateConversion",
+	"esri/widgets/CoordinateConversion"
 	//"esri/widgets/Expand",
 	//"dgrid/Grid",
-	"dojo/query",
-	"dojo/_base/array"
 ], function(
 	esriConfig, 
 	WebMap,
@@ -101,11 +99,9 @@ require([
 	watchUtils,
 	LayerList,
 	ScaleBar,
-	CoordinateConversion,
+	CoordinateConversion
 	//Expand,
 	//Grid,
-	query,
-	array
 ) {
 	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
 	titlefader.hideMessage(true);
@@ -256,7 +252,7 @@ require([
 	
 	// Final de uma atualização da view (ocorre em vários momentos antes do final do carregamento de todos os elementos)
     watchUtils.whenFalse(view, "updating", function(evt) {
-		var divattr = query('.esri-attribution__powered-by');
+		var divattr = document.getElementsByClassName('esri-attribution__powered-by');
 		changeAtrribution(divattr);
 		document.getElementById("loading").style.display = "none";
     });	

@@ -1,10 +1,9 @@
 
-function webmapInit() {
+function mapInit() {
 
 	// ========================================================================
 	//  Mapa base e MapView 
 	// ========================================================================
-	esriConfig.portalUrl = WEBMAP_SOURCE;
 
 	const webmap = new WebMap({
 		portalItem: { // autocasts as new PortalItem()
@@ -36,7 +35,7 @@ function webmapInit() {
 				if (selLayer == null && item.layer.layerId == LYR_SELECCAO_INTERACTIVA) {
 					selLayer = item.layer;
 				}
-				const found = (LYRS_DA_LEGENDA.indexOf(item.layer.layerId) >= 0);				
+				const found = (array.indexOf(LYRS_DA_LEGENDA, item.layer.layerId) >= 0);				
 				if (found) {
 					item.panel = {
 						content: "legend",
