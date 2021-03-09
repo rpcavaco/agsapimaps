@@ -44,29 +44,31 @@ require([
 	//  Layers, mapa base e MapView 
 	// ========================================================================
 
-	const layerDict = {}, mlayerorder = [], mlayers = [], flayers=[];
+	const layerDict = {}, layerorder = [], layers = [], flayers=[];
 	
 	for (let lkey in MAPLAYERS) {
 		if (lkey == "base") {
 			continue;
 		}
-		mlayerorder.push(lkey);
+		layerDict[lkey] = new MapImageLayer({ url: MAPLAYERS[lkey] });
+		layerorder.push(lkey);
 	}
-	mlayerorder.sort();
 
 	for (let lkey in FEATLAYERS) {
+		layerorder.push(lkey);
 		flayers.push(lkey);
 		layerDict[lkey] = new FeatureLayer({ url: FEATLAYERS[lkey] })
 	}
+	layerorder.sort();
+	console.log("layerorder:", layerorder);
 
-	for (let i=0; i<mlayerorder.length; i++) {
-		layerDict[mlayerorder[i]] = new MapImageLayer({ url: FEATLAYERS[mlayerorder[i]] });
-		mlayers.push(layerDict[mlayerorder[i]]);
+	for (let i=0; i<layerorder.length; i++) {
+		layers.push(layerDict[layerorder[i]]);
 	}
 
 	const the_map = new Map({
 		basemap: basemap,
-		mlayers: layers
+		layers: layers
 	});
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
@@ -85,7 +87,7 @@ require([
 
 	let selLayer = null;
 	if (Object.keys(layerDict).indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
-		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada no mapa.");
+		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada na configuração do mapa.");
 	} else {		
 		selLayer = layerDict[LYR_SELECCAO_INTERACTIVA_KEY];
 	}
@@ -94,7 +96,9 @@ require([
 		view: view,
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
+			console.log(item.layer);
 			if (item.layer.type != "group") {
+				
 				//const found = (LYRS_DA_LEGENDA.indexOf(item.layer.layerId) >= 0);				
 				if (true) {
 					item.panel = {
