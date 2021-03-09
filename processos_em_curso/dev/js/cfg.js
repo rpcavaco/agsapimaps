@@ -1,7 +1,6 @@
 //  ===========================================================================
 //  Configuração geral
 //  ---------------------------------------------------------------------------
-var MAP_MODE = "WEBMAP" // "WEBMAP"  "MAPLAYERS"
 
 // Para modo WEBMAP
 var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
