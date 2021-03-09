@@ -1,8 +1,35 @@
 //  ===========================================================================
 //  Configuração geral
 //  ---------------------------------------------------------------------------
+
+// Para modo WEBMAP -----------------------------------------------------------
+/*
 var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
-var PORTALITEM_ID = "25f42060fa80453fba15320eb85d7b25" // Processos em curso prod
+var PORTALITEM_ID = "8c75c44b8e734aa5aba643598f3c8c9e";
+
+var LYRS_DA_LEGENDA = [ 4 ];
+var LYR_SELECCAO_INTERACTIVA = 4;
+*/
+// ----------------------------------------------------------------------------
+
+
+// Para acesso direto a serviços ----------------------------------------------
+
+var MAPLAYERS = {
+	"base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
+	"lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top/MapServer"
+}
+
+var FEATLAYERS = {
+	"lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Zero/MapServer"
+}
+
+var LYR_TITLES = {
+	"lyr00_lotesProcEmCurso": "Lotes com processos em curso"
+}
+
+var LYR_SELECCAO_INTERACTIVA_KEY = "lyr00_lotesProcEmCurso";
+var LYRS_DA_LEGENDA = ["lyr00_lotesProcEmCurso"];
 
 var VIEW_EXTENT = {
 	xmin: -46900.0,
@@ -16,8 +43,6 @@ var VIEW_EXTENT = {
 
 var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / Datum 73";
 
-var LYRS_DA_LEGENDA = [ 4 ];
-var LYR_SELECCAO_INTERACTIVA = 4;
 
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
@@ -30,6 +55,12 @@ var HIGHLIGHT_OPTS = {
 	fillOpacity: 0.2
   }		
 
+var ALT_EXPANSAO_PAINEL_DADOS = [
+	//até num linhas, altura
+	[5, "180px"], 
+	[10, "280px"], 
+	[20, "320px"] 
+];
 //  ===========================================================================
 
 

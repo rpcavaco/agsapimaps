@@ -1,4 +1,21 @@
 
+function valCount(p_rows, p_attrs_cfg) {
+    let maxcnt=0, valcount;
+    for (let i=0; i<p_rows.length; i++) {  
+        valcount = 0;
+        for (let fld in p_attrs_cfg) {
+            let preval = p_rows[i][fld];
+            if (preval == null || preval.length==0) {
+                continue;
+            }
+            valcount++;
+        }
+        if (valcount > maxcnt) {
+            maxcnt = valcount;
+        }
+    }   
+    return maxcnt;
+}
 
 function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
@@ -28,11 +45,22 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 				);
 
-				/*const flds = [];
-				for (let pg in ATTRS_CFG) {						
-					flds.push.apply(flds, Object.keys(ATTRS_CFG[pg]))
-				} */
-				
+                // pan se demasiadamente proximo do painel de dados
+                const gdiv = document.getElementById("gridDiv");
+                if (gdiv) {
+                    const sty = window.getComputedStyle(gdiv);
+                    const gdiv_w = parseInt(sty.width, 10);
+                    const hlim = p_view.size[0] - gdiv_w;
+                    if (scrPt.x > hlim) {
+                        const newPt = {
+                            x: scrPt.x + (p_view.size[0] / 6),
+                            y: scrPt.y,
+                        }
+                        const newMapPt = p_view.toMap(newPt);
+                        p_view.goTo(newMapPt);
+                    }
+                }
+                   				
 				return p_sellayer.queryRelatedFeatures({
 					outFields:  ["*"],
 					relationshipId: p_sellayer.relationships[0].id,
@@ -48,7 +76,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
-				const exph = "350px";
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -56,7 +83,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					// get the attributes of the FeatureSet
 					const relatedFeatureSet = relatedFeatureSetByObjectId[objectId];
 					const rows = relatedFeatureSet.features.map(function(feature) {
-						console.log(feature.attributes);
+						// console.log(feature.attributes);
 						return feature.attributes;
 					});
 
@@ -77,28 +104,48 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let pageNum;
 					let reckey, pagekey;
 
-					let spEl, btEl;
+					let spEl, btEl, valcount, heightv=null;
 
 					if (rows.length>0) {
-						// expandir gridDiv
+						
+						// esconder msg introdutória
 						const mainmsgDiv = document.getElementById("mainmsg");
 						if (mainmsgDiv) {
 							mainmsgDiv.style.display = "none"
 						}
-						resultsDiv.style.height = exph;						
+
+						// expandir gridDiv
+						valcount = valCount(rows, ATTRS_CFG);
+						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
+							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
+								heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
+								break;
+							}
+						}
+						if (heightv == null) {
+							// se heightv nao tiver sido definida, colocar valor mais alto
+							heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
+						}
+						resultsDiv.style.height = heightv;		
+						
+						// abrir espaço para inserir botões de navegação entre registos
+						navDiv = document.createElement("div");
+						resultsDiv.appendChild(navDiv);
+						navDiv.setAttribute("class", "navdiv");
+						
 					}
 
 					if (rows.length>1) {
 
 						// inserir botões de navegação entre registos
-						navDiv = document.createElement("div");
+						/*navDiv = document.createElement("div");
 						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");
+						navDiv.setAttribute("class", "navdiv");*/
 
 						navInnerDiv = document.createElement("div");
 						navDiv.appendChild(navInnerDiv);
 						navInnerDiv.setAttribute("class", "graybtn-back just-right");
-						navInnerDiv.style.width = "200px";
+						navInnerDiv.style.width = "190px";
 						
 						btEl = document.createElement("button");
 						navInnerDiv.appendChild(btEl);
