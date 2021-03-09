@@ -7,7 +7,9 @@ var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
 var PORTALITEM_ID = "8c75c44b8e734aa5aba643598f3c8c9e";
 
 // Para acesso direto a serviços
-var MAPLAYER = "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer";
+var MAPLAYERS = {
+	"aa": "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer"
+}
 
 var VIEW_EXTENT = {
 	xmin: -41600.0,
@@ -35,7 +37,7 @@ var HIGHLIGHT_OPTS = {
 	fillOpacity: 0.2
   }		
 
-  var ALT_EXPANSAO_PAINEL_DADOS = "280px";  
+  var ALT_EXPANSAO_PAINEL_DADOS = "260px";  
 
 //  ===========================================================================
 

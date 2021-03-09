@@ -1,7 +1,7 @@
 
 require([
-	"esri/config",
-	"esri/WebMap",
+	"esri/Map",
+	"esri/layers/MapImageLayer",
 	"esri/views/MapView",
 	"esri/geometry/Extent",
 	"esri/core/watchUtils",
@@ -11,8 +11,8 @@ require([
 	//"esri/widgets/Expand",
 	//"dgrid/Grid",
 ], function(
-	esriConfig, 
-	WebMap,
+	Map,
+	MapImageLayer,
 	MapView,
 	Extent,
 	watchUtils,
@@ -26,18 +26,20 @@ require([
 	titlefader.hideMessage(true);
 
 	// ========================================================================
-	//  Mapa base e MapView 
+	//  Layers, mapa base e MapView 
 	// ========================================================================
-	esriConfig.portalUrl = WEBMAP_SOURCE;
 
-	const webmap = new WebMap({
-	  portalItem: { // autocasts as new PortalItem()
-		id: PORTALITEM_ID
-	  }
+	const layer = new MapImageLayer({
+		url: MAPLAYERS["aa"]
+	});
+
+	const the_map = new Map({
+		basemap: "satellite",
+		layers: [layer]
 	});
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
-		map: webmap, // Reference to the map object created before the view
+		map: the_map, // Reference to the map object created before the view
 		extent: new Extent(VIEW_EXTENT),
 		highlightOptions: HIGHLIGHT_OPTS	
 	});
