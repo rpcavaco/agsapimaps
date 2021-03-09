@@ -84,7 +84,6 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-
 	let selLayer = null;
 	if (Object.keys(layerDict).indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
 		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada na configuração do mapa.");
@@ -96,11 +95,9 @@ require([
 		view: view,
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
-			console.log(item.layer);
 			if (item.layer.type != "group") {
-				
-				//const found = (LYRS_DA_LEGENDA.indexOf(item.layer.layerId) >= 0);				
-				if (true) {
+				const found = (LYRS_DA_LEGENDA.indexOf(item.layer.id) >= 0);				
+				if (found) {
 					item.panel = {
 						content: "legend",
 						open: true
@@ -112,7 +109,6 @@ require([
 		}
 	});
 	view.ui.add(layerList, "top-right");
-
 	// ========================================================================
 	
 

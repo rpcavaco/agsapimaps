@@ -17,15 +17,15 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 
 var MAPLAYERS = {
 	"base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
-	"lyr01_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top"
+	"lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top/MapServer"
 }
 
 var FEATLAYERS = {
 	"lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer/0"
 }
 
-var LYR_SELECCAO_INTERACTIVA_KEY = "lotesProcEmCurso";
-var LYRS_DA_LEGENDA = [ 4 ];
+var LYR_SELECCAO_INTERACTIVA_KEY = "lyr00_lotesProcEmCurso";
+var LYRS_DA_LEGENDA = ["lyr00_lotesProcEmCurso"];
 
 var VIEW_EXTENT = {
 	xmin: -41600.0,
