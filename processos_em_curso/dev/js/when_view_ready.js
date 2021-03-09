@@ -49,6 +49,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				rec_rps.clear();
 				let registos_fmt = "Processo {0} de {1}"
 				const exph = ALT_EXPANSAO_PAINEL_DADOS;
+				const exph_low = ALT_EXPANSAO_PAINEL_DADOS_LOW;
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.forEach(function(objectId){
@@ -80,12 +81,19 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					let spEl, btEl;
 
 					if (rows.length>0) {
-						// expandir gridDiv
+						
+						// esconder msg introdutória
 						const mainmsgDiv = document.getElementById("mainmsg");
 						if (mainmsgDiv) {
 							mainmsgDiv.style.display = "none"
 						}
-						resultsDiv.style.height = exph;		
+
+						// expandir gridDiv
+						if (rows.length>5) {
+							resultsDiv.style.height = exph;		
+						} else {
+							resultsDiv.style.height = exph_low;		
+						}
 						
 						// abrir espaço para inserir botões de navegação entre registos
 						navDiv = document.createElement("div");

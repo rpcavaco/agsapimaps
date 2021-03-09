@@ -2,14 +2,24 @@
 //  Configuração geral
 //  ---------------------------------------------------------------------------
 
-// Para modo WEBMAP
+// Para modo WEBMAP -----------------------------------------------------------
+/*
 var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
 var PORTALITEM_ID = "8c75c44b8e734aa5aba643598f3c8c9e";
 
-// Para acesso direto a serviços
+var LYRS_DA_LEGENDA = [ 4 ];
+var LYR_SELECCAO_INTERACTIVA = 4;
+*/
+// ----------------------------------------------------------------------------
+
+
+// Para acesso direto a serviços ----------------------------------------------
+
 var MAPLAYERS = {
-	"aa": "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer"
+	"lotesProcEmCurso": "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer/4"
 }
+
+var LYR_SELECCAO_INTERACTIVA_KEY = "lotesProcEmCurso";
 
 var VIEW_EXTENT = {
 	xmin: -41600.0,
@@ -23,8 +33,6 @@ var VIEW_EXTENT = {
 
 var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / Datum 73";
 
-var LYRS_DA_LEGENDA = [ 4 ];
-var LYR_SELECCAO_INTERACTIVA = 4;
 
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
@@ -37,7 +45,8 @@ var HIGHLIGHT_OPTS = {
 	fillOpacity: 0.2
   }		
 
-  var ALT_EXPANSAO_PAINEL_DADOS = "260px";  
+var ALT_EXPANSAO_PAINEL_DADOS_LOW = "180px";  
+var ALT_EXPANSAO_PAINEL_DADOS = "260px";  
 
 //  ===========================================================================
 

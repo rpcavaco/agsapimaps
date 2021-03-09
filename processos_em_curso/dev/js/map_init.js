@@ -29,13 +29,20 @@ require([
 	//  Layers, mapa base e MapView 
 	// ========================================================================
 
-	const layer = new MapImageLayer({
-		url: MAPLAYERS["aa"]
-	});
+	const layerDict = {}, layerorder = [], layers = [];
+	for (let lkey in MAPLAYERS) {
+		layerorder.push(lkey);
+	}
+	layerorder.sort();
+
+	for (let i=0; i<layerorder.length; i++) {
+		layerDict[layerorder[i]] = new MapImageLayer({ url: MAPLAYERS[layerorder[i]] });
+		layers.push(layerDict[layerorder[i]]);
+	}
 
 	const the_map = new Map({
-		basemap: "satellite",
-		layers: [layer]
+		//basemap: "satellite",
+		layers: layers
 	});
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
@@ -51,19 +58,21 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-		
-	var selLayer = null;  // Layer a usar para a sel. interativa
-	
+
+	let selLayer = null;
+	if (layerorder.indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
+		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada no mapa.");
+	} else {		
+		selLayer = layerDict[LYR_SELECCAO_INTERACTIVA_KEY];
+	}
+
 	const layerList = new LayerList({
 		view: view,
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
 			if (item.layer.type != "group") {
-				if (selLayer == null && item.layer.layerId == LYR_SELECCAO_INTERACTIVA) {
-					selLayer = item.layer;
-				}
-				const found = (LYRS_DA_LEGENDA.indexOf(item.layer.layerId) >= 0);				
-				if (found) {
+				//const found = (LYRS_DA_LEGENDA.indexOf(item.layer.layerId) >= 0);				
+				if (true) {
 					item.panel = {
 						content: "legend",
 						open: true
@@ -75,6 +84,7 @@ require([
 		}
 	});
 	view.ui.add(layerList, "top-right");
+
 	// ========================================================================
 	
 
@@ -84,6 +94,7 @@ require([
 	var ccExpand, ccwdg, scalebar;
 
 	if (COORDSDISPLAY_SHOW) {
+
 		ccwdg = new CoordinateConversion({
 			view: view,
 			multipleConversions: true
