@@ -16,12 +16,12 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-	"base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
-	"lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top/MapServer"
+    "base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
+    "lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top/MapServer"
 }
 
 var FEATLAYERS = {
-	"lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso/MapServer"
+    "lyr00_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Zero/MapServer"
 }
 
 var LYR_TITLES = {
