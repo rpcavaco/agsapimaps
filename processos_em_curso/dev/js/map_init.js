@@ -4,6 +4,7 @@ require([
 	"esri/Basemap",
 	"esri/layers/MapImageLayer",
 	"esri/layers/FeatureLayer",
+	//"esri/layers/WMSLayer",
 	"esri/views/MapView",
 	"esri/geometry/Extent",
 	"esri/core/watchUtils",
@@ -17,6 +18,7 @@ require([
 	Basemap,
 	MapImageLayer,
 	FeatureLayer,
+	//WMSLayer,
 	MapView,
 	Extent,
 	watchUtils,
@@ -70,6 +72,7 @@ require([
 		layerDict[lkey] = new FeatureLayer(lyrcfg);
 		layerorder.push(lkey);
 	}
+	
 	layerorder.sort();
 
 	for (let i=0; i<layerorder.length; i++) {
@@ -80,6 +83,8 @@ require([
 		basemap: basemap,
 		layers: layers
 	});
+
+	
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
 		map: the_map, // Reference to the map object created before the view

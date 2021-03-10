@@ -16,32 +16,32 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-    "base": "https://portalsig.cm-porto.pt/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs/MapServer",
-    "lyr99_top": "https://portalsig.cm-porto.pt/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top/MapServer"
+    "base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
+    "lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
 }
 
 var FEATLAYERS = {
-    "lyr00_lotesProcEmCurso": "https://portalsig.cm-porto.pt/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Zero/MapServer"
+    "lyr10_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Zero/MapServer"
 }
 
 var LYR_TITLES = {
-	"lyr00_lotesProcEmCurso": "Lotes com processos em curso"
+	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
 }
 
-var LYR_SELECCAO_INTERACTIVA_KEY = "lyr00_lotesProcEmCurso";
-var LYRS_DA_LEGENDA = ["lyr00_lotesProcEmCurso"];
+var LYR_SELECCAO_INTERACTIVA_KEY = "lyr10_lotesProcEmCurso";
+var LYRS_DA_LEGENDA = ["lyr10_lotesProcEmCurso"];
 
 var VIEW_EXTENT = {
-	xmin: -46900.0,
-	ymin: 162000.0,
-	xmax: -34700.0, 
-	ymax: 170000.0,
+	xmin: -47200.0,
+	ymin: 161900.0,
+	xmax: -34700.0,
+	ymax: 169500.0,
 	spatialReference: {
-		wkid: 102161
+		wkid: 3763
 	}
 };
 
-var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / Datum 73";
+var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / PT-TM06";
 
 
 var SCALEBAR_SHOW = false;
