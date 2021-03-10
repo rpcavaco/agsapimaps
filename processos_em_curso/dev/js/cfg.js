@@ -21,7 +21,7 @@ var MAPLAYERS = {
 }
 
 var FEATLAYERS = {
-    "lyr10_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Zero/MapServer"
+    "lyr10_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer"
 }
 
 var LYR_TITLES = {
