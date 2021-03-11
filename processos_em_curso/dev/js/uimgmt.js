@@ -78,15 +78,15 @@ function changeAtrribution(p_nodes) {
 			node.innerText = ATTR_TEXT;
 		}
 	}
-};
+}
 
 function showLoaderImg() {
 	document.getElementById("loading").style.display = "block";
-};
+}
 
 function hideLoaderImg() {
 	document.getElementById("loading").style.display = "none";	
-};
+}
 
 function sizeWidgets() {
 
@@ -208,7 +208,7 @@ function init_ui() {
 	// NOVO =======================================================
 
 
-	AutocompleteObjMgr.add(Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
+	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
 		{
 			parentdiv: "loc_content",
 			textentry: "loc_inputbox",
@@ -229,3 +229,7 @@ function init_ui() {
 	
 
 }
+
+(function() {
+	init_ui();
+})();

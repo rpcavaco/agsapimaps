@@ -634,9 +634,6 @@ class LocAutoCompleter extends AutoCompleter {
 		}
 		else if (ot["tiporesp"] == 'pick') {
 
-			var alllow_saving = true;	
-			var recs = [];
-								
 			clearPublishingWidgets();
 			
 			if (cont["numbers"]) {

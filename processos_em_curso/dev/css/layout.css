@@ -157,3 +157,23 @@ li:nth-child(even) {
     content: "";
     color: inherit;
 }
+
+#loc_content {
+    margin: 0px 40px 0px 30px;
+    position: absolute;
+    z-index: 900;
+    top: 20px;
+    left: 65px;
+}
+
+#loc_content input {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 400px;
+    font-size: 16px;
+    height: 28px;
+    line-height: 34px;
+    display: inline-block;
+    vertical-align: top;
+}
