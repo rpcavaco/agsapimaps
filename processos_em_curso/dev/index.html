@@ -22,9 +22,11 @@
 	<script src="/esri_js_api/4.18/init.js"></script>
 	<script src="js/basics.m.js"></script>
 	<script src="js/cfg.js"></script>
+	<script src="js/uimgmt.js"></script>
+	<script src="js/autocomp.js"></script>
 	<script src="js/panel_switcher.js"></script>
 	<script src="js/when_view_ready.js"></script>
-	<script src="js/init.js"></script>
+	<script src="js/uimgmt.js"></script>
 	<!-- <script src="js/webmap_init.js"></script> -->
 	<script src="js/map_init.js"></script>
 
@@ -35,7 +37,17 @@
 	<div id="titlearea" class="semi-square">
 		<p>Gestão de Operações Urbanísticas</p>
 	</div>
-	
+
+	<div>
+		<!-- Autocomplete -->
+		<div id="loc_content">
+			<input id="loc_inputbox" type="text" autocomplete="off">
+			<div style="visibility: hidden" id="loc_cleansearchbtn" class="semi-square">Limpar</div>
+			<div style="display: none;" id="loc_resultlistarea">
+			</div>
+		</div>
+	</div>
+
 	<div id="viewDiv">
 		<div class="esri-ui-bottom-right esri-ui-corner">
 			<div id="gridDiv" class="esri-component esri-widget">

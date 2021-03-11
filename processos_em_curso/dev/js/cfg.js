@@ -61,6 +61,10 @@ var ALT_EXPANSAO_PAINEL_DADOS = [
 	[10, "280px"], 
 	[20, "320px"] 
 ];
+
+var AJAX_ENDPOINTS = {
+	QRY: "https://servsig.cm-porto.pt/loc/c/lq"
+}
 //  ===========================================================================
 
 
@@ -92,7 +96,7 @@ var ATTRS_CFG = {
 	// "estorcam":  ["Estimativa orçamental (€)", null],
 	"volum_constr":  ["Volume construção", null],
 	"area_implant":  ["Área implantação (m2)", null],
-	"cercea":  ["Cércea (nº pisos)",  null],
+	"cercea":  ["Cércea",  null],
 	"pisos_abaixo_csol":  ["Pisos abaixo cot.soleira",  null],
 	"pisos_acima_csol":  ["Pisos acima cot.soleira", null],
 	"prazo":  ["Prazo (dias)", null]

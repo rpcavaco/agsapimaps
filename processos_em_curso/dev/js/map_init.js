@@ -28,8 +28,6 @@ require([
 	//Expand,
 	//Grid,
 ) {
-	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS);
-	titlefader.hideMessage(true);
 
 	var basemap = new Basemap({
 		baseLayers: [
@@ -84,7 +82,6 @@ require([
 		layers: layers
 	});
 
-	
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
 		map: the_map, // Reference to the map object created before the view
@@ -208,14 +205,14 @@ require([
 	//		- editar a "attribution"
 	// ========================================================================
     watchUtils.whenTrue(view, "updating", function(evt) {
-		document.getElementById("loading").style.display = "block";
+		showLoaderImg();
     });
 	
 	// Final de uma atualização da view (ocorre em vários momentos antes do final do carregamento de todos os elementos)
     watchUtils.whenFalse(view, "updating", function(evt) {
 		var divattr = document.getElementsByClassName('esri-attribution__powered-by');
 		changeAtrribution(divattr);
-		document.getElementById("loading").style.display = "none";
+		hideLoaderImg();
     });	
 	// ========================================================================
 	

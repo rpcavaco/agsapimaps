@@ -50,9 +50,9 @@ var COORDSDISPLAY_SHOW = true;
 var TITLE_FADING_MSECS = 200;
 
 var HIGHLIGHT_OPTS = {
-	color: [255, 255, 0, 1],
+	color: [255, 160, 0, 1],
 	haloOpacity: 0.9,
-	fillOpacity: 0.2
+	fillOpacity: 0.4
   }		
 
 var ALT_EXPANSAO_PAINEL_DADOS = [
@@ -92,7 +92,7 @@ var ATTRS_CFG = {
 	// "estorcam":  ["Estimativa orçamental (€)", null],
 	"volum_constr":  ["Volume construção", null],
 	"area_implant":  ["Área implantação (m2)", null],
-	"cercea":  ["Cércea (nº pisos)",  null],
+	"cercea":  ["Cércea",  null],
 	"pisos_abaixo_csol":  ["Pisos abaixo cot.soleira",  null],
 	"pisos_acima_csol":  ["Pisos acima cot.soleira", null],
 	"prazo":  ["Prazo (dias)", null]
