@@ -723,9 +723,13 @@ class LocAutoCompleter extends AutoCompleter {
 					
 				}
 
-				this.setCurrentRecords(recs, false);	
+				if (recs.length > 1) {
+					this.setCurrentRecords(recs, false);	
+				} else if (recs.length > 0) {
+					this.setText(recs[0].toponimo, false);
+					QueriesMgr.executeQuery("eixosVia", [recs[0].cod_topo]);
+				}
 				
-				QueriesMgr.executeQuery("eixosVia", [ot.cod_topo]);
 
 				/*let env = new Envelope2D();
 				if (ot.ext) {
