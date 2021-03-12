@@ -317,8 +317,8 @@
 			this.deleteHandler();
 		}
 
-		this.enteredtext = textvalue;
-		this.widgets["textentry"].value = textvalue;
+		this.enteredtext = p_textvalue;
+		this.widgets["textentry"].value = p_textvalue;
 		
 		return this.enteredtext.length;
 	}
@@ -443,17 +443,14 @@
 					
 					let usabletxt = target.value.replace(/[ ]+/g, ' ');
 					
-					let l1 =  p_this.checkInputPrevLen();
-					if (!l1) {
-						l1 = 0;
-					}
+					let l1 =  p_this.checkInputPrevLen;
 					let l2 = usabletxt.trim().length;
 
 					len = p_this.setText(usabletxt);
 					if (len > 0) {
-						this.activateCleanButton(true);
+						p_this.activateCleanButton(true);
 					} else {
-						this.deleteHandler();
+						p_this.deleteHandler();
 					}	
 					
 					if (Math.abs(l2 - l1) < 1) {
@@ -468,12 +465,12 @@
 					
 					this.checkInputTimerID = (function(p_this) {
 						return setInterval(
-							this.checkInputTimer, 
-							this.inputTimerIntervalValue
+							p_this.checkInputTimer, 
+							p_this.inputTimerIntervalValue
 						); 
 					})(this);
 
-					console.assert(this.checkInputTimerID!=null, "this.checkInputTimerID NULO!");
+					console.assert(p_this.checkInputTimerID!=null, "this.checkInputTimerID NULO!");
 					
 				}
 			);
