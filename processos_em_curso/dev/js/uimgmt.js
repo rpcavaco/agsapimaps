@@ -1,5 +1,4 @@
-
-function DivFader(p_elemid, p_fadingheartbeat) {
+�function DivFader(p_elemid, p_fadingheartbeat) {
 	
 	// Constantes
 	// MessagesControllerParams é especifico de cada aplicação, deve estar no init-xxxx.js
@@ -101,20 +100,20 @@ function sizeWidgets() {
 	let wdg = document.getElementById("loc_inputbox");
 	let wdg2 = document.getElementById("loc_resultlistarea");
 
-	if (wdg!=null && wdg2!=null) {​​​​​​​
+	if (wdg!=null && wdg2!=null) {       
 		let w;
-		if (parseInt(winsize.width) > 1200) {​​​​​​​
+		if (parseInt(winsize.width) > 1200) {       
 			w = '450px';
-		}​​​​​​​ else if (parseInt(winsize.width) > 530) {​​​​​​​
+		} else if (parseInt(winsize.width) > 530) {       
 			w = '350px';
-		}​​​​​​​ else if (parseInt(winsize.width) > 430) {​​​​​​​
+		} else if (parseInt(winsize.width) > 430) {       
 			w = '265px';
-		}​​​​​​​ else {​​​​​​​
+		} else {       
 			w = '180px';
-		}​​​​​​​
+		}       
 		wdg.style.width = w;
 		wdg2.style.width = w;
-	}​​​​​​​
+	}       
 
 	wdg = document.getElementById("loc_cleansearchbtn");	
 	if (wdg) {
