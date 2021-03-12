@@ -1,4 +1,4 @@
-�function DivFader(p_elemid, p_fadingheartbeat) {
+function DivFader(p_elemid, p_fadingheartbeat) {
 	
 	// Constantes
 	// MessagesControllerParams é especifico de cada aplicação, deve estar no init-xxxx.js
