@@ -199,15 +199,6 @@ function init_ui() {
 	// Init UI não-ESRI
 
 
-	/*================================
-	*
-	* Autocomplete
-	*
-	==================================*/
-
-	// NOVO =======================================================
-
-
 	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
 		{
 			parentdiv: "loc_content",
@@ -216,8 +207,8 @@ function init_ui() {
 			recordsarea: "loc_resultlistarea"
 		}
 	));
-	
 
+	AutocompleteObjMgr.bindEventHandlers();
 
 	// ajustar ao tamanho disponível 
 	sizeWidgets();

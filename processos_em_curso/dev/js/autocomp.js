@@ -790,6 +790,12 @@ var AutocompleteObjMgr = {
 		for (let k in auto_completers) {
 			auto_completers[k].setCurrentMouseClick(p_mouse_pt);
 		}
+	},
+
+	bindEventHandlers: function() {
+		for (let k in auto_completers) {
+			auto_completers[k].bindEventHandlers();
+		}
 	}
 
 };
