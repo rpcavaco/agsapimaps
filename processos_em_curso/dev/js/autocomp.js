@@ -584,14 +584,18 @@ class LocAutoCompleter extends AutoCompleter {
 			// WORKING	
 			if (p_rec.cod_topo !== undefined) {
 				// aumentar o enve
-				let env = new Envelope2D();
+				
+				/*let env = new Envelope2D();
 				if (p_rec.env != undefined) {
 					env.setMinsMaxs(p_rec.env[0], p_rec.env[1], p_rec.env[2], p_rec.env[3]);
 					env.expand(1.2);
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", env.getArray(), [], false);
 				} else {
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", null, [], false);
-				}
+				}*/
+
+				QueriesMgr.executeQuery("eixosVia", [ot.cod_topo]);
+
 			}
 			
 			//this.send();

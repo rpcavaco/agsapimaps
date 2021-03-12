@@ -2,7 +2,7 @@
 var QueriesMgr = {
 	
 	queries: {},
-	
+	mapView: null,
 	resultsLayer: null,
 	
 	displayResults: function(p_results, p_symb) {
@@ -11,6 +11,10 @@ var QueriesMgr = {
 			graphic.symbol = p_symb;
 			return graphic;
 		});
+		if (this.mapView) {
+			this.mapView.goTo({ target: features });
+			console.log("zoooming ...");
+		}
 		console.log("num.feats encontradas:", features.length);
 		this.resultsLayer.addMany(features);
 	},
@@ -53,6 +57,7 @@ var QueriesMgr = {
 (function() {
 	QueriesMgr.init();
 })();
+
 require([
 	"esri/Map",
 	"esri/Basemap",
@@ -260,6 +265,8 @@ require([
 
 		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
 		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		
+
+		QueriesMgr.mapView = view;
 
 		if (selLayer!=null && typeof when_view_ready === 'function') {	
 			when_view_ready(view, selLayer, "queryResults");
