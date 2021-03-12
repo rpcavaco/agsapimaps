@@ -15,7 +15,6 @@ var QueriesMgr = {
             if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
                 lyr = this.resultsLayers[opt_type];
                 if (lyr) {
-					console.log("removing 18", opt_type)
                     lyr.removeAll();
                 }
             }
@@ -23,7 +22,6 @@ var QueriesMgr = {
             for (let k in this.resultsLayers) {
                 lyr = this.resultsLayers[k];
                 if (lyr) {
-					console.log("removing 26", k)
 					lyr.removeAll();
                 }
             }
@@ -33,9 +31,7 @@ var QueriesMgr = {
 	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
 
 		const gtype = this.queries[p_qrykey]["gtype"];
-
 		this.clearResults(gtype);
-
 		const features = p_results.features.map(function(graphic) {
 			graphic.symbol = p_symb;
 			return graphic;
@@ -46,22 +42,12 @@ var QueriesMgr = {
 			if (this.mapView) {
 
 				if (gtype == 'pt') {
-
 					let pzoom_scale = 1000;
-
 					if (this.queries[p_qrykey]["zoomscale"] !== undefined) {
 						pzoom_scale = parseInt(this.queries[p_qrykey]["zoomscale"]);
-					}
-			
-					let x=0, y=0;
-                    for (let i=0; i<features.length; i++) {
-                        x += features[i].geometry.x;
-                        y += features[i].geometry.y;
-                     }
-                     this.mapView.goTo({ center: [x/features.length, y/features.length], scale: pzoom_scale });
-
+					}			
+                    this.mapView.goTo({ target: features, scale: pzoom_scale });
 				} else {
-
 					let extent = null;
 					for (let i=0; i<features.length; i++) {
 						if (extent) {
@@ -88,7 +74,6 @@ var QueriesMgr = {
 		const fl = this.queries[p_qrykey]["flayer"];
 		const queryObj = fl.createQuery();
 		queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
-		console.log("where:"+queryObj.where);
 		(function(p_this, p_qryobj, p_symb) {
 			fl.queryFeatures(p_qryobj).then(function(qresults) {
 				p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where);

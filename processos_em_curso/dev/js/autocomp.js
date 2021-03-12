@@ -40,7 +40,7 @@ class AutoCompleter {
 		this.reqPayload = clone(p_initial_req_payload);
 		this.recvPayload = null;
 		this.widgets = clone(p_widgets);
-		this.checkInputPrevLen = 0;
+		this.prevEnteredText = "";
 		this.checkInputTimerID = null;
 		this.checkInputCnt = 0;
 		this.currentRecords = [];
@@ -113,9 +113,7 @@ class AutoCompleter {
 
 	prepareSend(b_doforce) {
 		this.enteredtext = this.enteredtext.trim();
-		const l1 = this.enteredtext.length;
-		const l2 = this.checkInputPrevLen;
-		if (b_doforce || (l1 - l2) > 0) {
+		if (b_doforce || this.enteredtext != this.prevEnteredText) {
 			if (this.checkInputTimerID) {
 				clearInterval(this.checkInputTimerID);
 				this.checkInputTimerID = null;
@@ -126,7 +124,7 @@ class AutoCompleter {
 				this.execSearch (inptxt);
 			}		
 		}		
-		this.checkInputPrevLen = l1;
+		this.prevEnteredText = this.enteredtext;
 	}
 
 	/*send() {
@@ -209,7 +207,7 @@ class AutoCompleter {
 	getRecord(p_idx) {
 		let ret = null;
 		if (this.currentRecords.length > 0) {
-			ret = this.currentRecords[idx];
+			ret = this.currentRecords[p_idx];
 		}
 		return ret;
 	}
@@ -459,11 +457,8 @@ class AutoCompleter {
 						list_idx = -1;
 					}
 					
-					let usabletxt = target.value.replace(/[ ]+/g, ' ');
+					let usabletxt = target.value.replace(/[ ]+/g, ' ').trim();
 					
-					let l1 =  p_this.checkInputPrevLen;
-					let l2 = usabletxt.trim().length;
-
 					len = p_this.setText(usabletxt);
 					if (len > 0) {
 						p_this.activateCleanButton(true);
@@ -471,7 +466,7 @@ class AutoCompleter {
 						p_this.deleteHandler();
 					}	
 					
-					if (Math.abs(l2 - l1) < 1) {
+					if (this.prevEnteredText == usabletxt) {
 						return false;
 					}
 
@@ -704,7 +699,6 @@ class LocAutoCompleter extends AutoCompleter {
 							'notfound': true,
 							'lbl': '<i>'+this.notFoundLabel+'</i> ' + ot.toponym + ' <b><s>' +ot.errornp + '</s></b>'
 						});
-					return;
 				}
 				
 				if (cont["numbers"]) {
@@ -771,6 +765,7 @@ class LocAutoCompleter extends AutoCompleter {
 					cod_topo = ot.npoldata.cod_topo_np;
 				}	
 				
+				QueriesMgr.executeQuery("eixosVia", [cod_topo]);
 				QueriesMgr.executeQuery("numPol", [cod_topo, ot.npol]);
 
 				/*
