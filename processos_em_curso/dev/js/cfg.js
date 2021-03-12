@@ -32,7 +32,12 @@ var QUERIES_CFG = {
 	"eixosVia": {
 		"url": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
 		"template": "cod_topo='{0}'",
-		"layerId": 3
+		"layerId": 3,
+		"symb": {
+			type: "simple-line",
+			width: 4,
+			color: [255, 100, 0]
+		}
 	}
 	
 }

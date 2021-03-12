@@ -5,14 +5,10 @@ var QueriesMgr = {
 	
 	resultsLayer: null,
 	
-	displayResults: function(p_results) {
+	displayResults: function(p_results, p_symb) {
 		this.resultsLayer.removeAll();
 		const features = p_results.features.map(function(graphic) {
-			graphic.symbol = {
-			  type: "simple-line",
-			  width: 4,
-			  color: [255, 100, 0]
-			};
+			graphic.symbol = p_symb;
 			return graphic;
 		});
 		console.log("num.feats encontradas:", features.length);
@@ -24,11 +20,11 @@ var QueriesMgr = {
 		const queryObj = fl.createQuery();
 		queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
 		console.log("where:"+queryObj.where);
-		(function(p_this, p_qryobj) {
+		(function(p_this, p_qryobj, p_symb) {
 			fl.queryFeatures(p_qryobj).then(function(qresults) {
-				p_this.displayResults(qresults);
+				p_this.displayResults(qresults, p_symb);
 			});
-		})(this, queryObj);
+		})(this, queryObj, this.queries[p_qrykey]["symb"]);
 	},
 	
 	init: function() {	
@@ -36,10 +32,14 @@ var QueriesMgr = {
 			this.queries[k] = {};
 			this.queries[k]["url"] = QUERIES_CFG[k]["url"];
 			this.queries[k]["template"] = QUERIES_CFG[k]["template"];
+			this.queries[k]["symb"] = QUERIES_CFG[k]["symb"];
+			if (QUERIES_CFG[k]["layerId"] !== undefined) {
+                this.queries[k]["layerId"] = QUERIES_CFG[k]["layerId"];
+            }			
 		}
 	}
 	
-	// precisa de inicializaÃ§Ã£o de feat. layers com isto, dentro de view.when:
+	// precisa de inicialização de feat. layers com isto, dentro de view.when:
 	/*
 	{
 		for (let k in QueriesMgr.queries) {
