@@ -99,23 +99,22 @@ function sizeWidgets() {
 	const width_limit = 490;
 	
 	let wdg = document.getElementById("loc_inputbox");
-	if (wdg) {
-		var w, w2;
-		if (parseInt(winsize.width) > 1200) {
+	let wdg2 = document.getElementById("loc_resultlistarea");
+
+	if (wdg!=null && wdg2!=null) {​​​​​​​
+		let w;
+		if (parseInt(winsize.width) > 1200) {​​​​​​​
 			w = '450px';
-			w2 = '420px';
-		} else if (parseInt(winsize.width) > 530) {
+		}​​​​​​​ else if (parseInt(winsize.width) > 530) {​​​​​​​
 			w = '350px';
-			w2 = '320px';
-		} else if (parseInt(winsize.width) > 430) {
+		}​​​​​​​ else if (parseInt(winsize.width) > 430) {​​​​​​​
 			w = '265px';
-			w2 = '235px';
-		} else {
+		}​​​​​​​ else {​​​​​​​
 			w = '180px';
-			w2 = '150px';	
-		}
+		}​​​​​​​
 		wdg.style.width = w;
-	}
+		wdg2.style.width = w;
+	}​​​​​​​
 
 	wdg = document.getElementById("loc_cleansearchbtn");	
 	if (wdg) {

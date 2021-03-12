@@ -1,9 +1,64 @@
 
+var QueriesMgr = {
+	
+	queries: {},
+	
+	resultsLayer: null,
+	
+	displayResults: function(p_results) {
+		this.resultsLayer.removeAll();
+		const features = p_results.features.map(function(graphic) {
+			graphic.symbol = {
+			  type: "simple-line",
+			  width: 4,
+			  color: [255, 100, 0]
+			};
+			return graphic;
+		});
+		console.log("num.feats encontradas:", features.length);
+		this.resultsLayer.addMany(features);
+	},
+	
+	executeQuery: function(p_qrykey, p_argslist) {
+		const fl = this.queries[p_qrykey]["flayer"];
+		const queryObj = fl.createQuery();
+		queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
+		console.log("where:"+queryObj.where);
+		(function(p_this, p_qryobj) {
+			fl.queryFeatures(p_qryobj).then(function(qresults) {
+				p_this.displayResults(qresults);
+			});
+		})(this, queryObj);
+	},
+	
+	init: function() {	
+		for (let k in QUERIES_CFG) {
+			this.queries[k] = {};
+			this.queries[k]["url"] = QUERIES_CFG[k]["url"];
+			this.queries[k]["template"] = QUERIES_CFG[k]["template"];
+		}
+	}
+	
+	// precisa de inicializaÃ§Ã£o de feat. layers com isto, dentro de view.when:
+	/*
+	{
+		for (let k in QueriesMgr.queries) {
+		QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"] });		
+	}
+	*/
+
+	
+};
+
+(function() {
+	QueriesMgr.init();
+})();
 require([
 	"esri/Map",
 	"esri/Basemap",
 	"esri/layers/MapImageLayer",
 	"esri/layers/FeatureLayer",
+	"esri/layers/GraphicsLayer",
 	//"esri/layers/WMSLayer",
 	"esri/views/MapView",
 	"esri/geometry/Extent",
@@ -18,6 +73,7 @@ require([
 	Basemap,
 	MapImageLayer,
 	FeatureLayer,
+	GraphicsLayer,
 	//WMSLayer,
 	MapView,
 	Extent,
@@ -77,11 +133,24 @@ require([
 		layers.push(layerDict[layerorder[i]]);
 	}
 
+	// adicionar layer de resultados de pesquisa
+	QueriesMgr.resultsLayer = new GraphicsLayer();	
+	layers.push(QueriesMgr.resultsLayer);
+	
 	const the_map = new Map({
 		basemap: basemap,
 		layers: layers
 	});
-
+	
+	//  instanciar as FeatureLayer das pesquisas
+	for (let k in QueriesMgr.queries) {
+		if (QueriesMgr.queries[k]["layerId"] !== undefined) {
+			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"], layerId: QueriesMgr.queries[k]["layerId"] });	
+		} else {
+			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"] });	
+		}	
+	}	
+	
 	const view = new MapView({
 		container: "viewDiv", // Reference to the view div created in step 5
 		map: the_map, // Reference to the map object created before the view

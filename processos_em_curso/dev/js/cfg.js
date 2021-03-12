@@ -28,6 +28,15 @@ var LYR_TITLES = {
 	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
 }
 
+var QUERIES_CFG = {
+	"eixosVia": {
+		"url": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
+		"template": "cod_topo='{0}'",
+		"layerId": 3
+	}
+	
+}
+
 var LYR_SELECCAO_INTERACTIVA_KEY = "lyr10_lotesProcEmCurso";
 var LYRS_DA_LEGENDA = ["lyr10_lotesProcEmCurso"];
 
