@@ -693,6 +693,7 @@ class LocAutoCompleter extends AutoCompleter {
 							'notfound': true,
 							'lbl': '<i>'+this.notFoundLabel+'</i> ' + ot.toponym + ' <b><s>' +ot.errornp + '</s></b>'
 						});
+					return;
 				}
 				
 				if (cont["numbers"]) {
@@ -718,16 +719,18 @@ class LocAutoCompleter extends AutoCompleter {
 					
 				}
 
-				this.setCurrentRecords(recs, false);						
+				this.setCurrentRecords(recs, false);	
+				
+				QueriesMgr.executeQuery("eixosVia", [ot.cod_topo]);
 
-				let env = new Envelope2D();
+				/*let env = new Envelope2D();
 				if (ot.ext) {
 					env.setMinsMaxs(ot.ext[0], ot.ext[1], ot.ext[2], ot.ext[3]);
 					env.expand(1.2);
 					sel_toponimo(ot.toponym, ot.cod_topo, ot.str, env.getArray(), ot.loc, show_returned_values);
 				} else {
 					sel_toponimo(ot.toponym, ot.cod_topo, ot.str, null, ot.loc, show_returned_values);
-				}
+				} */
 			} else {
 				recs.push({
 						'cod_topo': ot.cod_topo,
