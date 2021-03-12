@@ -15,13 +15,10 @@ function AC_checkInputTimer(p_acompleter) {
 }
 
 class AutoCompleter {
-	constructor(p_name, p_initial_req_payload, p_widgets) {
+	constructor(p_name, p_url, p_initial_req_payload, p_widgets) {
 
 		if (p_initial_req_payload == null) {
 			throw new Error("no initial payload defined");
-		}
-		if (p_initial_req_payload["url"] === undefined) {
-			throw new Error("no URL in initial payload definition");
 		}
 
 		if (p_widgets == null) {
@@ -41,6 +38,7 @@ class AutoCompleter {
 		}
 
 		this.name = p_name;
+		this.URL = p_url,
 		this.reqPayload = clone(p_initial_req_payload);
 		this.recvPayload = null;
 		this.widgets = clone(p_widgets);
@@ -106,10 +104,10 @@ class AutoCompleter {
 
 		this.beforeExecSearch();
 
-		this.reqPayload["currstr"] = p_inptxt;
+		this.reqPayload["curstr"] = p_inptxt;
 		this.abortPreviousSearchCall();	
 		(function(p_this) {	
-			p_this.xhr = ajaxSender(p_this.reqPayload["url"], function() { 
+			p_this.xhr = ajaxSender(p_this.URL, function() { 
 				p_this.afterSearchExec(this); 
 			}, JSON.stringify(p_this.reqPayload), p_this.xhr);
 		})(this);
@@ -322,6 +320,11 @@ class AutoCompleter {
 		
 	}
 
+	emptyCurrentRecords() { 
+		this.currentRecords.length = 0;
+		this.showRecordsArea(false);
+	}
+
 	setText(p_textvalue, dontdeleteall) {
 		
 	    let dodelhandler = false;		
@@ -522,6 +525,7 @@ class AutoCompleter {
 	}
 
 	afterSearchExec(p_respobj) {
+		
 		if (p_respobj.readyState === p_respobj.DONE) {
 			this.beforeResponseDone(p_respobj);
 			this.xhr = null;
@@ -598,7 +602,7 @@ class LocAutoCompleter extends AutoCompleter {
 
 	recvPayloadProcessing(p_resptxt) {
 
-		let currstr, recs = [], cont = this.recvPayload;
+		let curstr, recs = [], cont = this.recvPayload;
 		let ot = cont["out"];
 
 		if (this.test_mode && console!=null) {
@@ -636,8 +640,8 @@ class LocAutoCompleter extends AutoCompleter {
 				
 			} else if (ot["str"] !== undefined) {
 				
-				currstr = this.getText().toLowerCase();
-				if (currstr.indexOf(ot.str.toLowerCase()) < 0) {				
+				curstr = this.getText().toLowerCase();
+				if (curstr.indexOf(ot.str.toLowerCase()) < 0) {				
 					recs = [{
 							'lbl': ot.str, 
 							'cont': ot.str 

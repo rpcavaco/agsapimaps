@@ -154,9 +154,8 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 			p_srid,
 			p_widgets
 		) {
-		super("geocode", 
+		super("geocode", p_url,
 			{
-				url: p_url,
 				outsrid: p_srid
 			}
 			, p_widgets);
