@@ -288,23 +288,23 @@ class AutoCompleter {
 			}
 			table.appendChild(tr);
 			
-			(function(p_tr, p_rec) {
+			(function(p_this, p_tr, p_rec) {
 				
 				attEventHandler(p_tr, 'click', function(e) {
 					
 					if (p_rec.lbl.substring(0,3) === '...') {
 						return;
 					}						
-					this.showRecordsArea(false);					
+					p_this.showRecordsArea(false);					
 					if 	(p_rec.cont !== undefined) {
-						this.setText(p_rec.cont, false);
+						p_this.setText(p_rec.cont, false);
 					}													
-					this.getTextEntryWidget().focus();
+					p_this.getTextEntryWidget().focus();
 					
 					// método estendido
-					this.recSelectionEvt(p_rec);
+					p_this.recSelectionEvt(p_rec);
 				});
-			})(tr, p_in_recs[i]);
+			})(this, tr, p_in_recs[i]);
 
 			// método estendido
 			this.setRecRowAndHoveringEvts(tr, p_in_recs[i]);
@@ -563,7 +563,7 @@ class LocAutoCompleter extends AutoCompleter {
 
 	setRecRowAndHoveringEvts(p_tr, p_rec) {
 
-		td = document.createElement('td');
+		let td = document.createElement('td');
 		p_tr.appendChild(td);				
 		td.insertAdjacentHTML('afterbegin',p_rec.lbl);
 

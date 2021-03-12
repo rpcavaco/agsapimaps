@@ -146,7 +146,7 @@ li:nth-child(even) {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
 	padding-left: 10px;
-    content: "";
+    content: "î˜‡";
     color: inherit;
 }
 
@@ -154,7 +154,7 @@ li:nth-child(even) {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
 	padding-right: 10px;
-    content: "";
+    content: "î˜†";
     color: inherit;
 }
 
@@ -170,10 +170,58 @@ li:nth-child(even) {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+	border-radius: 0;
+	-webkit-border-radius: 0;
     width: 400px;
     font-size: 16px;
     height: 28px;
     line-height: 34px;
     display: inline-block;
     vertical-align: top;
+}
+
+#loc_cleansearchbtn {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	float: right;
+	background-color: #fff;
+	/* background-color: rgb(230, 240, 230); */
+	color: #000;
+    height: 28px;
+	 width: 90px;
+	padding: 3px 4px 3px 4px;
+	margin: 0;
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	z-index: 1000;
+	cursor: pointer;
+	text-align: center;
+	border: 1px #95d8e5 solid;
+	display:inline-block;
+	border-radius: 0;
+	vertical-align: top; 
+
+}
+
+.hovering:hover {
+    background-color: #eee;
+}
+
+#loc_resultlistarea {
+	background-color: #fff;
+	border: 1px solid #eee;
+	width: 400px;
+	position: absolute;
+	z-index: 1000;
+	font-family: "Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
+	/* overflow:hidden; 
+	padding:10px; 
+	margin:-5px -20px -5px -5px; */
+}
+#loc_resultlistarea td {
+	width: 1px;
+}
+#loc_resultlistarea td + td {
+	width: 399px;
 }
