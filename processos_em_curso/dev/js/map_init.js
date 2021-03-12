@@ -9,7 +9,7 @@ var QueriesMgr = {
 		this.resultsLayer.removeAll();
 	},
 	
-	displayResults: function(p_results, p_symb, p_qrykey) {
+	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
 
 		this.resultsLayer.removeAll();
 		const features = p_results.features.map(function(graphic) {
@@ -26,13 +26,16 @@ var QueriesMgr = {
 			}
 		}
 
-		extent = extent.clone().expand(1.5);
-
-		if (this.mapView) {
-			this.mapView.goTo({ target: extent });
+		if (features.length > 0) {
+			extent = extent.clone().expand(1.5);
+			if (this.mapView) {
+				this.mapView.goTo({ target: extent });
+			}
+			this.resultsLayer.addMany(features);
+		} else {
+			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", p_where_txt);
 		}
-		console.assert(features.length > 0, "zero features encontradas na query", p_qrykey);
-		this.resultsLayer.addMany(features);
+
 	},
 	
 	executeQuery: function(p_qrykey, p_argslist) {
@@ -42,7 +45,7 @@ var QueriesMgr = {
 		console.log("where:"+queryObj.where);
 		(function(p_this, p_qryobj, p_symb) {
 			fl.queryFeatures(p_qryobj).then(function(qresults) {
-				p_this.displayResults(qresults, p_symb, p_qrykey);
+				p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where);
 			});
 		})(this, queryObj, this.queries[p_qrykey]["symb"]);
 	},
