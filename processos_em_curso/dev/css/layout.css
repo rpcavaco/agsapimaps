@@ -146,7 +146,7 @@ li:nth-child(even) {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
 	padding-left: 10px;
-    content: "î˜‡";
+    content: "";
     color: inherit;
 }
 
@@ -154,7 +154,7 @@ li:nth-child(even) {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
 	padding-right: 10px;
-    content: "î˜†";
+    content: "";
     color: inherit;
 }
 

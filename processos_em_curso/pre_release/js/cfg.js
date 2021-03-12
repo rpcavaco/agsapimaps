@@ -28,6 +28,43 @@ var LYR_TITLES = {
 	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
 }
 
+var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
+
+var QUERIES_CFG = {
+
+	"eixosVia": {
+		"gtype": "ln",
+		"url": FEATURE_MAP,
+		"template": "cod_topo='{0}'",
+		"layerId": 3,
+		"symb": {
+			type: "simple-line",
+			width: 4,
+			color: [255, 100, 0]
+		}
+	},
+
+	"numPol": {
+		"gtype": "pt",
+		"url": FEATURE_MAP,
+		"template": "cod_topo='{0}' and n_policia='{1}'",
+		"zoomscale": 800,
+		"layerId": 2,
+		"symb": {
+			type: "simple-marker",  
+			style: "square",
+			color: "blue",
+			size: "16px",  // pixels
+			outline: {  // autocasts as new SimpleLineSymbol()
+			  color: [ 255, 0, 0 ],
+			  width: 3  // points
+			}
+		}
+	}
+
+	
+}
+
 var LYR_SELECCAO_INTERACTIVA_KEY = "lyr10_lotesProcEmCurso";
 var LYRS_DA_LEGENDA = ["lyr10_lotesProcEmCurso"];
 
@@ -47,12 +84,12 @@ var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistema
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
 
-var TITLE_FADING_MSECS = 200;
+var TITLE_FADING_MSECS = 250;
 
 var HIGHLIGHT_OPTS = {
-	color: [255, 160, 0, 1],
+	color: [255, 255, 0, 1],
 	haloOpacity: 0.9,
-	fillOpacity: 0.4
+	fillOpacity: 0.2
   }		
 
 var ALT_EXPANSAO_PAINEL_DADOS = [
@@ -61,6 +98,10 @@ var ALT_EXPANSAO_PAINEL_DADOS = [
 	[10, "280px"], 
 	[20, "320px"] 
 ];
+
+var AJAX_ENDPOINTS = {
+	QRY: "https://servsig.cm-porto.net/loc/c/lq"
+}
 //  ===========================================================================
 
 
