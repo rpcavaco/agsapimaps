@@ -33,6 +33,7 @@ var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM0
 var QUERIES_CFG = {
 
 	"eixosVia": {
+		"gtype": "ln",
 		"url": FEATURE_MAP,
 		"template": "cod_topo='{0}'",
 		"layerId": 3,
@@ -44,6 +45,7 @@ var QUERIES_CFG = {
 	},
 
 	"numPol": {
+		"gtype": "pt",
 		"url": FEATURE_MAP,
 		"template": "cod_topo='{0}' and n_policia='{0}'",
 		"layerId": 2,

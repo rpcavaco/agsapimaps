@@ -3,35 +3,67 @@ var QueriesMgr = {
 	
 	queries: {},
 	mapView: null,
-	resultsLayer: null,
+	resultsLayers: {
+		pt: null,
+		ln: null,
+		pol: null
+	},
 
-	clearResults: function() {
-		this.resultsLayer.removeAll();
+	clearResults: function(opt_type) {
+		if (opt_type != null) {
+			if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
+				this.resultsLayer[opt_type].removeAll();
+			}
+		} else {
+			let lyr;
+			for (let k in this.resultsLayers) {
+				lyr = this.resultsLayer[k];
+				if (lyr) {
+					lyr.removeAll();
+				}
+			}
+		}
 	},
 	
 	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
 
-		this.resultsLayer.removeAll();
+		const gtype = this.queries[p_qrykey]["gtype"];
+
+		this.clearResults(gtype);
+
 		const features = p_results.features.map(function(graphic) {
 			graphic.symbol = p_symb;
 			return graphic;
 		});
 
-		let extent = null;
-		for (let i=0; i<features.length; i++) {
-			if (extent) {
-				extent.union(features[i].geometry.extent);
-			} else {
-				extent = features[i].geometry.extent.clone();
-			}
-		}
-
 		if (features.length > 0) {
-			extent = extent.clone().expand(1.5);
+
 			if (this.mapView) {
-				this.mapView.goTo({ target: extent });
+
+				if (gtype == 'pt') {
+
+					for (let i=0; i<features.length; i++) {
+						console.log(JSON.stringify(features[i].geometry);
+					}
+
+				} else {
+
+					let extent = null;
+					for (let i=0; i<features.length; i++) {
+						if (extent) {
+							extent.union(features[i].geometry.extent);
+						} else {
+							extent = features[i].geometry.extent.clone();
+						}
+					}
+			
+					extent = extent.clone().expand(1.5);
+					this.mapView.goTo({ target: extent });
+				}
+				
 			}
 			this.resultsLayer.addMany(features);
+
 		} else {
 			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", p_where_txt);
 		}
@@ -53,6 +85,7 @@ var QueriesMgr = {
 	init: function() {	
 		for (let k in QUERIES_CFG) {
 			this.queries[k] = {};
+			this.queries[k]["gtype"] = QUERIES_CFG[k]["gtype"];
 			this.queries[k]["url"] = QUERIES_CFG[k]["url"];
 			this.queries[k]["template"] = QUERIES_CFG[k]["template"];
 			this.queries[k]["symb"] = QUERIES_CFG[k]["symb"];
