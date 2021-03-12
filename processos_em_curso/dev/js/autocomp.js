@@ -780,21 +780,21 @@ var AutocompleteObjMgr = {
 	},
 
 	get: function(p_name) {
-		if (Object.keys(auto_completers).indexOf(p_name) < 0 ) {
+		if (Object.keys(this.auto_completers).indexOf(p_name) < 0 ) {
 			throw new Error("AutocompleteObjMgr, no '"+p_name+"' autocomplete");
 		}
 		return this.auto_completers[p_name];
 	},
 
 	setCurrentMouseClick: function(p_mouse_pt) {
-		for (let k in auto_completers) {
-			auto_completers[k].setCurrentMouseClick(p_mouse_pt);
+		for (let k in this.auto_completers) {
+			this.auto_completers[k].setCurrentMouseClick(p_mouse_pt);
 		}
 	},
 
 	bindEventHandlers: function() {
-		for (let k in auto_completers) {
-			auto_completers[k].bindEventHandlers();
+		for (let k in this.auto_completers) {
+			this.auto_completers[k].bindEventHandlers();
 		}
 	}
 

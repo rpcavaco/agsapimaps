@@ -163,7 +163,7 @@ li:nth-child(even) {
     position: absolute;
     z-index: 900;
     top: 20px;
-    left: 65px;
+    left: 180px;
 }
 
 #loc_content input {
