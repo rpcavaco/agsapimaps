@@ -3,8 +3,6 @@ function AC_checkInputTimer(p_acompleter) {
 	
 	p_acompleter.checkInputCnt = p_acompleter.checkInputCnt + 1;
 	
-	console.log("133: "+p_acompleter.checkInputCnt+" >= "+p_acompleter.maxCheckInputCnt);
-	
 	if (p_acompleter.checkInputCnt >= p_acompleter.maxCheckInputCnt) {
 		p_acompleter.checkInputCnt = 0;
 		clearInterval(p_acompleter.checkInputTimerID);
@@ -117,7 +115,6 @@ class AutoCompleter {
 		this.enteredtext = this.enteredtext.trim();
 		const l1 = this.enteredtext.length;
 		const l2 = this.checkInputPrevLen;
-		console.log("123 l1, l2, b_doforce:", l1, l2, b_doforce);
 		if (b_doforce || (l1 - l2) > 0) {
 			if (this.checkInputTimerID) {
 				clearInterval(this.checkInputTimerID);
@@ -550,7 +547,7 @@ class AutoCompleter {
 
 }
 
-AutoCompleter.prototype.maxCheckInputCnt = 30;
+AutoCompleter.prototype.maxCheckInputCnt = 20;
 AutoCompleter.prototype.inputTimerIntervalValue = 40;
 AutoCompleter.prototype.useMousePosMsg = '<i>(usar apenas a <b>posição indicada</b> com o rato)</i>';
 
@@ -558,7 +555,7 @@ class LocAutoCompleter extends AutoCompleter {
 
 	constructor(p_name,  p_url, p_initial_req_payload, p_widgets) {
 		super(p_name,  p_url, p_initial_req_payload, p_widgets);
-		this.test_mode = true;
+		this.test_mode = false;
 	}
 
 	setRecRowAndHoveringEvts(p_tr, p_rec) {
@@ -733,10 +730,12 @@ class LocAutoCompleter extends AutoCompleter {
 					
 				}
 
-				if (recs.length > 1) {
+				if (recs.length > 0) {
 					this.setCurrentRecords(recs, false);	
-				} else if (recs.length > 0) {
-					this.setText(recs[0].toponimo, false);
+				}
+
+				if (recs.length == 1) {
+					//this.setText(recs[0].toponimo, false);
 					QueriesMgr.executeQuery("eixosVia", [recs[0].cod_topo]);
 				}
 				
@@ -762,9 +761,9 @@ class LocAutoCompleter extends AutoCompleter {
 						
 				//copyToClipboard(ot.cod_topo + ' ' + ot.toponym + ' ' +ot.npol);
 
-				if (recs.length > 1) {
+				//if (recs.length > 1) {
 					this.setCurrentRecords(recs, false);	
-				}
+				//}
 				
 				let cod_topo = ot.cod_topo;
 				// o toponimo 'oficial' assoicado a este número é outro ...

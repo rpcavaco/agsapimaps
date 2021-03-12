@@ -48,6 +48,7 @@ var QUERIES_CFG = {
 		"gtype": "pt",
 		"url": FEATURE_MAP,
 		"template": "cod_topo='{0}' and n_policia='{1}'",
+		"zoomscale": 800,
 		"layerId": 2,
 		"symb": {
 			type: "simple-marker",  

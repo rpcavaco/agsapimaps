@@ -10,19 +10,22 @@ var QueriesMgr = {
 	},
 
 	clearResults: function(opt_type) {
+		let lyr;
 		if (opt_type != null) {
-			if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
-				this.resultsLayers[opt_type].removeAll();
-			}
-		} else {
-			let lyr;
-			for (let k in this.resultsLayers) {
-				lyr = this.resultsLayers[k];
-				if (lyr) {
-					lyr.removeAll();
-				}
-			}
-		}
+            if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
+                lyr = this.resultsLayers[opt_type];
+                if (lyr) {
+                    lyr.removeAll();
+                }
+            }
+        } else {
+            for (let k in this.resultsLayers) {
+                lyr = this.resultsLayers[k];
+                if (lyr) {
+                    lyr.removeAll();
+                }
+            }
+        }
 	},
 	
 	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
@@ -101,6 +104,9 @@ var QueriesMgr = {
 			if (QUERIES_CFG[k]["layerId"] !== undefined) {
                 this.queries[k]["layerId"] = QUERIES_CFG[k]["layerId"];
             }			
+			if (QUERIES_CFG[k]["zoomscale"] !== undefined) {
+                this.queries[k]["zoomscale"] = QUERIES_CFG[k]["zoomscale"];
+            }
 		}
 	}
 	
