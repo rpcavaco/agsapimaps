@@ -556,8 +556,8 @@ AutoCompleter.prototype.useMousePosMsg = '<i>(usar apenas a <b>posição indicad
 
 class LocAutoCompleter extends AutoCompleter {
 
-	constructor(p_name, p_initial_req_payload, p_widgets) {
-		super(p_name, p_initial_req_payload, p_widgets);
+	constructor(p_name,  p_url, p_initial_req_payload, p_widgets) {
+		super(p_name,  p_url, p_initial_req_payload, p_widgets);
 		this.test_mode = true;
 	}
 
@@ -603,6 +603,12 @@ class LocAutoCompleter extends AutoCompleter {
 	recvPayloadProcessing(p_resptxt) {
 
 		let curstr, recs = [], cont = this.recvPayload;
+
+		if (cont["error"] !== undefined || cont["out"] === undefined) {
+			console.error('response:'+p_resptxt);
+			return;
+		}
+
 		let ot = cont["out"];
 
 		if (this.test_mode && console!=null) {
