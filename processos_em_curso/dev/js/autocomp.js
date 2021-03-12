@@ -1,5 +1,20 @@
 
- class AutoCompleter {
+function AC_checkInputTimer(p_acompleter) {
+	
+	p_acompleter.checkInputCnt = p_acompleter.checkInputCnt + 1;
+	
+	console.log("133: "+p_acompleter.checkInputCnt+" >= "+p_acompleter.maxCheckInputCnt);
+	
+	if (p_acompleter.checkInputCnt >= p_acompleter.maxCheckInputCnt) {
+		p_acompleter.checkInputCnt = 0;
+		clearInterval(p_acompleter.checkInputTimerID);
+		p_acompleter.checkInputTimerID = null;
+		p_acompleter.prepareSend(false);
+	}   
+	
+}
+
+class AutoCompleter {
 	constructor(p_name, p_initial_req_payload, p_widgets) {
 
 		if (p_initial_req_payload == null) {
@@ -67,7 +82,7 @@
 		this.getTextEntryWidget().style.color = 'black';        
 		this.setText('');
 
-		this.showResultsArea(false);
+		this.showRecordsArea(false);
 		
 		this.afterCleanSearch();
 	}
@@ -94,9 +109,9 @@
 		this.reqPayload["currstr"] = p_inptxt;
 		this.abortPreviousSearchCall();	
 		(function(p_this) {	
-			p_this.xhr = ajaxSender(urlstr, function() { 
+			p_this.xhr = ajaxSender(p_this.reqPayload["url"], function() { 
 				p_this.afterSearchExec(this); 
-			}, JSON.stringify(this.reqPayload), this.xhr);
+			}, JSON.stringify(p_this.reqPayload), p_this.xhr);
 		})(this);
 	}
 
@@ -104,7 +119,8 @@
 		this.enteredtext = this.enteredtext.trim();
 		const l1 = this.enteredtext.length;
 		const l2 = this.checkInputPrevLen;
-		if (b_doforce || (l1 - l2) == 0) {
+		console.log("123 l1, l2, b_doforce:", l1, l2, b_doforce);
+		if (b_doforce || (l1 - l2) > 0) {
 			if (this.checkInputTimerID) {
 				clearInterval(this.checkInputTimerID);
 				this.checkInputTimerID = null;
@@ -112,7 +128,7 @@
 			
 			let inptxt = this.widgets["textentry"].value;
 			if (inptxt!=null && inptxt.length>0) {
-				execSearch (inptxt);
+				this.execSearch (inptxt);
 			}		
 		}		
 		this.checkInputPrevLen = l1;
@@ -129,8 +145,10 @@
 	checkInputTimer() {
 
 		this.checkInputCnt++;
-		
-		if (this.checkInputCnt >= maxCheckInputCnt) {
+
+		console.log("133: "+this.checkInputCnt+" >= "+this.maxCheckInputCnt);
+
+		if (this.checkInputCnt >= this.maxCheckInputCnt) {
 			this.checkInputCnt = 0;
 			clearInterval(this.checkInputTimerID);
 			this.checkInputTimerID = null;
@@ -463,12 +481,12 @@
 						p_this.checkInputCnt = 0;
 					}
 					
-					this.checkInputTimerID = (function(p_this) {
-						return setInterval(
-							p_this.checkInputTimer, 
-							p_this.inputTimerIntervalValue
-						); 
-					})(this);
+                    (function(pp_this) {
+						pp_this.checkInputTimerID = setInterval(
+							function() { AC_checkInputTimer(pp_this); },
+							pp_this.inputTimerIntervalValue
+						);
+				    })(p_this);
 
 					console.assert(p_this.checkInputTimerID!=null, "this.checkInputTimerID NULO!");
 					
