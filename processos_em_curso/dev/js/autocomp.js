@@ -457,7 +457,7 @@ class AutoCompleter {
 						list_idx = -1;
 					}
 					
-					let usabletxt = target.value.replace(/[ ]+/g, ' ').trim();
+					let usabletxt = target.value.replace(/[ ]+/g, ' ');
 					
 					len = p_this.setText(usabletxt);
 					if (len > 0) {
@@ -466,7 +466,7 @@ class AutoCompleter {
 						p_this.deleteHandler();
 					}	
 					
-					if (this.prevEnteredText == usabletxt) {
+					if (this.prevEnteredText == usabletxt.trim()) {
 						return false;
 					}
 
