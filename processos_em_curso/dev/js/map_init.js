@@ -5,17 +5,29 @@ var QueriesMgr = {
 	mapView: null,
 	resultsLayer: null,
 	
-	displayResults: function(p_results, p_symb) {
+	displayResults: function(p_results, p_symb, p_qrykey) {
+
 		this.resultsLayer.removeAll();
 		const features = p_results.features.map(function(graphic) {
 			graphic.symbol = p_symb;
 			return graphic;
 		});
-		if (this.mapView) {
-			this.mapView.goTo({ target: features });
-			console.log("zoooming ...");
+
+		let extent = null;
+		for (let i=0; i<features.length; i++) {
+			if (extent) {
+				extent.union(features[i].geometry.extent);
+			} else {
+				extent = features[i].geometry.extent.clone();
+			}
 		}
-		console.log("num.feats encontradas:", features.length);
+
+		extent = extent.clone().expand(0.5);
+
+		if (this.mapView) {
+			this.mapView.goTo({ target: extent });
+		}
+		console.assert(features.length > 0, "zero features encontradas na query", p_qrykey);
 		this.resultsLayer.addMany(features);
 	},
 	
@@ -26,7 +38,7 @@ var QueriesMgr = {
 		console.log("where:"+queryObj.where);
 		(function(p_this, p_qryobj, p_symb) {
 			fl.queryFeatures(p_qryobj).then(function(qresults) {
-				p_this.displayResults(qresults, p_symb);
+				p_this.displayResults(qresults, p_symb, p_qrykey);
 			});
 		})(this, queryObj, this.queries[p_qrykey]["symb"]);
 	},

@@ -594,7 +594,7 @@ class LocAutoCompleter extends AutoCompleter {
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", null, [], false);
 				}*/
 
-				QueriesMgr.executeQuery("eixosVia", [ot.cod_topo]);
+				QueriesMgr.executeQuery("eixosVia", [p_rec.cod_topo]);
 
 			}
 			
