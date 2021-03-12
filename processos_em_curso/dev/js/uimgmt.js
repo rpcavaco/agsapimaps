@@ -90,13 +90,15 @@ function hideLoaderImg() {
 
 function sizeWidgets() {
 
-	var winsize = {
+	let winsize = {
 		width: window.innerWidth || document.body.clientWidth,
 		height: window.innerHeight || document.body.clientHeight,
 	};
 	//var minified_boxes = false;
+
+	const width_limit = 490;
 	
-	var wdg1, wdg2, wdg3, wdgB, wdg = document.getElementById("loc_inputbox");
+	let wdg = document.getElementById("loc_inputbox");
 	if (wdg) {
 		var w, w2;
 		if (parseInt(winsize.width) > 1200) {
@@ -117,7 +119,7 @@ function sizeWidgets() {
 
 	wdg = document.getElementById("loc_cleansearchbtn");	
 	if (wdg) {
-		if (parseInt(winsize.width) > 490) {
+		if (parseInt(winsize.width) > width_limit) {
 			wdg.style.fontSize = '14px';
 			wdg.style.width = '90px';
 		} else {
@@ -128,10 +130,19 @@ function sizeWidgets() {
 	
 	wdg = document.getElementById("loc_content");	
 	if (wdg)  {
-		if (parseInt(winsize.width) > 490) {
-			wdg.style.left = '65px';
+		if (parseInt(winsize.width) > width_limit) {
+			wdg.style.left = '180px';
 		} else {
 			wdg.style.left = '40px';
+		}				
+	}
+	
+	wdg = document.getElementById("logo");	
+	if (wdg)  {
+		if (parseInt(winsize.width) > width_limit) {
+			wdg.style.display = 'block';
+		} else {
+			wdg.style.display = 'none';
 		}				
 	}
 

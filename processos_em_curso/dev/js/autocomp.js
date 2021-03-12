@@ -363,7 +363,7 @@
 			let rec0, prev_listidx = -1, list_idx = -1;
 			attEventHandler(p_this.widgets["textentry"], 'keyup', 
 				function(evt) {
-					var pc, kc, len, target = getTarget(evt);
+					let kc, len, target = getTarget(evt);
 					if (!target) return;
 					
 					if (evt["key"] !== undefined) {
@@ -441,13 +441,13 @@
 						list_idx = -1;
 					}
 					
-					usabletxt = target.value.replace(/[ ]+/g, ' ');
+					let usabletxt = target.value.replace(/[ ]+/g, ' ');
 					
-					var l1 =  p_this.checkInputPrevLen();
+					let l1 =  p_this.checkInputPrevLen();
 					if (!l1) {
 						l1 = 0;
 					}
-					var l2 = usabletxt.trim().length;
+					let l2 = usabletxt.trim().length;
 
 					len = p_this.setText(usabletxt);
 					if (len > 0) {
