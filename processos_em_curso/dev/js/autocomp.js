@@ -762,7 +762,9 @@ class LocAutoCompleter extends AutoCompleter {
 						
 				//copyToClipboard(ot.cod_topo + ' ' + ot.toponym + ' ' +ot.npol);
 
-				this.setCurrentRecords(recs, false);	
+				if (recs.length > 1) {
+					this.setCurrentRecords(recs, false);	
+				}
 				
 				let cod_topo = ot.cod_topo;
 				// o toponimo 'oficial' assoicado a este número é outro ...

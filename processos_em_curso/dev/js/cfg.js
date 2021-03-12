@@ -47,15 +47,15 @@ var QUERIES_CFG = {
 	"numPol": {
 		"gtype": "pt",
 		"url": FEATURE_MAP,
-		"template": "cod_topo='{0}' and n_policia='{0}'",
+		"template": "cod_topo='{0}' and n_policia='{1}'",
 		"layerId": 2,
 		"symb": {
 			type: "simple-marker",  
 			style: "square",
 			color: "blue",
-			size: "8px",  // pixels
+			size: "16px",  // pixels
 			outline: {  // autocasts as new SimpleLineSymbol()
-			  color: [ 255, 255, 0 ],
+			  color: [ 255, 0, 0 ],
 			  width: 3  // points
 			}
 		}

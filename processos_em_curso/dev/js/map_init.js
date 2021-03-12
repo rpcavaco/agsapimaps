@@ -12,12 +12,12 @@ var QueriesMgr = {
 	clearResults: function(opt_type) {
 		if (opt_type != null) {
 			if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
-				this.resultsLayer[opt_type].removeAll();
+				this.resultsLayers[opt_type].removeAll();
 			}
 		} else {
 			let lyr;
 			for (let k in this.resultsLayers) {
-				lyr = this.resultsLayer[k];
+				lyr = this.resultsLayers[k];
 				if (lyr) {
 					lyr.removeAll();
 				}
@@ -42,9 +42,18 @@ var QueriesMgr = {
 
 				if (gtype == 'pt') {
 
-					for (let i=0; i<features.length; i++) {
-						console.log(JSON.stringify(features[i].geometry);
+					let pzoom_scale = 1000;
+
+					if (this.queries[p_qrykey]["zoomscale"] !== undefined) {
+						pzoom_scale = parseInt(this.queries[p_qrykey]["zoomscale"]);
 					}
+			
+					let x=0, y=0;
+                    for (let i=0; i<features.length; i++) {
+                        x += features[i].geometry.x;
+                        y += features[i].geometry.y;
+                     }
+                     this.mapView.goTo({ center: [x/features.length, y/features.length], scale: pzoom_scale });
 
 				} else {
 
