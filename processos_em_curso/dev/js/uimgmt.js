@@ -176,6 +176,8 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 
 		this.cleanSearch();
 
+		QueriesMgr.clearResults();
+
 		// TODO
 		// this, clearPublishingWidge
 

@@ -570,9 +570,14 @@ class LocAutoCompleter extends AutoCompleter {
 		// hovering
 		if (p_rec.npol !== undefined && p_rec.lbl.substring(0,3) !== '...') {
 			(function(p_tr, p_rec) {
-				attEventHandler(p_tr, 'mouseover', function(e) {					 						
+				attEventHandler(p_tr, 'mouseover', function(e) {	
+					
+					QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol]);
+
+					/*
 					sel_num(p_rec.cod_topo, p_rec.toponimo, p_rec.npol, p_rec.npoldata.areaespecial, 
 						p_rec.npoldata.freguesia, p_rec.npoldata.cod_freg, true, p_rec.pt, false);
+						*/
 					
 				});
 			})(p_tr, p_rec);
@@ -600,7 +605,12 @@ class LocAutoCompleter extends AutoCompleter {
 			
 			//this.send();
 		} else {
+
+			QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol]);
+
+			/*
 			sel_num(p_rec.cod_topo, p_rec.toponimo, p_rec.npol, p_rec.npoldata.areaespecial, p_rec.npoldata.freguesia, p_rec.npoldata.cod_freg, false, p_rec.pt, true);
+			*/
 		}
 	}
 
@@ -758,9 +768,13 @@ class LocAutoCompleter extends AutoCompleter {
 				// o toponimo 'oficial' assoicado a este número é outro ...
 				if (ot.npoldata.cod_topo_np !== undefined)	{
 					cod_topo = ot.npoldata.cod_topo_np;
-				}		
+				}	
+				
+				QueriesMgr.executeQuery("numPol", [cod_topo, ot.npol]);
 
+				/*
 				sel_num(cod_topo, ot.toponym, ot.npol, ot.npoldata.areaespecial, ot.npoldata.freguesia, ot.npoldata.cod_freg, false, ot.loc, true);
+				*/
 			}
 		}		
 	}	

@@ -4,6 +4,10 @@ var QueriesMgr = {
 	queries: {},
 	mapView: null,
 	resultsLayer: null,
+
+	clearResults: function() {
+		this.resultsLayer.removeAll();
+	},
 	
 	displayResults: function(p_results, p_symb, p_qrykey) {
 
@@ -22,7 +26,7 @@ var QueriesMgr = {
 			}
 		}
 
-		extent = extent.clone().expand(0.5);
+		extent = extent.clone().expand(1.5);
 
 		if (this.mapView) {
 			this.mapView.goTo({ target: extent });

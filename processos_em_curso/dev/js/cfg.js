@@ -28,9 +28,12 @@ var LYR_TITLES = {
 	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
 }
 
+var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
+
 var QUERIES_CFG = {
+
 	"eixosVia": {
-		"url": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
+		"url": FEATURE_MAP,
 		"template": "cod_topo='{0}'",
 		"layerId": 3,
 		"symb": {
@@ -38,7 +41,24 @@ var QUERIES_CFG = {
 			width: 4,
 			color: [255, 100, 0]
 		}
+	},
+
+	"numPol": {
+		"url": FEATURE_MAP,
+		"template": "cod_topo='{0}' and n_policia='{0}'",
+		"layerId": 2,
+		"symb": {
+			type: "simple-marker",  
+			style: "square",
+			color: "blue",
+			size: "8px",  // pixels
+			outline: {  // autocasts as new SimpleLineSymbol()
+			  color: [ 255, 255, 0 ],
+			  width: 3  // points
+			}
+		}
 	}
+
 	
 }
 
