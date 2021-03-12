@@ -15,6 +15,7 @@ var QueriesMgr = {
             if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
                 lyr = this.resultsLayers[opt_type];
                 if (lyr) {
+					console.log("removing 18", opt_type)
                     lyr.removeAll();
                 }
             }
@@ -22,7 +23,8 @@ var QueriesMgr = {
             for (let k in this.resultsLayers) {
                 lyr = this.resultsLayers[k];
                 if (lyr) {
-                    lyr.removeAll();
+					console.log("removing 26", k)
+					lyr.removeAll();
                 }
             }
         }
@@ -74,7 +76,7 @@ var QueriesMgr = {
 				}
 				
 			}
-			this.resultsLayer.addMany(features);
+			this.resultsLayers[gtype].addMany(features);
 
 		} else {
 			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", p_where_txt);
@@ -206,8 +208,10 @@ require([
 	}
 
 	// adicionar layer de resultados de pesquisa
-	QueriesMgr.resultsLayer = new GraphicsLayer();	
-	layers.push(QueriesMgr.resultsLayer);
+    for (let k in QueriesMgr.resultsLayers) {
+        QueriesMgr.resultsLayers[k] = new GraphicsLayer();   
+        layers.push(QueriesMgr.resultsLayers[k]);
+    }
 	
 	const the_map = new Map({
 		basemap: basemap,
