@@ -159,6 +159,7 @@ function RecordPanelSwitcher() {
 	this.iterator_current_key = null,
 	this.rotator_current_key = null,
 	this.registos_fmt = "";
+	this.max_attrs_per_page = 20;
 	this.records = {
 	};
 
@@ -383,7 +384,7 @@ function RecordPanelSwitcher() {
 		return num;
 	};
 
-	this.generatePanels = function(p_records, p_attrs_cfg, p_parentdiv_id) {
+	this.generatePanels = function(p_records, p_attrs_cfg, p_parentdiv_id, p_heightv) {
 	
 		if (!p_records.length) {
 			return;
@@ -394,6 +395,8 @@ function RecordPanelSwitcher() {
 			console.warn("RecordPanelSwitcher: generatePanels, parent div not found:", p_parentdiv_id);
 			return;
 		}
+
+		resultsDiv.style.height = p_heightv;
 
 		while (resultsDiv.firstChild) {
 			resultsDiv.removeChild(resultsDiv.firstChild);
@@ -408,13 +411,12 @@ function RecordPanelSwitcher() {
 
 			const navInnerDiv = document.createElement("div");
 			navDiv.appendChild(navInnerDiv);
-			navInnerDiv.setAttribute("class", "graybtn-back just-right");
-			navInnerDiv.style.width = "190px";
+			navInnerDiv.setAttribute("class", "graybtn-back recnav-container");
 			
 			let btEl = document.createElement("button");
+			btEl.setAttribute("class", "left-arrow");
 			navInnerDiv.appendChild(btEl);
 			let spEl = document.createElement("div");
-			spEl.setAttribute("class", "left-arrow");
 			btEl.appendChild(spEl);
 			(function(p_btEl, p_rec_rps, p_nrows) {
 				attEventHandler(p_btEl, 'click', 
@@ -422,7 +424,7 @@ function RecordPanelSwitcher() {
 						const num = p_rec_rps.rotatePrev();
 						const el = document.getElementById("rec-nav-nums");
 						if (el) {
-							el.textContent = String.format(this.registos_fmt, num, p_nrows);
+							el.textContent = String.format(p_rec_rps.registos_fmt, num, p_nrows);
 						}
 					}
 				);							
@@ -431,26 +433,24 @@ function RecordPanelSwitcher() {
 			spEl = document.createElement("div");
 			spEl.setAttribute("id", "rec-nav-nums");
 			navInnerDiv.appendChild(spEl);
-			spEl.textContent = String.format(this.registos_fmt, 1, rows.length);
+			spEl.textContent = String.format(this.registos_fmt, 1, p_records.length);
 
 			btEl = document.createElement("button");
-			navInnerDiv.appendChild(btEl);
-			//btEl.setAttribute("class", "graybtn");
-			spEl = document.createElement("div");
-			spEl.setAttribute("class", "right-arrow");
-			btEl.appendChild(spEl);
-			// spEl.textContent = "Rec seguinte";
-			(function(p_btEl, p_rec_rps, p_nrows) {
-				attEventHandler(p_btEl, 'click', 
-					function(evt) {
-						const num = p_rec_rps.rotateNext();
-						const el = document.getElementById("rec-nav-nums");
-						if (el) {
-							el.textContent = String.format(this.registos_fmt, num, p_nrows);
-						}
-					}
-				);							
-			})(btEl, rec_rps, rows.length);	
+            btEl.setAttribute("class", "right-arrow");
+            navInnerDiv.appendChild(btEl);
+            spEl = document.createElement("div");
+            btEl.appendChild(spEl);
+            (function(p_btEl, p_rec_rps, p_nrows) {
+                attEventHandler(p_btEl, 'click',
+                    function(evt) {
+                        const num = p_rec_rps.rotateNext();
+                        const el = document.getElementById("rec-nav-nums");
+                        if (el) {
+                            el.textContent = String.format(p_rec_rps.registos_fmt, num, p_nrows);
+                        }
+                    }
+                );                           
+            })(btEl, this, p_records.length);
 		}
 
 		let ulEl, reckey, pagekey, pageNum, liEl, pageDiv, pgNavDiv, attrs_per_page_cnt;
@@ -471,7 +471,7 @@ function RecordPanelSwitcher() {
 
 				lbl = p_attrs_cfg[fld][0];
 				fmt = p_attrs_cfg[fld][1];
-				preval = rows[i][fld];
+				preval = p_records[i][fld];
 
 				if (preval == null || preval.length==0) {
 					continue;
@@ -488,7 +488,7 @@ function RecordPanelSwitcher() {
 						val = preval;
 				}
 
-				if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
+				if (pageDiv == null || attrs_per_page_cnt >= this.max_attrs_per_page) {	
 					if (pageDiv) {
 						this.addPanel(reckey, pageDiv, pagekey);
 						pageNum++;

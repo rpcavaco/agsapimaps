@@ -134,42 +134,42 @@ li:nth-child(even) {
 
 .navdiv {
 	border-bottom: grey 1px dotted;
-	padding-bottom: 10px
+	padding-bottom: 10px;
 }
 
 .pagenavdiv {
 	border-top: grey 1px dotted;
-	padding-top: 10px
+	padding-top: 10px;
+}
+
+.recnav-container {
+    width: 140px;
+    margin-left: auto;
+}
+
+#rec-nav-nums {
+    float: left;
 }
 
 .right-arrow {
-	background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M0,10L10,5 0,0 z%22 /%3E%3C/svg%3E');
-	height:8px;
-	width:8px; 
+    padding-top: 5px;
 }
 
-/*
-.right-arrow::after {
-	font-family: "CalciteWebCoreIcons";
-	font-size: 16px;	
-	padding-left: 10px;
-    content: "";
-    color: inherit;
+.right-arrow div {
+    background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M0,10L10,5 0,0 z%22 /%3E%3C/svg%3E');
+    height:8px;
+    width:8px; 
 }
-
-.left-arrow::before {
-	font-family: "CalciteWebCoreIcons";
-	font-size: 16px;	
-	padding-right: 10px;
-    content: "";
-    color: inherit;
-}
-*/
 
 .left-arrow {
-	background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M10,0L0,5 10,10 z%22 /%3E%3C/svg%3E');
-	height:8px;
-	width:8px; 
+    float: left;
+    padding-top: 5px;
+}
+
+.left-arrow div {
+    background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M10,0L0,5 10,10 z%22 /%3E%3C/svg%3E');
+    height:8px;
+    width:8px; 
 }
 
 #loc_content {

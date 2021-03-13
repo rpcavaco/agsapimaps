@@ -25,6 +25,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 		const pt = p_view.toMap(scrPt);
 		const rec_rps = new RecordPanelSwitcher();
+		rec_rps.max_attrs_per_page = 12;
+		rec_rps.registos_fmt = "Processo {0} de {1}"
 
 		p_sellayer.queryObjectIds({
 			geometry: pt,
@@ -75,7 +77,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				// Create a grid with the data
 
 				rec_rps.clear();
-				rec_rps.registos_fmt = "Processo {0} de {1}"
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.every(function(objectId){
@@ -113,7 +114,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					}
 					resultsDiv.style.height = heightv;		
 
-					rec_rps.generatePanels(rows, ATTRS_CFG, "queryResults");
+					rec_rps.generatePanels(rows, ATTRS_CFG, "queryResults", heightv);
 
 					// apenas o primeiro registo
 					return false;
