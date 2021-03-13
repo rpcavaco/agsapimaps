@@ -142,6 +142,13 @@ li:nth-child(even) {
 	padding-top: 10px
 }
 
+.right-arrow {
+	background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M0,10L10,5 0,0 z%22 /%3E%3C/svg%3E');
+	height:8px;
+	width:8px; 
+}
+
+/*
 .right-arrow::after {
 	font-family: "CalciteWebCoreIcons";
 	font-size: 16px;	
@@ -156,6 +163,13 @@ li:nth-child(even) {
 	padding-right: 10px;
     content: "";
     color: inherit;
+}
+*/
+
+.left-arrow {
+	background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 10%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22black%22 line-width=%222%22 d=%22M10,0L0,5 10,10 z%22 /%3E%3C/svg%3E');
+	height:8px;
+	width:8px; 
 }
 
 #loc_content {
@@ -198,7 +212,6 @@ li:nth-child(even) {
 	cursor: pointer;
 	text-align: center;
 	border: 1px #95d8e5 solid;
-	display:inline-block;
 	border-radius: 0;
 	vertical-align: top; 
 

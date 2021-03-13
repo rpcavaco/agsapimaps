@@ -75,10 +75,10 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				// Create a grid with the data
 
 				rec_rps.clear();
-				let registos_fmt = "Processo {0} de {1}"
+				rec_rps.registos_fmt = "Processo {0} de {1}"
 
 				Object.keys(relatedFeatureSetByObjectId)
-				.forEach(function(objectId){
+				.every(function(objectId){
 
 					// get the attributes of the FeatureSet
 					const relatedFeatureSet = relatedFeatureSetByObjectId[objectId];
@@ -91,56 +91,44 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						return;
 					}
 
-					const resultsDiv = document.getElementById(p_griddiv);
-
-					while (resultsDiv.firstChild) {
-						resultsDiv.removeChild(resultsDiv.firstChild);
+					// esconder msg introdutória
+					const mainmsgDiv = document.getElementById("mainmsg");
+					if (mainmsgDiv) {
+						mainmsgDiv.style.display = "none"
 					}
-				  
 
+					// expandir gridDiv
+					let valcount, heightv=null;
+
+					valcount = valCount(rows, ATTRS_CFG);
+					for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
+						if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
+							heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
+							break;
+						}
+					}
+					if (heightv == null) {
+						// se heightv nao tiver sido definida, colocar valor mais alto
+						heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
+					}
+					resultsDiv.style.height = heightv;		
+
+					rec_rps.generatePanels(rows, ATTRS_CFG, "queryResults");
+
+					// apenas o primeiro registo
+					return false;
+
+					
+/* 
 					let attrs_per_page_cnt;
 					let max_attrs_per_page = 12;
 					let navDiv, navInnerDiv, pageDiv;
 					let pageNum;
 					let reckey, pagekey;
 
-					let spEl, btEl, valcount, heightv=null;
-
-					if (rows.length>0) {
-						
-						// esconder msg introdutória
-						const mainmsgDiv = document.getElementById("mainmsg");
-						if (mainmsgDiv) {
-							mainmsgDiv.style.display = "none"
-						}
-
-						// expandir gridDiv
-						valcount = valCount(rows, ATTRS_CFG);
-						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
-							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
-								heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
-								break;
-							}
-						}
-						if (heightv == null) {
-							// se heightv nao tiver sido definida, colocar valor mais alto
-							heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
-						}
-						resultsDiv.style.height = heightv;		
-						
-						// abrir espaço para inserir botões de navegação entre registos
-						navDiv = document.createElement("div");
-						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");
-						
-					}
-
 					if (rows.length>1) {
 
 						// inserir botões de navegação entre registos
-						/*navDiv = document.createElement("div");
-						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");*/
 
 						navInnerDiv = document.createElement("div");
 						navDiv.appendChild(navInnerDiv);
@@ -164,7 +152,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 								}
 							);							
 						})(btEl, rec_rps, rows.length);
-
+ 
 						spEl = document.createElement("span");
 						spEl.setAttribute("id", "rec-nav-nums");
 						//spEl.setAttribute("class", "graybtn");
@@ -174,7 +162,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						btEl = document.createElement("button");
 						navInnerDiv.appendChild(btEl);
 						//btEl.setAttribute("class", "graybtn");
-						spEl = document.createElement("span");
+						spEl = document.createElement("div");
 						spEl.setAttribute("class", "right-arrow");
 						btEl.appendChild(spEl);
 						// spEl.textContent = "Rec seguinte";
@@ -191,9 +179,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						})(btEl, rec_rps, rows.length);	
 
 					}
-
-					let ulEl, liEl, val, pgNavDiv;
-
+*/
+					//let ulEl, liEl, val, pgNavDiv;
+/*
 					for (let i=0; i<rows.length; i++) {
 						
 						reckey = rec_rps.recKey(i+1);
@@ -313,6 +301,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 						}
 						recpanelcoll = rec_rps.iterateNext();
 					}
+					*/
 				}); // .forEach(function(objectId){
 					
 			}

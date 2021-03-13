@@ -158,6 +158,7 @@ function RecordPanelSwitcher() {
 	this.recordorder = [],
 	this.iterator_current_key = null,
 	this.rotator_current_key = null,
+	this.registos_fmt = "";
 	this.records = {
 	};
 
@@ -381,4 +382,211 @@ function RecordPanelSwitcher() {
 		}
 		return num;
 	};
+
+	this.generatePanels = function(p_records, p_attrs_cfg, p_parentdiv_id) {
+	
+		if (!p_records.length) {
+			return;
+		}
+
+		const resultsDiv = document.getElementById(p_parentdiv_id);
+		if (resultsDiv == null) {
+			console.warn("RecordPanelSwitcher: generatePanels, parent div not found:", p_parentdiv_id);
+			return;
+		}
+
+		while (resultsDiv.firstChild) {
+			resultsDiv.removeChild(resultsDiv.firstChild);
+		}
+
+		if (p_records.length>1) {
+
+			// abrir espaço para inserir botões de navegação entre registos
+			const navDiv = document.createElement("div");
+			resultsDiv.appendChild(navDiv);
+			navDiv.setAttribute("class", "navdiv");
+
+			const navInnerDiv = document.createElement("div");
+			navDiv.appendChild(navInnerDiv);
+			navInnerDiv.setAttribute("class", "graybtn-back just-right");
+			navInnerDiv.style.width = "190px";
+			
+			let btEl = document.createElement("button");
+			navInnerDiv.appendChild(btEl);
+			let spEl = document.createElement("div");
+			spEl.setAttribute("class", "left-arrow");
+			btEl.appendChild(spEl);
+			(function(p_btEl, p_rec_rps, p_nrows) {
+				attEventHandler(p_btEl, 'click', 
+					function(evt) {
+						const num = p_rec_rps.rotatePrev();
+						const el = document.getElementById("rec-nav-nums");
+						if (el) {
+							el.textContent = String.format(this.registos_fmt, num, p_nrows);
+						}
+					}
+				);							
+			})(btEl, this, p_records.length);
+
+			spEl = document.createElement("div");
+			spEl.setAttribute("id", "rec-nav-nums");
+			navInnerDiv.appendChild(spEl);
+			spEl.textContent = String.format(this.registos_fmt, 1, rows.length);
+
+			btEl = document.createElement("button");
+			navInnerDiv.appendChild(btEl);
+			//btEl.setAttribute("class", "graybtn");
+			spEl = document.createElement("div");
+			spEl.setAttribute("class", "right-arrow");
+			btEl.appendChild(spEl);
+			// spEl.textContent = "Rec seguinte";
+			(function(p_btEl, p_rec_rps, p_nrows) {
+				attEventHandler(p_btEl, 'click', 
+					function(evt) {
+						const num = p_rec_rps.rotateNext();
+						const el = document.getElementById("rec-nav-nums");
+						if (el) {
+							el.textContent = String.format(this.registos_fmt, num, p_nrows);
+						}
+					}
+				);							
+			})(btEl, rec_rps, rows.length);	
+		}
+
+		let ulEl, reckey, pagekey, pageNum, liEl, pageDiv, pgNavDiv, attrs_per_page_cnt;
+		let lbl, fmt, preval, val, d;
+
+		for (let i=0; i<p_records.length; i++) {
+						
+			reckey = this.recKey(i+1);
+			pageNum = 0;
+			ulEl = null;
+			pageDiv = null;
+			attrs_per_page_cnt = 0;
+
+			pagekey = this.pageKey(pageNum+1)
+			this.newRecord(reckey);
+			
+			for (let fld in p_attrs_cfg) {
+
+				lbl = p_attrs_cfg[fld][0];
+				fmt = p_attrs_cfg[fld][1];
+				preval = rows[i][fld];
+
+				if (preval == null || preval.length==0) {
+					continue;
+				}
+
+				switch (fmt) {
+					case 'date':
+						d = new Date(0);
+						d.setUTCSeconds(preval / 1000);
+						val = d.toLocaleDateString();
+						break;
+
+					default:
+						val = preval;
+				}
+
+				if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
+					if (pageDiv) {
+						this.addPanel(reckey, pageDiv, pagekey);
+						pageNum++;
+						pagekey = this.pageKey(pageNum+1);
+						attrs_per_page_cnt = 0;
+					}
+					pageDiv = document.createElement("div");	
+					resultsDiv.appendChild(pageDiv);				
+					ulEl = document.createElement("ul");
+					pageDiv.appendChild(ulEl);				
+					ulEl.setAttribute("class", "attrs-list");
+				}
+				
+				liEl = document.createElement("li");
+				ulEl.appendChild(liEl);
+				liEl.setAttribute("class", "nobull");
+				liEl.insertAdjacentHTML('afterBegin', lbl);
+				spEl = document.createElement("span");
+				spEl.setAttribute("style", "float: right");
+				spEl.textContent = val;
+				liEl.appendChild(spEl);
+
+				attrs_per_page_cnt++;
+			}
+			// todo - não fazer se n houver conteudo
+			if (pageDiv != null) {
+				this.addPanel(reckey, pageDiv, pagekey);
+			}
+
+		} // for row in  rows
+		// atualizar mensagem "1 de n registos"
+
+		let recPanels, recpaneliter, recpanel_count;
+
+		this.resetIteration(); 
+		let recpanelcoll = this.iterateNext();
+		while (recpanelcoll) {
+
+			recPanels = recpanelcoll.content;
+			recPanels.resetIteration(); 
+			recpaneliter = recPanels.iterateNext();
+			recpanel_count = 0;
+
+			while (recpaneliter && recpanel_count < 50) {
+
+				recpanel_count++;
+				pgNavDiv = document.createElement("div");
+				recpaneliter.content.dom_elem.appendChild(pgNavDiv);
+				pgNavDiv.setAttribute("class", "pagenavdiv");
+
+				// inserir botões de navegação entre páginas do mesmo registo
+				if (!recpaneliter.is_first) {
+					btEl = document.createElement("button");
+					pgNavDiv.appendChild(btEl);
+					btEl.setAttribute("class", "graybtn float-left btn-left");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "left-arrow");
+					btEl.appendChild(spEl);
+					spEl.textContent = "Página anterior";
+					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.activatePanel(p_reckey, p_panelkey);
+							}
+						);							
+					})(btEl, this, recpanelcoll.reckey, recpaneliter.prevkey);
+				}
+				if (!recpaneliter.is_last) {
+					btEl = document.createElement("button");
+					pgNavDiv.appendChild(btEl);
+					btEl.setAttribute("class", "graybtn float-right btn-right");
+					spEl = document.createElement("span");
+					spEl.setAttribute("class", "right-arrow");
+					btEl.appendChild(spEl);
+					spEl.textContent = "Página seguinte";
+					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
+						attEventHandler(p_btEl, 'click', 
+							function(evt) {
+								p_rec_rps.activatePanel(p_reckey, p_panelkey);
+							}
+						);							
+					})(btEl, this, recpanelcoll.reckey, recpaneliter.nextkey);
+				}
+				recpaneliter = recPanels.iterateNext();
+			}
+			recpanelcoll = this.iterateNext();
+		}		
+	};
+
 };
+
+/*
+
+	CSS Classes:
+
+	- navdiv
+	- graybtn-back 
+	- just-right
+	- left-arrow
+	- rec-nav-nums
+*/

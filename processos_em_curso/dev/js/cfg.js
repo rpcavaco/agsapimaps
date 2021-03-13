@@ -16,49 +16,49 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-    "base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
-    "lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
+    base: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
+    lyr99_top: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
 }
 
 var FEATLAYERS = {
-    "lyr10_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer"
+    lyr10_lotesProcEmCurso: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer"
 }
 
 var LYR_TITLES = {
-	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
+	lyr10_lotesProcEmCurso: "Lotes com processos em curso"
 }
 
 var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
 
 var QUERIES_CFG = {
 
-	"eixosVia": {
-		"gtype": "ln",
-		"url": FEATURE_MAP,
-		"template": "cod_topo='{0}'",
-		"layerId": 3,
-		"symb": {
+	eixosVia: {
+		gtype: "ln",
+		url: FEATURE_MAP,
+		template: "cod_topo='{0}'",
+		layerId: 3,
+		symb: {
 			type: "simple-line",
 			width: 4,
 			color: [255, 100, 0]
 		}
 	},
 
-	"numPol": {
-		"gtype": "pt",
-		"url": FEATURE_MAP,
-		"template": "cod_topo='{0}' and n_policia='{1}'",
-		"zoomscale": 800,
-		"layerId": 2,
-		"symb": {
+	numPol: {
+		gtype: "pt",
+		url: FEATURE_MAP,
+		template: "cod_topo='{0}' and n_policia='{1}'",
+		zoomscale: 800,
+		layerId: 2,
+		symb: {
 			type: "simple-marker",  
-			style: "square",
-			color: "blue",
-			size: "16px",  // pixels
-			outline: {  // autocasts as new SimpleLineSymbol()
-			  color: [ 255, 0, 0 ],
-			  width: 3  // points
-			}
+            style: "x",
+            color: "red",
+            size: "16px",  // pixels
+            outline: {  // autocasts as new SimpleLineSymbol()
+              color: [ 255, 30, 30 ],
+              width: 4  // points
+            }
 		}
 	}
 
@@ -112,29 +112,29 @@ var AJAX_ENDPOINTS = {
 //  A. Lista de atributos
 // 
 var ATTRS_CFG = {
-	"nud_capa": ["Processo", null],
-	// "nud_reg": ["Documento",  null],
-	"desc_tipo_proc":  ["Tipo de processo", null],
-	"desc_oper_urb":  ["Operação urbanística", null],
-	"num_conservatoria":  ["Registo predial", null],
+	nud_capa: ["Processo", null],
+	// nud_reg: ["Documento",  null],
+	desc_tipo_proc:  ["Tipo de processo", null],
+	desc_oper_urb:  ["Operação urbanística", null],
+	num_conservatoria:  ["Registo predial", null],
 
-	/* "num_titulo":  ["Número de tí­tulo", null],
-	"data_emissao":  ["Data emissão tí­tulo", 'date'],
-	"data_entrada":  ["Data entrada", 'date'], 
+	/* num_titulo:  ["Número de tí­tulo", null],
+	data_emissao:  ["Data emissão tí­tulo", 'date'],
+	data_entrada:  ["Data entrada", 'date'], 
 
-	"aprov_arq_despacho":  ["Despacho aprovação arq.ª", null],
-	"aprov_arq_data_despacho":  ["Data despacho aprov.arq.ª", 'date'],
+	aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
+	aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'date'],
 
-	"entrada":  ["Em 'entrada'", null], */
+	entrada:  ["Em 'entrada'", null], */
 
-	"total":  ["Número total de fogos", null],
-	// "abc":  ["Área bruta construção (m2)", null],
-	"atc":  ["Área total construção (m2)", null],
-	// "estorcam":  ["Estimativa orçamental (€)", null],
-	"volum_constr":  ["Volume construção", null],
-	"area_implant":  ["Área implantação (m2)", null],
-	"cercea":  ["Cércea",  null],
-	"pisos_abaixo_csol":  ["Pisos abaixo cot.soleira",  null],
-	"pisos_acima_csol":  ["Pisos acima cot.soleira", null],
-	"prazo":  ["Prazo (dias)", null]
+	total:  ["Número total de fogos", null],
+	// abc:  ["Área bruta construção (m2)", null],
+	atc:  ["Área total construção (m2)", null],
+	// "estorcam:  ["Estimativa orçamental (€)", null],
+	volum_constr:  ["Volume construção", null],
+	area_implant:  ["Área implantação (m2)", null],
+	cercea:  ["Cércea",  null],
+	pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
+	pisos_acima_csol:  ["Pisos acima cot.soleira", null],
+	prazo:  ["Prazo (dias)", null]
 };
