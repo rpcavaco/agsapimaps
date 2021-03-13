@@ -543,14 +543,6 @@ function RecordPanelSwitcher() {
 				pgNavDiv.appendChild(largerbtnDiv);
 				largerbtnDiv.setAttribute("class", "graybtn larger-button-pagenav-left");	
 
-
-				spEl = document.createElement("div");
-				spEl.setAttribute("id", "rec-nav-nums");
-				navInnerDiv.appendChild(spEl);
-				spEl.textContent = String.format(this.registos_fmt, 1, p_records.length);
-
-				
-
 				// inserir botões de navegação entre páginas do mesmo registo
 				if (!recpaneliter.is_first) {
 					btEl = document.createElement("button");
@@ -570,9 +562,9 @@ function RecordPanelSwitcher() {
 				if (!recpaneliter.is_last) {
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "graybtn right-arrow");
-					pgNavDiv.appendChild(btEl);
+					largerbtnDiv.appendChild(btEl);
 					spEl = document.createElement("div");
-					btEl.appendChild(spEl);
+					largerbtnDiv.appendChild(spEl);
 					spEl.textContent = "Página seguinte";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
