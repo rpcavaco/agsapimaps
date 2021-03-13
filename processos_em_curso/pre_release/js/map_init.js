@@ -346,6 +346,14 @@ require([
 		changeAtrribution(divattr);
 		hideLoaderImg();
     });	
+
+	watchUtils.whenTrue(view, "stationary", function() {
+		if (view.extent) {
+			for (let i=0; i<SCALE_LIMIT_FUNCS.length; i++) {
+				SCALE_LIMIT_FUNCS[i](view.scale);
+			}
+		}
+	});	
 	// ========================================================================
 	
 });

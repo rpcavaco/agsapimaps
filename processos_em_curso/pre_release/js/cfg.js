@@ -16,19 +16,32 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-    "base": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
-    "lyr99_top": "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
+   	base: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
+    lyr99_top: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
 }
 
 var FEATLAYERS = {
-    "lyr10_lotesProcEmCurso": "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer"
+    lyr10_lotesProcEmCurso: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer"
 }
 
 var LYR_TITLES = {
-	"lyr10_lotesProcEmCurso": "Lotes com processos em curso"
+	lyr10_lotesProcEmCurso: "Lotes com processos em curso"
 }
 
 var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
+
+var SCALE_LIMIT_FUNCS = [
+	function(p_zoomval) {
+		const ref  = 30000, wdg = document.getElementById("zoominmsg");
+		if (wdg) {
+			if (p_zoomval > ref) {
+				wdg.style.display = 'block';
+			} else {
+				wdg.style.display = 'none';
+			}
+		}
+	}
+];
 
 var QUERIES_CFG = {
 
@@ -52,13 +65,13 @@ var QUERIES_CFG = {
 		"layerId": 2,
 		"symb": {
 			type: "simple-marker",  
-			style: "square",
-			color: "blue",
-			size: "16px",  // pixels
-			outline: {  // autocasts as new SimpleLineSymbol()
-			  color: [ 255, 0, 0 ],
-			  width: 3  // points
-			}
+            style: "x",
+            color: "red",
+            size: "16px",  // pixels
+            outline: {  // autocasts as new SimpleLineSymbol()
+              color: [ 255, 30, 30 ],
+              width: 4  // points
+            }
 		}
 	}
 
