@@ -411,7 +411,7 @@ function RecordPanelSwitcher() {
 
 			const navInnerDiv = document.createElement("div");
 			navDiv.appendChild(navInnerDiv);
-			navInnerDiv.setAttribute("class", "graybtn-back recnav-container");
+			navInnerDiv.setAttribute("class", "graybtn recnav-container");
 			
 			let btEl = document.createElement("button");
 			btEl.setAttribute("class", "left-arrow");
@@ -542,10 +542,9 @@ function RecordPanelSwitcher() {
 				// inserir botões de navegação entre páginas do mesmo registo
 				if (!recpaneliter.is_first) {
 					btEl = document.createElement("button");
+					btEl.setAttribute("class", "graybtn left-arrow");
 					pgNavDiv.appendChild(btEl);
-					btEl.setAttribute("class", "graybtn float-left btn-left");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "left-arrow");
+					spEl = document.createElement("div");
 					btEl.appendChild(spEl);
 					spEl.textContent = "Página anterior";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
@@ -558,10 +557,9 @@ function RecordPanelSwitcher() {
 				}
 				if (!recpaneliter.is_last) {
 					btEl = document.createElement("button");
+					btEl.setAttribute("class", "graybtn right-arrow");
 					pgNavDiv.appendChild(btEl);
-					btEl.setAttribute("class", "graybtn float-right btn-right");
-					spEl = document.createElement("span");
-					spEl.setAttribute("class", "right-arrow");
+					spEl = document.createElement("div");
 					btEl.appendChild(spEl);
 					spEl.textContent = "Página seguinte";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
@@ -585,7 +583,7 @@ function RecordPanelSwitcher() {
 	CSS Classes:
 
 	- navdiv
-	- graybtn-back 
+	- graybtn 
 	- just-right
 	- left-arrow
 	- rec-nav-nums
