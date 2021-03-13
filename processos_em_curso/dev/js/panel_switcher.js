@@ -539,12 +539,13 @@ function RecordPanelSwitcher() {
 				recpaneliter.content.dom_elem.appendChild(pgNavDiv);
 				pgNavDiv.setAttribute("class", "pagenavdiv");
 
-				const largerbtnDiv = document.createElement("div");
-				pgNavDiv.appendChild(largerbtnDiv);
-				largerbtnDiv.setAttribute("class", "graybtn larger-button-pagenav-left");	
-
 				// inserir botões de navegação entre páginas do mesmo registo
 				if (!recpaneliter.is_first) {
+
+					const largerbtnDiv1 = document.createElement("div");
+					pgNavDiv.appendChild(largerbtnDiv1);
+					largerbtnDiv1.setAttribute("class", "graybtn larger-button-pagenav-left");	
+	
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "left-arrow");
 					largerbtnDiv.appendChild(btEl);
@@ -560,8 +561,13 @@ function RecordPanelSwitcher() {
 					})(largerbtnDiv, this, recpanelcoll.reckey, recpaneliter.prevkey);
 				}
 				if (!recpaneliter.is_last) {
+
+					const largerbtnDiv1 = document.createElement("div");
+					pgNavDiv.appendChild(largerbtnDiv1);
+					largerbtnDiv1.setAttribute("class", "graybtn larger-button-pagenav-right");	
+	
 					btEl = document.createElement("button");
-					btEl.setAttribute("class", "graybtn right-arrow");
+					btEl.setAttribute("class", "right-arrow");
 					largerbtnDiv.appendChild(btEl);
 					spEl = document.createElement("div");
 					largerbtnDiv.appendChild(spEl);
