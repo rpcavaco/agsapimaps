@@ -539,13 +539,25 @@ function RecordPanelSwitcher() {
 				recpaneliter.content.dom_elem.appendChild(pgNavDiv);
 				pgNavDiv.setAttribute("class", "pagenavdiv");
 
+				const largerbtnDiv = document.createElement("div");
+				pgNavDiv.appendChild(largerbtnDiv);
+				largerbtnDiv.setAttribute("class", "graybtn larger-button-pagenav-left");	
+
+
+				spEl = document.createElement("div");
+				spEl.setAttribute("id", "rec-nav-nums");
+				navInnerDiv.appendChild(spEl);
+				spEl.textContent = String.format(this.registos_fmt, 1, p_records.length);
+
+				
+
 				// inserir botões de navegação entre páginas do mesmo registo
 				if (!recpaneliter.is_first) {
 					btEl = document.createElement("button");
-					btEl.setAttribute("class", "graybtn left-arrow");
-					pgNavDiv.appendChild(btEl);
+					btEl.setAttribute("class", "left-arrow");
+					largerbtnDiv.appendChild(btEl);
 					spEl = document.createElement("div");
-					btEl.appendChild(spEl);
+					largerbtnDiv.appendChild(spEl);
 					spEl.textContent = "Página anterior";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
@@ -553,7 +565,7 @@ function RecordPanelSwitcher() {
 								p_rec_rps.activatePanel(p_reckey, p_panelkey);
 							}
 						);							
-					})(btEl, this, recpanelcoll.reckey, recpaneliter.prevkey);
+					})(largerbtnDiv, this, recpanelcoll.reckey, recpaneliter.prevkey);
 				}
 				if (!recpaneliter.is_last) {
 					btEl = document.createElement("button");

@@ -110,12 +110,9 @@ li:nth-child(even) {
 	line-height: 1.3em;
 }
 
-.btn-left {
-	padding: 4px 16px 4px 4px;
-}
-
-.btn-right {
-	padding: 4px 4px 4px 16px;
+.graybtn button {
+    background: transparent;
+    border: none;   
 }
 
 .navdiv {
@@ -131,6 +128,15 @@ li:nth-child(even) {
 .recnav-container {
     width: 160px;
     margin-left: auto;
+}
+
+.larger-button-pagenav-left {
+    width: 200px;    
+}
+
+.larger-button-pagenav-right {
+    width: 200px;    
+    margin-left: auto;    
 }
 
 #rec-nav-nums {
