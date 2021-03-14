@@ -545,13 +545,17 @@ function RecordPanelSwitcher() {
 					const largerbtnDiv1 = document.createElement("div");
 					pgNavDiv.appendChild(largerbtnDiv1);
 					largerbtnDiv1.setAttribute("class", "graybtn larger-button-pagenav-left");	
-	
+					
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "left-arrow");
 					largerbtnDiv1.appendChild(btEl);
 					spEl = document.createElement("div");
+					btEl.appendChild(spEl);
+
+					spEl = document.createElement("div");
 					largerbtnDiv1.appendChild(spEl);
-					spEl.textContent = "Página anterior";
+					spEl.textContent = "Página seguinte";
+
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
 							function(evt) {
@@ -565,13 +569,16 @@ function RecordPanelSwitcher() {
 					const largerbtnDiv2 = document.createElement("div");
 					pgNavDiv.appendChild(largerbtnDiv2);
 					largerbtnDiv2.setAttribute("class", "graybtn larger-button-pagenav-right");	
-	
+
+					spEl = document.createElement("div");
+					largerbtnDiv2.appendChild(spEl);
+					spEl.textContent = "Página seguinte";
+					
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "right-arrow");
 					largerbtnDiv2.appendChild(btEl);
 					spEl = document.createElement("div");
-					largerbtnDiv2.appendChild(spEl);
-					spEl.textContent = "Página seguinte";
+					btEl.appendChild(spEl);
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
 							function(evt) {
