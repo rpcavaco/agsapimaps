@@ -130,13 +130,14 @@ li:nth-child(even) {
     margin-left: auto;
 }
 
-.larger-button-pagenav-left {
-    width: 200px;    
+.larger-button-pagenav-right {
+    width: 160px;    
+    margin-left: auto;
+    padding-left: 20px;
 }
 
-.larger-button-pagenav-right {
-    width: 200px;    
-    margin-left: auto;    
+.larger-button-pagenav-right div {
+   float: left;    
 }
 
 #rec-nav-nums {
