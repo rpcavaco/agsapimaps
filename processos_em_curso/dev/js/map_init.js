@@ -144,12 +144,17 @@ require([
 	//Grid,
 ) {
 
+	const bmil = new MapImageLayer({
+		url: MAPLAYERS["base"]["url"],
+		title: "Basemap"
+	  });
+	if (MAPLAYERS["base"]["layerId"] !== undefined) {
+		bmil["layerId"] = MAPLAYERS["base"]["layerId"];
+	}
+
 	var basemap = new Basemap({
 		baseLayers: [
-		  new MapImageLayer({
-			url: MAPLAYERS["base"],
-			title: "Basemap"
-		  })
+			bmil
 		],
 		title: "basemap",
 		id: "basemap"
