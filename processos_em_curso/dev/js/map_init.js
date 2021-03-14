@@ -167,9 +167,12 @@ require([
 			continue;
 		}
 		if (LYR_TITLES[lkey] === undefined) {
-			lyrcfg = { id: lkey, url: MAPLAYERS[lkey] };
+			lyrcfg = { id: lkey, url: MAPLAYERS[lkey]["url"] };
 		} else {
-			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: MAPLAYERS[lkey] };
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: MAPLAYERS[lkey]["url"] };
+		}
+		if (MAPLAYERS[lkey]["layerId"] !== undefined) {
+			lyrcfg["layerId"] = MAPLAYERS[lkey]["layerId"];
 		}
 		layerDict[lkey] = new MapImageLayer(lyrcfg);
 		layerorder.push(lkey);
@@ -178,9 +181,12 @@ require([
 	for (let lkey in FEATLAYERS) {
 		flayers.push(lkey);
 		if (LYR_TITLES[lkey] === undefined) {
-			lyrcfg = { id: lkey, url: FEATLAYERS[lkey] };
+			lyrcfg = { id: lkey, url: FEATLAYERS[lkey]["url"] };
 		} else {
-			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: FEATLAYERS[lkey] };
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: FEATLAYERS[lkey]["url"] };
+		}
+		if (FEATLAYERS[lkey]["layerId"] !== undefined) {
+			lyrcfg["layerId"] = FEATLAYERS[lkey]["layerId"];
 		}
 		layerDict[lkey] = new FeatureLayer(lyrcfg);
 		layerorder.push(lkey);

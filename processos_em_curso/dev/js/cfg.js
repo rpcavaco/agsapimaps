@@ -16,12 +16,15 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-    base: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
-    lyr99_top: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
+    base: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer" },
+    lyr99_top: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer" }
 }
 
 var FEATLAYERS = {
-    lyr10_lotesProcEmCurso: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer"
+    lyr10_lotesProcEmCurso: {
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		layerId: 0
+	}
 }
 
 var LYR_TITLES = {
