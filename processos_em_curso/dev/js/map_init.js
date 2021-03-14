@@ -237,13 +237,6 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-	let selLayer = null;
-	if (Object.keys(layerDict).indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
-		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada na configuração do mapa.");
-	} else {		
-		selLayer = layerDict[LYR_SELECCAO_INTERACTIVA_KEY];
-	}
-
 	const layerList = new LayerList({
 		view: view,
 		listItemCreatedFunction: function(event) {
@@ -268,7 +261,8 @@ require([
 	// ------------------------------------------------------------------------
 	//  Display de coordenadas e barra de escala
 	// ------------------------------------------------------------------------
-	var ccExpand, ccwdg, scalebar;
+	//var ccExpand, 
+	let ccwdg, scalebar;
 
 	if (COORDSDISPLAY_SHOW) {
 
@@ -328,7 +322,10 @@ require([
   });
 });	
 */
+
 	view.when(function() {
+
+		let selLayer = layerDict[LYRS_SELECCAO_INTERACTIVA[0]];
 
 		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
 		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		

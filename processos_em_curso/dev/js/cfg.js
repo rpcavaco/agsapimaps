@@ -24,11 +24,16 @@ var FEATLAYERS = {
     lyr10_lotesProcEmCurso: {
 		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 0
-	}
+	},
+    lyr11_loteamProcEmCurso: {
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		layerId: 1
+	}	
 }
 
 var LYR_TITLES = {
-	lyr10_lotesProcEmCurso: "Lotes com processos em curso"
+	lyr10_lotesProcEmCurso: "Lotes com processos em curso",
+	lyr11_loteamProcEmCurso: "Loteamentos com processos em curso"
 }
 
 var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
@@ -68,8 +73,15 @@ var QUERIES_CFG = {
 	
 }
 
-var LYR_SELECCAO_INTERACTIVA_KEY = "lyr10_lotesProcEmCurso";
-var LYRS_DA_LEGENDA = ["lyr10_lotesProcEmCurso"];
+var LYRS_SELECCAO_INTERACTIVA = [
+	"lyr10_lotesProcEmCurso",
+	"lyr11_loteamProcEmCurso"
+];
+
+var LYRS_DA_LEGENDA = [
+	"lyr10_lotesProcEmCurso",
+	"lyr11_loteamProcEmCurso"
+];
 
 var VIEW_EXTENT = {
 	xmin: -41600.0,
