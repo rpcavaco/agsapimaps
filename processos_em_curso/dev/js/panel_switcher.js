@@ -548,9 +548,9 @@ function RecordPanelSwitcher() {
 	
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "left-arrow");
-					largerbtnDiv.appendChild(btEl);
+					largerbtnDiv1.appendChild(btEl);
 					spEl = document.createElement("div");
-					largerbtnDiv.appendChild(spEl);
+					largerbtnDiv1.appendChild(spEl);
 					spEl.textContent = "Página anterior";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
@@ -558,19 +558,19 @@ function RecordPanelSwitcher() {
 								p_rec_rps.activatePanel(p_reckey, p_panelkey);
 							}
 						);							
-					})(largerbtnDiv, this, recpanelcoll.reckey, recpaneliter.prevkey);
+					})(largerbtnDiv1, this, recpanelcoll.reckey, recpaneliter.prevkey);
 				}
 				if (!recpaneliter.is_last) {
 
-					const largerbtnDiv1 = document.createElement("div");
-					pgNavDiv.appendChild(largerbtnDiv1);
-					largerbtnDiv1.setAttribute("class", "graybtn larger-button-pagenav-right");	
+					const largerbtnDiv2 = document.createElement("div");
+					pgNavDiv.appendChild(largerbtnDiv2);
+					largerbtnDiv2.setAttribute("class", "graybtn larger-button-pagenav-right");	
 	
 					btEl = document.createElement("button");
 					btEl.setAttribute("class", "right-arrow");
-					largerbtnDiv.appendChild(btEl);
+					largerbtnDiv2.appendChild(btEl);
 					spEl = document.createElement("div");
-					largerbtnDiv.appendChild(spEl);
+					largerbtnDiv2.appendChild(spEl);
 					spEl.textContent = "Página seguinte";
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
@@ -578,7 +578,7 @@ function RecordPanelSwitcher() {
 								p_rec_rps.activatePanel(p_reckey, p_panelkey);
 							}
 						);							
-					})(btEl, this, recpanelcoll.reckey, recpaneliter.nextkey);
+					})(largerbtnDiv2, this, recpanelcoll.reckey, recpaneliter.nextkey);
 				}
 				recpaneliter = recPanels.iterateNext();
 			}
