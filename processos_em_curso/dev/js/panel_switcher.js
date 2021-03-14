@@ -553,8 +553,9 @@ function RecordPanelSwitcher() {
 					btEl.appendChild(spEl);
 
 					spEl = document.createElement("div");
+					spEl.setAttribute("class", "unselectable");
 					largerbtnDiv1.appendChild(spEl);
-					spEl.textContent = "Página seguinte";
+					spEl.textContent = "Página anterior";
 
 					(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
 						attEventHandler(p_btEl, 'click', 
@@ -571,6 +572,7 @@ function RecordPanelSwitcher() {
 					largerbtnDiv2.setAttribute("class", "graybtn larger-button-pagenav-right");	
 
 					spEl = document.createElement("div");
+					spEl.setAttribute("class", "unselectable");
 					largerbtnDiv2.appendChild(spEl);
 					spEl.textContent = "Página seguinte";
 					
