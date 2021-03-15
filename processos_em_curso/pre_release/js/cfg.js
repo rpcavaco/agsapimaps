@@ -16,54 +16,49 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-   	base: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer",
-    lyr99_top: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer"
+    base: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer" },
+    lyr99_top: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer" }
 }
 
 var FEATLAYERS = {
-    lyr10_lotesProcEmCurso: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer"
+    lyr10_lotesProcEmCurso: {
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		layerId: 0
+	},
+    lyr11_loteamProcEmCurso: {
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		layerId: 1
+	}	
 }
 
 var LYR_TITLES = {
-	lyr10_lotesProcEmCurso: "Lotes com processos em curso"
+	lyr10_lotesProcEmCurso: "Lotes com processos em curso",
+	lyr11_loteamProcEmCurso: "Loteamentos com processos em curso"
 }
 
 var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
 
-var SCALE_LIMIT_FUNCS = [
-	function(p_zoomval) {
-		const ref  = 30000, wdg = document.getElementById("zoominmsg");
-		if (wdg) {
-			if (p_zoomval > ref) {
-				wdg.style.display = 'block';
-			} else {
-				wdg.style.display = 'none';
-			}
-		}
-	}
-];
-
 var QUERIES_CFG = {
 
-	"eixosVia": {
-		"gtype": "ln",
-		"url": FEATURE_MAP,
-		"template": "cod_topo='{0}'",
-		"layerId": 3,
-		"symb": {
+	eixosVia: {
+		gtype: "ln",
+		url: FEATURE_MAP,
+		template: "cod_topo='{0}'",
+		layerId: 3,
+		symb: {
 			type: "simple-line",
 			width: 4,
 			color: [255, 100, 0]
 		}
 	},
 
-	"numPol": {
-		"gtype": "pt",
-		"url": FEATURE_MAP,
-		"template": "cod_topo='{0}' and n_policia='{1}'",
-		"zoomscale": 800,
-		"layerId": 2,
-		"symb": {
+	numPol: {
+		gtype: "pt",
+		url: FEATURE_MAP,
+		template: "cod_topo='{0}' and n_policia='{1}'",
+		zoomscale: 800,
+		layerId: 2,
+		symb: {
 			type: "simple-marker",  
             style: "x",
             color: "red",
@@ -78,8 +73,15 @@ var QUERIES_CFG = {
 	
 }
 
-var LYR_SELECCAO_INTERACTIVA_KEY = "lyr10_lotesProcEmCurso";
-var LYRS_DA_LEGENDA = ["lyr10_lotesProcEmCurso"];
+var LYRS_SELECCAO_INTERACTIVA = [
+	"lyr10_lotesProcEmCurso",
+	"lyr11_loteamProcEmCurso"
+];
+
+var LYRS_DA_LEGENDA = [
+	"lyr10_lotesProcEmCurso",
+	"lyr11_loteamProcEmCurso"
+];
 
 var VIEW_EXTENT = {
 	xmin: -47200.0,
@@ -90,6 +92,20 @@ var VIEW_EXTENT = {
 		wkid: 3763
 	}
 };
+
+var SCALE_LIMIT_FUNCS = [
+	function(p_zoomval) {
+		const ref  = 30000, wdg = document.getElementById("zoominmsg");
+		if (wdg) {
+			if (p_zoomval > ref) {
+				wdg.style.display = 'block';
+			} else {
+				wdg.style.display = 'none';
+			}
+		}
+	}
+];
+
 
 var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / PT-TM06";
 
@@ -125,29 +141,31 @@ var AJAX_ENDPOINTS = {
 //  A. Lista de atributos
 // 
 var ATTRS_CFG = {
-	"nud_capa": ["Processo", null],
-	// "nud_reg": ["Documento",  null],
-	"desc_tipo_proc":  ["Tipo de processo", null],
-	"desc_oper_urb":  ["Operação urbanística", null],
-	"num_conservatoria":  ["Registo predial", null],
+	nud_capa: ["Processo", null],
+	// nud_reg: ["Documento",  null],
+	desc_tipo_proc:  ["Tipo de processo", null],
+	desc_oper_urb:  ["Operação urbanística", null],
+	num_conservatoria:  ["Registo predial", null],
+	requerente: ["Requerente", null], 
 
-	/* "num_titulo":  ["Número de tí­tulo", null],
-	"data_emissao":  ["Data emissão tí­tulo", 'date'],
-	"data_entrada":  ["Data entrada", 'date'], 
+	/* num_titulo:  ["Número de tí­tulo", null],
 
-	"aprov_arq_despacho":  ["Despacho aprovação arq.ª", null],
-	"aprov_arq_data_despacho":  ["Data despacho aprov.arq.ª", 'date'],
+	data_entrada:  ["Data entrada", 'date'], 
 
-	"entrada":  ["Em 'entrada'", null], */
+	aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
+	aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'date'],
 
-	"total":  ["Número total de fogos", null],
-	// "abc":  ["Área bruta construção (m2)", null],
-	"atc":  ["Área total construção (m2)", null],
-	// "estorcam":  ["Estimativa orçamental (€)", null],
-	"volum_constr":  ["Volume construção", null],
-	"area_implant":  ["Área implantação (m2)", null],
-	"cercea":  ["Cércea",  null],
-	"pisos_abaixo_csol":  ["Pisos abaixo cot.soleira",  null],
-	"pisos_acima_csol":  ["Pisos acima cot.soleira", null],
-	"prazo":  ["Prazo (dias)", null]
+	entrada:  ["Em 'entrada'", null], */
+
+	total:  ["Número total de fogos", null],
+	// abc:  ["Área bruta construção (m2)", null],
+	atc:  ["Área total construção (m2)", null],
+	// "estorcam:  ["Estimativa orçamental (€)", null],
+	volum_constr:  ["Volume construção", null],
+	area_implant:  ["Área implantação (m2)", null],
+	cercea:  ["Cércea",  null],
+	pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
+	pisos_acima_csol:  ["Pisos acima cot.soleira", null],
+	prazo:  ["Prazo (dias)", null],
+	data_emissao:  ["Data emissão título", 'date']
 };

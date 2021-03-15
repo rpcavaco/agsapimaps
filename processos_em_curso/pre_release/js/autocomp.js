@@ -542,7 +542,7 @@ class AutoCompleter {
 
 }
 
-AutoCompleter.prototype.maxCheckInputCnt = 20;
+AutoCompleter.prototype.maxCheckInputCnt = 10;
 AutoCompleter.prototype.inputTimerIntervalValue = 40;
 AutoCompleter.prototype.useMousePosMsg = '<i>(usar apenas a <b>posição indicada</b> com o rato)</i>';
 

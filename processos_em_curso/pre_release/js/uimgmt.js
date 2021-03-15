@@ -9,17 +9,20 @@ function DivFader(p_elemid, p_fadingheartbeat) {
 	this.timer = null;
 	this.inited = false;
 	this.init = function() {
+
 		if (this.inited) {
 			return;
 		}
 		var msgsdiv = document.getElementById(this.elemid);
 		
-		attEventHandler(msgsdiv, 'click',
-			function(evt) {
-				MessagesController.hideMessage(true);
-				return finishEvent(evt);
-			}
-		);
+		if (msgsdiv) {
+			attEventHandler(msgsdiv, 'click',
+				function(evt) {
+					MessagesController.hideMessage(true);
+					return finishEvent(evt);
+				}	
+			);
+		}
 		
 		this.inited = true;
 	};
@@ -176,7 +179,14 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 
 		this.cleanSearch();
 
+		if (typeof QueriesMgr != 'undefined') {
 		QueriesMgr.clearResults();
+		}
+
+		if (typeof LayerInteractionMgr != 'undefined') {
+			LayerInteractionMgr.clearFunc();
+		}
+
 
 		// TODO
 		// this, clearPublishingWidge

@@ -282,11 +282,11 @@ require([
 				const found = (lidx >= 0);				
 				if (found) {
 
-                    if (typeof LayerInteractionMgr != 'undefined') {
-                        if (!LayerInteractionMgr.hasSelection()) {
-                            LayerInteractionMgr.select(item.layer.id);
-                        }
-                    }
+					if (typeof LayerInteractionMgr != 'undefined') {
+						if (!LayerInteractionMgr.hasSelection()) {
+						    LayerInteractionMgr.select(item.layer.id);
+						}
+					}
 
 					item.visible = (lidx == 0);
 					item.panel = {
@@ -400,7 +400,6 @@ require([
   });
 });	
 */
-
 	view.when(function() {
 
 		const selLyrId = LYRS_SELECCAO_INTERACTIVA[0];

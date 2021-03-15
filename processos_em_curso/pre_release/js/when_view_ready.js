@@ -17,7 +17,77 @@ function valCount(p_rows, p_attrs_cfg) {
     return maxcnt;
 }
 
-function when_view_ready(p_view, p_sellayer, p_griddiv) {
+var LayerInteractionMgr = {
+	interactionLayersIds: [],
+	selectedLayerId: null,
+	addedInteractionLayers: {},
+	clearFunc: null,
+	onSelect: null,
+	doClear: function() {
+		if (this.clearFunc) {
+			this.clearFunc();
+		}
+	},
+	init: function() {
+		if (typeof LYRS_SELECCAO_INTERACTIVA == 'undefined') {
+			throw new Error("LayerInteractionMgr: LYRS_SELECCAO_INTERACTIVA não está definda.");
+		}
+		if (LYRS_SELECCAO_INTERACTIVA.length < 1) {
+			throw new Error("LayerInteractionMgr: LYRS_SELECCAO_INTERACTIVA está definida mas vazia.");
+		}
+		this.interactionLayersIds = clone(LYRS_SELECCAO_INTERACTIVA);
+		this.selectedLayerId = LYRS_SELECCAO_INTERACTIVA[0];
+    },	
+	select: function(p_lyrId) {
+		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
+			throw new Error("LayerInteractionMgr.select: layer não configurada:"+p_lyrId);
+		}
+		if (Object.keys(this.addedInteractionLayers).indexOf(p_lyrId) < 0) {
+			throw new Error("LayerInteractionMgr.select: layer ainda não adicionado:"+p_lyrId);
+		}
+		this.selectedLayerId = p_lyrId;
+		this.onSelect(this.selectedLayerId);
+		this.doClear();
+	},
+	hasSelection: function() {
+		return this.selectedLayerId != null;
+	},
+	addLayer: function(p_lyrId, p_lyr_obj, p_dont_throw_error) {
+		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
+			if (!p_dont_throw_error) {
+				throw new Error("LayerInteractionMgr.addLayer: layer não configurada:"+p_lyrId);
+			}
+			return;
+		}
+		this.addedInteractionLayers[p_lyrId] = p_lyr_obj;
+	},
+	getSelectedLayer: function() {
+		if (this.selectedLayerId == null) {
+			throw new Error("LayerInteractionMgr.getSelectedLayer: selectedLayerId nulo.");
+		}
+		if (Object.keys(this.addedInteractionLayers).indexOf(this.selectedLayerId) < 0) {
+			throw new Error("LayerInteractionMgr.getSelectedLayer: layer ainda não adicionado:"+this.selectedLayerId);
+		}
+		return this.addedInteractionLayers[this.selectedLayerId];
+	}
+};
+
+(function() {
+	LayerInteractionMgr.init();
+	LayerInteractionMgr.onSelect = function(p_sel_layer_id) {
+		const spEmLoteam = document.getElementById("sp-emloteam");
+		if (spEmLoteam) {
+			if (p_sel_layer_id.indexOf("_loteam") > 1) {
+				spEmLoteam.style.visibility = 'visible';
+			} else {
+				spEmLoteam.style.visibility = 'hidden';
+			}
+		}		
+	}
+})();
+
+
+function when_view_ready(p_view, p_griddiv) {
 
 	let hlight; //, grid;
 
@@ -25,8 +95,12 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 
 		const pt = p_view.toMap(scrPt);
 		const rec_rps = new RecordPanelSwitcher();
+		rec_rps.max_attrs_per_page = 12;
+		rec_rps.registos_fmt = "Processo {0} de {1}"
 
-		p_sellayer.queryObjectIds({
+		const selLayer = LayerInteractionMgr.getSelectedLayer();
+
+		selLayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
 			returnGeometry: false,
@@ -36,7 +110,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				
 				if(objectIds==null || objectIds.length==0) { return; }
 				
-				p_view.whenLayerView(p_sellayer).then(
+				p_view.whenLayerView(selLayer).then(
 					function(layerView) {
 						if (hlight) {
 							hlight.remove();
@@ -46,7 +120,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				);
 
                 // pan se demasiadamente proximo do painel de dados
-                const gdiv = document.getElementById("gridDiv");
+                const gdiv = document.getElementById(p_griddiv);
                 if (gdiv) {
                     const sty = window.getComputedStyle(gdiv);
                     const gdiv_w = parseInt(sty.width, 10);
@@ -61,9 +135,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
                     }
                 }
                    				
-				return p_sellayer.queryRelatedFeatures({
+				return selLayer.queryRelatedFeatures({
 					outFields:  ["*"],
-					relationshipId: p_sellayer.relationships[0].id,
+					relationshipId: selLayer.relationships[0].id,
 					objectIds: objectIds
 				});
 
@@ -75,10 +149,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				// Create a grid with the data
 
 				rec_rps.clear();
-				let registos_fmt = "Processo {0} de {1}"
 
 				Object.keys(relatedFeatureSetByObjectId)
-				.forEach(function(objectId){
+				.every(function(objectId){
 
 					// get the attributes of the FeatureSet
 					const relatedFeatureSet = relatedFeatureSetByObjectId[objectId];
@@ -90,23 +163,6 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 					if (!rows.length) {
 						return;
 					}
-
-					const resultsDiv = document.getElementById(p_griddiv);
-
-					while (resultsDiv.firstChild) {
-						resultsDiv.removeChild(resultsDiv.firstChild);
-					}
-				  
-
-					let attrs_per_page_cnt;
-					let max_attrs_per_page = 12;
-					let navDiv, navInnerDiv, pageDiv;
-					let pageNum;
-					let reckey, pagekey;
-
-					let spEl, btEl, valcount, heightv=null;
-
-					if (rows.length>0) {
 						
 						// esconder msg introdutória
 						const mainmsgDiv = document.getElementById("mainmsg");
@@ -114,7 +170,18 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							mainmsgDiv.style.display = "none"
 						}
 
+					const spEmLoteam = document.getElementById("sp-emloteam");
+					if (spEmLoteam) {
+						if (LayerInteractionMgr.selectedLayerId.indexOf("_loteam") > 1) {
+							spEmLoteam.style.visibility = 'visible';
+						} else {
+							spEmLoteam.style.visibility = 'hidden';
+						}
+					}
+
 						// expandir gridDiv
+					let valcount, heightv=null;
+
 						valcount = valCount(rows, ATTRS_CFG);
 						for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
 							if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
@@ -126,193 +193,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 							// se heightv nao tiver sido definida, colocar valor mais alto
 							heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
 						}
-						resultsDiv.style.height = heightv;		
+					rec_rps.generatePanels(rows, ATTRS_CFG, "queryResults", heightv);
 						
-						// abrir espaço para inserir botões de navegação entre registos
-						navDiv = document.createElement("div");
-						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");
+					// apenas o primeiro registo
+					return false;
 						
-					}
-
-					if (rows.length>1) {
-
-						// inserir botões de navegação entre registos
-						/*navDiv = document.createElement("div");
-						resultsDiv.appendChild(navDiv);
-						navDiv.setAttribute("class", "navdiv");*/
-
-						navInnerDiv = document.createElement("div");
-						navDiv.appendChild(navInnerDiv);
-						navInnerDiv.setAttribute("class", "graybtn-back just-right");
-						navInnerDiv.style.width = "190px";
-						
-						btEl = document.createElement("button");
-						navInnerDiv.appendChild(btEl);
-						//btEl.setAttribute("class", "graybtn");
-						spEl = document.createElement("span");
-						spEl.setAttribute("class", "left-arrow");
-						btEl.appendChild(spEl);
-						(function(p_btEl, p_rec_rps, p_nrows) {
-							attEventHandler(p_btEl, 'click', 
-								function(evt) {
-									const num = p_rec_rps.rotatePrev();
-									const el = document.getElementById("rec-nav-nums");
-									if (el) {
-										el.textContent = String.format(registos_fmt, num, p_nrows);
-									}
-								}
-							);							
-						})(btEl, rec_rps, rows.length);
-
-						spEl = document.createElement("span");
-						spEl.setAttribute("id", "rec-nav-nums");
-						//spEl.setAttribute("class", "graybtn");
-						navInnerDiv.appendChild(spEl);
-						spEl.textContent = String.format(registos_fmt, 1, rows.length);
-
-						btEl = document.createElement("button");
-						navInnerDiv.appendChild(btEl);
-						//btEl.setAttribute("class", "graybtn");
-						spEl = document.createElement("span");
-						spEl.setAttribute("class", "right-arrow");
-						btEl.appendChild(spEl);
-						// spEl.textContent = "Rec seguinte";
-						(function(p_btEl, p_rec_rps, p_nrows) {
-							attEventHandler(p_btEl, 'click', 
-								function(evt) {
-									const num = p_rec_rps.rotateNext();
-									const el = document.getElementById("rec-nav-nums");
-									if (el) {
-										el.textContent = String.format(registos_fmt, num, p_nrows);
-									}
-								}
-							);							
-						})(btEl, rec_rps, rows.length);	
-
-					}
-
-					let ulEl, liEl, val, pgNavDiv;
-
-					for (let i=0; i<rows.length; i++) {
-						
-						reckey = rec_rps.recKey(i+1);
-						pageNum = 0;
-						ulEl = null;
-						pageDiv = null;
-						attrs_per_page_cnt = 0;
-						pageNum = 0;
-
-						pagekey = rec_rps.pageKey(pageNum+1)
-						rec_rps.newRecord(reckey);
-						
-						for (let fld in ATTRS_CFG) {
-
-							let lbl = ATTRS_CFG[fld][0];
-							let fmt = ATTRS_CFG[fld][1];
-							let preval = rows[i][fld];
-
-							if (preval == null || preval.length==0) {
-								continue;
-							}
-
-							switch (fmt) {
-								case 'date':
-									d = new Date(0);
-									d.setUTCSeconds(preval / 1000);
-									val = d.toLocaleDateString();
-									break;
-
-								default:
-									val = preval;
-							}
-
-							if (pageDiv == null || attrs_per_page_cnt >= max_attrs_per_page) {	
-								if (pageDiv) {
-									rec_rps.addPanel(reckey, pageDiv, pagekey);
-									pageNum++;
-									pagekey = rec_rps.pageKey(pageNum+1);
-									attrs_per_page_cnt = 0;
-								}
-								pageDiv = document.createElement("div");	
-								resultsDiv.appendChild(pageDiv);				
-								ulEl = document.createElement("ul");
-								pageDiv.appendChild(ulEl);				
-								ulEl.setAttribute("class", "attrs-list");
-							}
-							
-							liEl = document.createElement("li");
-							ulEl.appendChild(liEl);
-							liEl.setAttribute("class", "nobull");
-							liEl.insertAdjacentHTML('afterBegin', lbl);
-							spEl = document.createElement("span");
-							spEl.setAttribute("style", "float: right");
-							spEl.textContent = val;
-							liEl.appendChild(spEl);
-
-							attrs_per_page_cnt++;
-						}
-						// todo - não fazer se n houver conteudo
-						if (pageDiv != null) {
-							rec_rps.addPanel(reckey, pageDiv, pagekey);
-						}
-	
-					} // for row in  rows
-					// atualizar mensagem "1 de n registos"
-
-					rec_rps.resetIteration(); 
-					let recpanelcoll = rec_rps.iterateNext();
-					while (recpanelcoll) {
-
-						let recPanels = recpanelcoll.content;
-						recPanels.resetIteration(); 
-						let recpaneliter = recPanels.iterateNext();
-						let recpanel_count = 0;
-
-						while (recpaneliter && recpanel_count < 50) {
-
-							recpanel_count++;
-							pgNavDiv = document.createElement("div");
-							recpaneliter.content.dom_elem.appendChild(pgNavDiv);
-							pgNavDiv.setAttribute("class", "pagenavdiv");
-
-							// inserir botões de navegação entre páginas do mesmo registo
-							if (!recpaneliter.is_first) {
-								btEl = document.createElement("button");
-								pgNavDiv.appendChild(btEl);
-								btEl.setAttribute("class", "graybtn float-left btn-left");
-								spEl = document.createElement("span");
-								spEl.setAttribute("class", "left-arrow");
-								btEl.appendChild(spEl);
-								spEl.textContent = "Página anterior";
-								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
-									attEventHandler(p_btEl, 'click', 
-										function(evt) {
-											p_rec_rps.activatePanel(p_reckey, p_panelkey);
-										}
-									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.prevkey);
-							}
-							if (!recpaneliter.is_last) {
-								btEl = document.createElement("button");
-								pgNavDiv.appendChild(btEl);
-								btEl.setAttribute("class", "graybtn float-right btn-right");
-								spEl = document.createElement("span");
-								spEl.setAttribute("class", "right-arrow");
-								btEl.appendChild(spEl);
-								spEl.textContent = "Página seguinte";
-								(function(p_btEl, p_rec_rps, p_reckey, p_panelkey) {
-									attEventHandler(p_btEl, 'click', 
-										function(evt) {
-											p_rec_rps.activatePanel(p_reckey, p_panelkey);
-										}
-									);							
-								})(btEl, rec_rps, recpanelcoll.reckey, recpaneliter.nextkey);
-							}
-							recpaneliter = recPanels.iterateNext();
-						}
-						recpanelcoll = rec_rps.iterateNext();
-					}
 				}); // .forEach(function(objectId){
 					
 			}
@@ -345,6 +230,8 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 		} */
 		//clearbutton.style.display = "none";
 	}
+	
+	LayerInteractionMgr.clearFunc = clearMap;
 
 	/*selLayer.load().then(function() {
 		return g = new Grid();

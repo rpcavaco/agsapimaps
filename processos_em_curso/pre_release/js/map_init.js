@@ -112,6 +112,28 @@ var QueriesMgr = {
 	QueriesMgr.init();
 })();
 
+// Evitar a repetição inutil nos listeners de alterações
+EventFire = {
+	registry: {},
+	checkEqLastValueChange: function(p_type, p_key, p_value) {
+		
+		let ret = false;
+		if (this.registry[p_type] === undefined) {
+			this.registry[p_type] = {};
+		}
+		if (this.registry[p_type][p_key] === undefined) {
+			this.registry[p_type][p_key] = p_value;
+		} else {
+			ret = (this.registry[p_type][p_key] == p_value);
+			if (!ret) {
+				this.registry[p_type][p_key] = p_value;
+			}
+		}
+
+		return ret;
+	}
+};
+
 require([
 	"esri/Map",
 	"esri/Basemap",
@@ -144,12 +166,17 @@ require([
 	//Grid,
 ) {
 
+	const bmil = new MapImageLayer({
+		url: MAPLAYERS["base"]["url"],
+		title: "Basemap"
+	  });
+	if (MAPLAYERS["base"]["layerId"] !== undefined) {
+		bmil["layerId"] = MAPLAYERS["base"]["layerId"];
+	}
+
 	var basemap = new Basemap({
 		baseLayers: [
-		  new MapImageLayer({
-			url: MAPLAYERS["base"],
-			title: "Basemap"
-		  })
+			bmil
 		],
 		title: "basemap",
 		id: "basemap"
@@ -167,9 +194,12 @@ require([
 			continue;
 		}
 		if (LYR_TITLES[lkey] === undefined) {
-			lyrcfg = { id: lkey, url: MAPLAYERS[lkey] };
+			lyrcfg = { id: lkey, url: MAPLAYERS[lkey]["url"] };
 		} else {
-			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: MAPLAYERS[lkey] };
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: MAPLAYERS[lkey]["url"] };
+		}
+		if (MAPLAYERS[lkey]["layerId"] !== undefined) {
+			lyrcfg["layerId"] = MAPLAYERS[lkey]["layerId"];
 		}
 		layerDict[lkey] = new MapImageLayer(lyrcfg);
 		layerorder.push(lkey);
@@ -178,15 +208,19 @@ require([
 	for (let lkey in FEATLAYERS) {
 		flayers.push(lkey);
 		if (LYR_TITLES[lkey] === undefined) {
-			lyrcfg = { id: lkey, url: FEATLAYERS[lkey] };
+			lyrcfg = { id: lkey, url: FEATLAYERS[lkey]["url"] };
 		} else {
-			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: FEATLAYERS[lkey] };
+			lyrcfg = { id: lkey, title: LYR_TITLES[lkey], url: FEATLAYERS[lkey]["url"] };
+		}
+		if (FEATLAYERS[lkey]["layerId"] !== undefined) {
+			lyrcfg["layerId"] = FEATLAYERS[lkey]["layerId"];
 		}
 		layerDict[lkey] = new FeatureLayer(lyrcfg);
 		layerorder.push(lkey);
 	}
 	
 	layerorder.sort();
+	layerorder.reverse();
 
 	for (let i=0; i<layerorder.length; i++) {
 		layers.push(layerDict[layerorder[i]]);
@@ -226,24 +260,72 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-	let selLayer = null;
-	if (Object.keys(layerDict).indexOf(LYR_SELECCAO_INTERACTIVA_KEY) < 0) {
-		console.warn("Layer a usar para a sel. interativa '"+LYR_SELECCAO_INTERACTIVA_KEY+"' não encontrada na configuração do mapa.");
-	} else {		
-		selLayer = layerDict[LYR_SELECCAO_INTERACTIVA_KEY];
-	}
+	const radioButtonLayerItems = {};
 
 	const layerList = new LayerList({
 		view: view,
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
 			if (item.layer.type != "group") {
-				const found = (LYRS_DA_LEGENDA.indexOf(item.layer.id) >= 0);				
+
+				/* LayerInteractionMgr definido em when_view_ready.js, que deverá
+				*   ser carregado antes desta source.
+				*  Podem ser tentativamente carregadas todas as layers, 
+				*   as que não estiverem configuradas para a interacção
+				*   serão silenciosamente rejeitadas.
+				*/
+				if (typeof LayerInteractionMgr != 'undefined') {
+					LayerInteractionMgr.addLayer(item.layer.id, item.layer, true);
+				}
+
+				const lidx = LYRS_DA_LEGENDA.indexOf(item.layer.id);
+				const found = (lidx >= 0);				
 				if (found) {
+
+ 					if (typeof LayerInteractionMgr != 'undefined') {
+						if (!LayerInteractionMgr.hasSelection()) {
+						    LayerInteractionMgr.select(item.layer.id);
+						}
+					}
+
+					item.visible = (lidx == 0);
 					item.panel = {
 						content: "legend",
-						open: true
+						open: (lidx == 0)
 					};
+					(function(p_item, p_this_layerid, p_rbli) {
+						p_item.watch("visible", function(visible){
+							if (EventFire.checkEqLastValueChange("layerviz", p_this_layerid, visible)) {
+								return;
+							}
+							for (let lyrId in p_rbli) {
+								if (!visible) {
+									if (lyrId != p_this_layerid && !p_rbli[lyrId].visible) {
+										p_rbli[lyrId].visible = true;
+										p_rbli[p_this_layerid].panel.open = false;
+										p_rbli[lyrId].panel.open = true;
+
+										if (typeof LayerInteractionMgr != 'undefined') {
+											LayerInteractionMgr.select(lyrId);
+										}
+										break;
+									}
+								} else {
+									if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
+										p_rbli[lyrId].visible = false;
+										p_rbli[lyrId].panel.open = false;
+										p_rbli[p_this_layerid].panel.open = true;
+
+										if (typeof LayerInteractionMgr != 'undefined') {
+											LayerInteractionMgr.select(p_this_layerid);
+										}
+									}
+								}
+							}
+						});
+					})(item, item.layer.id, radioButtonLayerItems);
+					radioButtonLayerItems[item.layer.id] = item;
+
 				} else {
 					item.layer.listMode = "hide";
 				}
@@ -257,7 +339,8 @@ require([
 	// ------------------------------------------------------------------------
 	//  Display de coordenadas e barra de escala
 	// ------------------------------------------------------------------------
-	var ccExpand, ccwdg, scalebar;
+	//var ccExpand, 
+	let ccwdg, scalebar;
 
 	if (COORDSDISPLAY_SHOW) {
 
@@ -319,13 +402,25 @@ require([
 */
 	view.when(function() {
 
+		const selLyrId = LYRS_SELECCAO_INTERACTIVA[0];
+		let selLayer = layerDict[selLyrId];
+
+		const spEmLoteam = document.getElementById("sp-emloteam");
+		if (spEmLoteam) {
+			if (selLyrId.indexOf("_loteam") > 1) {
+				spEmLoteam.style.visibility = 'visible';
+			} else {
+				spEmLoteam.style.visibility = 'hidden';
+			}
+		}
+
 		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
 		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		
 
 		QueriesMgr.mapView = view;
 
 		if (selLayer!=null && typeof when_view_ready === 'function') {	
-			when_view_ready(view, selLayer, "queryResults");
+			when_view_ready(view, "queryResults");
 		}
 		
 	});
