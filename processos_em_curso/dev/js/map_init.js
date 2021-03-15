@@ -112,6 +112,28 @@ var QueriesMgr = {
 	QueriesMgr.init();
 })();
 
+// Evitar a repetição inutil nos listeners de alterações
+EventFire = {
+	registry: {},
+	checkEqLastValueChange: function(p_type, p_key, p_value) {
+		
+		let ret = false;
+		if (this.registry[p_type] === undefined) {
+			this.registry[p_type] = {};
+		}
+		if (this.registry[p_type][p_key] === undefined) {
+			this.registry[p_type][p_key] = p_value;
+		} else {
+			ret = (this.registry[p_type][p_key] == p_value);
+			if (!ret) {
+				this.registry[p_type][p_key] = p_value;
+			}
+		}
+
+		return ret;
+	}
+};
+
 require([
 	"esri/Map",
 	"esri/Basemap",
@@ -259,6 +281,13 @@ require([
 				const lidx = LYRS_DA_LEGENDA.indexOf(item.layer.id);
 				const found = (lidx >= 0);				
 				if (found) {
+
+                    if (typeof LayerInteractionMgr != 'undefined') {
+                        if (!LayerInteractionMgr.hasSelection()) {
+                            LayerInteractionMgr.select(item.layer.id);
+                        }
+                    }
+
 					item.visible = (lidx == 0);
 					item.panel = {
 						content: "legend",
@@ -266,21 +295,33 @@ require([
 					};
 					(function(p_item, p_this_layerid, p_rbli) {
 						p_item.watch("visible", function(visible){
+							if (EventFire.checkEqLastValueChange("layerviz", p_this_layerid, visible)) {
+								return;
+							}
 							for (let lyrId in p_rbli) {
 								if (!visible) {
 									if (lyrId != p_this_layerid && !p_rbli[lyrId].visible) {
 										p_rbli[lyrId].visible = true;
+										p_rbli[p_this_layerid].panel.open = false;
 										p_rbli[lyrId].panel.open = true;
+
+										if (typeof LayerInteractionMgr != 'undefined') {
+											LayerInteractionMgr.select(lyrId);
+										}
 										break;
 									}
 								} else {
 									if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
 										p_rbli[lyrId].visible = false;
 										p_rbli[lyrId].panel.open = false;
+										p_rbli[p_this_layerid].panel.open = true;
+
+										if (typeof LayerInteractionMgr != 'undefined') {
+											LayerInteractionMgr.select(p_this_layerid);
+										}
 									}
 								}
 							}
-								
 						});
 					})(item, item.layer.id, radioButtonLayerItems);
 					radioButtonLayerItems[item.layer.id] = item;
@@ -362,7 +403,17 @@ require([
 
 	view.when(function() {
 
-		let selLayer = layerDict[LYRS_SELECCAO_INTERACTIVA[0]];
+		const selLyrId = LYRS_SELECCAO_INTERACTIVA[0];
+		let selLayer = layerDict[selLyrId];
+
+		const spEmLoteam = document.getElementById("sp-emloteam");
+		if (spEmLoteam) {
+			if (selLyrId.indexOf("_loteam") > 1) {
+				spEmLoteam.style.visibility = 'visible';
+			} else {
+				spEmLoteam.style.visibility = 'hidden';
+			}
+		}
 
 		console.assert(selLayer!=null, "selLayer está indefinida, popup desativado");		
 		console.assert(typeof when_view_ready === 'function', "função 'when_view_ready' está indefinida, popup desativado");		
@@ -370,7 +421,7 @@ require([
 		QueriesMgr.mapView = view;
 
 		if (selLayer!=null && typeof when_view_ready === 'function') {	
-			when_view_ready(view, selLayer, "queryResults");
+			when_view_ready(view, "queryResults");
 		}
 		
 	});

@@ -109,6 +109,21 @@ li:nth-child(even) {
 	padding-left: 8px;
 }
 
+.attrs-list td {
+	padding-top: 0;
+	padding-bottom: 0;
+	width: 190px;
+}
+
+.attrs-list td + td {
+	padding-top: 0;
+	padding-bottom: 0;
+	width: 260px;
+}
+
+.attrs-list tr:nth-child(even) { 
+	background-color: #eee; 
+}
 
 .graybtn {
 	background-color: #eee;
@@ -136,6 +151,10 @@ li:nth-child(even) {
 .recnav-container {
     width: 160px;
     margin-left: auto;
+}
+
+.larger-button-pagenav-left {
+    width: 160px;    
 }
 
 .larger-button-pagenav-right {

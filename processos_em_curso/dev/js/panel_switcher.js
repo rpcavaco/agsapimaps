@@ -160,6 +160,7 @@ function RecordPanelSwitcher() {
 	this.rotator_current_key = null,
 	this.registos_fmt = "";
 	this.max_attrs_per_page = 20;
+	this.max_val_str_length = -1;
 	this.records = {
 	};
 
@@ -402,12 +403,13 @@ function RecordPanelSwitcher() {
 			resultsDiv.removeChild(resultsDiv.firstChild);
 		}
 
-		if (p_records.length>1) {
-
 			// abrir espaço para inserir botões de navegação entre registos
-			const navDiv = document.createElement("div");
-			resultsDiv.appendChild(navDiv);
-			navDiv.setAttribute("class", "navdiv");
+		const navDiv = document.createElement("div");
+		resultsDiv.appendChild(navDiv);
+		navDiv.setAttribute("class", "navdiv");
+
+
+		if (p_records.length>1) {
 
 			const navInnerDiv = document.createElement("div");
 			navDiv.appendChild(navInnerDiv);
@@ -453,14 +455,14 @@ function RecordPanelSwitcher() {
             })(btEl, this, p_records.length);
 		}
 
-		let ulEl, reckey, pagekey, pageNum, liEl, pageDiv, pgNavDiv, attrs_per_page_cnt;
+		let parentEl, reckey, pagekey, pageNum, liEl, pageDiv, pgNavDiv, attrs_per_page_cnt;
 		let lbl, fmt, preval, val, d;
 
 		for (let i=0; i<p_records.length; i++) {
 						
 			reckey = this.recKey(i+1);
 			pageNum = 0;
-			ulEl = null;
+			parentEl = null;
 			pageDiv = null;
 			attrs_per_page_cnt = 0;
 
@@ -476,7 +478,6 @@ function RecordPanelSwitcher() {
 				if (preval == null || preval.length==0) {
 					continue;
 				}
-
 				switch (fmt) {
 					case 'date':
 						d = new Date(0);
@@ -488,6 +489,13 @@ function RecordPanelSwitcher() {
 						val = preval;
 				}
 
+				if (this.max_val_str_length > 5) {
+					let strval = val.toString();
+					if (strval.length > this.max_val_str_length) {
+						val = strval.substring(0, this.max_val_str_length-3) + '...';
+					}
+				}
+
 				if (pageDiv == null || attrs_per_page_cnt >= this.max_attrs_per_page) {	
 					if (pageDiv) {
 						this.addPanel(reckey, pageDiv, pagekey);
@@ -497,17 +505,24 @@ function RecordPanelSwitcher() {
 					}
 					pageDiv = document.createElement("div");	
 					resultsDiv.appendChild(pageDiv);				
-					ulEl = document.createElement("ul");
-					pageDiv.appendChild(ulEl);				
-					ulEl.setAttribute("class", "attrs-list");
+					//parentEl = document.createElement("ul");
+					parentEl = document.createElement("table");
+					pageDiv.appendChild(parentEl);				
+					parentEl.setAttribute("class", "attrs-list");
 				}
 				
-				liEl = document.createElement("li");
-				ulEl.appendChild(liEl);
-				liEl.setAttribute("class", "nobull");
-				liEl.insertAdjacentHTML('afterBegin', lbl);
-				spEl = document.createElement("span");
-				spEl.setAttribute("style", "float: right");
+				//liEl = document.createElement("li");
+				liEl = document.createElement("tr");
+				parentEl.appendChild(liEl);
+				//liEl.setAttribute("class", "nobull");
+				//liEl.insertAdjacentHTML('afterBegin', lbl);
+				tdEl = document.createElement("td");
+				liEl.appendChild(tdEl);
+				//liEl.insertAdjacentHTML('afterBegin', lbl);
+				tdEl.textContent = lbl;
+				//spEl = document.createElement("span");
+				spEl = document.createElement("td");
+				//spEl.setAttribute("style", "float: right");
 				spEl.textContent = val;
 				liEl.appendChild(spEl);
 

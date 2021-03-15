@@ -146,9 +146,10 @@ var ATTRS_CFG = {
 	desc_tipo_proc:  ["Tipo de processo", null],
 	desc_oper_urb:  ["Operação urbanística", null],
 	num_conservatoria:  ["Registo predial", null],
+	requerente: ["Requerente", null], 
 
 	/* num_titulo:  ["Número de tí­tulo", null],
-	data_emissao:  ["Data emissão tí­tulo", 'date'],
+	
 	data_entrada:  ["Data entrada", 'date'], 
 
 	aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
@@ -165,5 +166,6 @@ var ATTRS_CFG = {
 	cercea:  ["Cércea",  null],
 	pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
 	pisos_acima_csol:  ["Pisos acima cot.soleira", null],
-	prazo:  ["Prazo (dias)", null]
+	prazo:  ["Prazo (dias)", null],
+	data_emissao:  ["Data emissão título", 'date']
 };

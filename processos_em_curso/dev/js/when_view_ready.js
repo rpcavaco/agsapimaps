@@ -20,13 +20,24 @@ function valCount(p_rows, p_attrs_cfg) {
 var LayerInteractionMgr = {
 	interactionLayersIds: [],
 	selectedLayerId: null,
-	selectedLayer: null,
 	addedInteractionLayers: {},
-	init: function() {
-		this.interactionLayersIds = clone(LYRS_SELECCAO_INTERACTIVA);
-		this.selectedLayerId = this.interactionLayersIds[0];
-		this.addedInteractionLayers = {}
+	clearFunc: null,
+	onSelect: null,
+	doClear: function() {
+		if (this.clearFunc) {
+			this.clearFunc();
+		}
 	},
+	init: function() {
+		if (typeof LYRS_SELECCAO_INTERACTIVA == 'undefined') {
+			throw new Error("LayerInteractionMgr: LYRS_SELECCAO_INTERACTIVA não está definda.");
+		}
+		if (LYRS_SELECCAO_INTERACTIVA.length < 1) {
+			throw new Error("LayerInteractionMgr: LYRS_SELECCAO_INTERACTIVA está definida mas vazia.");
+		}
+		this.interactionLayersIds = clone(LYRS_SELECCAO_INTERACTIVA);
+		this.selectedLayerId = LYRS_SELECCAO_INTERACTIVA[0];
+    },	
 	select: function(p_lyrId) {
 		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
 			throw new Error("LayerInteractionMgr.select: layer não configurada:"+p_lyrId);
@@ -35,7 +46,11 @@ var LayerInteractionMgr = {
 			throw new Error("LayerInteractionMgr.select: layer ainda não adicionado:"+p_lyrId);
 		}
 		this.selectedLayerId = p_lyrId;
-		this.selectedLayer = this.addedInteractionLayers[p_lyrId];
+		this.onSelect(this.selectedLayerId);
+		this.doClear();
+	},
+	hasSelection: function() {
+		return this.selectedLayerId != null;
 	},
 	addLayer: function(p_lyrId, p_lyr_obj, p_dont_throw_error) {
 		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
@@ -45,11 +60,30 @@ var LayerInteractionMgr = {
 			return;
 		}
 		this.addedInteractionLayers[p_lyrId] = p_lyr_obj;
+	},
+	getSelectedLayer: function() {
+		if (this.selectedLayerId == null) {
+			throw new Error("LayerInteractionMgr.getSelectedLayer: selectedLayerId nulo.");
+		}
+		if (Object.keys(this.addedInteractionLayers).indexOf(this.selectedLayerId) < 0) {
+			throw new Error("LayerInteractionMgr.getSelectedLayer: layer ainda não adicionado:"+this.selectedLayerId);
+		}
+		return this.addedInteractionLayers[this.selectedLayerId];
 	}
-}
+};
 
 (function() {
 	LayerInteractionMgr.init();
+	LayerInteractionMgr.onSelect = function(p_sel_layer_id) {
+		const spEmLoteam = document.getElementById("sp-emloteam");
+		if (spEmLoteam) {
+			if (p_sel_layer_id.indexOf("_loteam") > 1) {
+				spEmLoteam.style.visibility = 'visible';
+			} else {
+				spEmLoteam.style.visibility = 'hidden';
+			}
+		}		
+	}
 })();
 
 
@@ -64,11 +98,9 @@ function when_view_ready(p_view, p_griddiv) {
 		rec_rps.max_attrs_per_page = 12;
 		rec_rps.registos_fmt = "Processo {0} de {1}"
 
-		if (LayerInteractionMgr.selectedLayer == null) {
-			return;
-		}
+		const selLayer = LayerInteractionMgr.getSelectedLayer();
 
-		LayerInteractionMgr.selectedLayer.queryObjectIds({
+		selLayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
 			returnGeometry: false,
@@ -78,7 +110,7 @@ function when_view_ready(p_view, p_griddiv) {
 				
 				if(objectIds==null || objectIds.length==0) { return; }
 				
-				p_view.whenLayerView(LayerInteractionMgr.selectedLayer).then(
+				p_view.whenLayerView(selLayer).then(
 					function(layerView) {
 						if (hlight) {
 							hlight.remove();
@@ -88,7 +120,7 @@ function when_view_ready(p_view, p_griddiv) {
 				);
 
                 // pan se demasiadamente proximo do painel de dados
-                const gdiv = document.getElementById("gridDiv");
+                const gdiv = document.getElementById(p_griddiv);
                 if (gdiv) {
                     const sty = window.getComputedStyle(gdiv);
                     const gdiv_w = parseInt(sty.width, 10);
@@ -103,9 +135,9 @@ function when_view_ready(p_view, p_griddiv) {
                     }
                 }
                    				
-				return LayerInteractionMgr.selectedLayer.queryRelatedFeatures({
+				return selLayer.queryRelatedFeatures({
 					outFields:  ["*"],
-					relationshipId: LayerInteractionMgr.selectedLayer.relationships[0].id,
+					relationshipId: selLayer.relationships[0].id,
 					objectIds: objectIds
 				});
 
@@ -136,6 +168,15 @@ function when_view_ready(p_view, p_griddiv) {
 					const mainmsgDiv = document.getElementById("mainmsg");
 					if (mainmsgDiv) {
 						mainmsgDiv.style.display = "none"
+					}
+					
+					const spEmLoteam = document.getElementById("sp-emloteam");
+					if (spEmLoteam) {
+						if (LayerInteractionMgr.selectedLayerId.indexOf("_loteam") > 1) {
+							spEmLoteam.style.visibility = 'visible';
+						} else {
+							spEmLoteam.style.visibility = 'hidden';
+						}
 					}
 
 					// expandir gridDiv
@@ -189,6 +230,8 @@ function when_view_ready(p_view, p_griddiv) {
 		} */
 		//clearbutton.style.display = "none";
 	}
+	
+	LayerInteractionMgr.clearFunc = clearMap;
 
 	/*selLayer.load().then(function() {
 		return g = new Grid();
