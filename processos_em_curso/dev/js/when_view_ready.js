@@ -17,7 +17,43 @@ function valCount(p_rows, p_attrs_cfg) {
     return maxcnt;
 }
 
-function when_view_ready(p_view, p_sellayer, p_griddiv) {
+var LayerInteractionMgr = {
+	interactionLayersIds: [],
+	selectedLayerId: null,
+	selectedLayer: null,
+	addedInteractionLayers: {},
+	init: function() {
+		this.interactionLayersIds = clone(LYRS_SELECCAO_INTERACTIVA);
+		this.selectedLayerId = this.interactionLayersIds[0];
+		this.addedInteractionLayers = {}
+	},
+	select: function(p_lyrId) {
+		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
+			throw new Error("LayerInteractionMgr.select: layer não configurada:"+p_lyrId);
+		}
+		if (Object.keys(this.addedInteractionLayers).indexOf(p_lyrId) < 0) {
+			throw new Error("LayerInteractionMgr.select: layer ainda não adicionado:"+p_lyrId);
+		}
+		this.selectedLayerId = p_lyrId;
+		this.selectedLayer = this.addedInteractionLayers[p_lyrId];
+	},
+	addLayer: function(p_lyrId, p_lyr_obj, p_dont_throw_error) {
+		if (this.interactionLayersIds.indexOf(p_lyrId) < 0) {
+			if (!p_dont_throw_error) {
+				throw new Error("LayerInteractionMgr.addLayer: layer não configurada:"+p_lyrId);
+			}
+			return;
+		}
+		this.addedInteractionLayers[p_lyrId] = p_lyr_obj;
+	}
+}
+
+(function() {
+	LayerInteractionMgr.init();
+})();
+
+
+function when_view_ready(p_view, p_griddiv) {
 
 	let hlight; //, grid;
 
@@ -28,7 +64,11 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 		rec_rps.max_attrs_per_page = 12;
 		rec_rps.registos_fmt = "Processo {0} de {1}"
 
-		p_sellayer.queryObjectIds({
+		if (LayerInteractionMgr.selectedLayer == null) {
+			return;
+		}
+
+		LayerInteractionMgr.selectedLayer.queryObjectIds({
 			geometry: pt,
 			spatialRelationship: "intersects",
 			returnGeometry: false,
@@ -38,7 +78,7 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
 				
 				if(objectIds==null || objectIds.length==0) { return; }
 				
-				p_view.whenLayerView(p_sellayer).then(
+				p_view.whenLayerView(LayerInteractionMgr.selectedLayer).then(
 					function(layerView) {
 						if (hlight) {
 							hlight.remove();
@@ -63,9 +103,9 @@ function when_view_ready(p_view, p_sellayer, p_griddiv) {
                     }
                 }
                    				
-				return p_sellayer.queryRelatedFeatures({
+				return LayerInteractionMgr.selectedLayer.queryRelatedFeatures({
 					outFields:  ["*"],
-					relationshipId: p_sellayer.relationships[0].id,
+					relationshipId: LayerInteractionMgr.selectedLayer.relationships[0].id,
 					objectIds: objectIds
 				});
 

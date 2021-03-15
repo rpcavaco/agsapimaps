@@ -198,6 +198,7 @@ require([
 	}
 	
 	layerorder.sort();
+	layerorder.reverse();
 
 	for (let i=0; i<layerorder.length; i++) {
 		layers.push(layerDict[layerorder[i]]);
@@ -237,17 +238,53 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
+	const radioButtonLayerItems = {};
+
 	const layerList = new LayerList({
 		view: view,
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
 			if (item.layer.type != "group") {
-				const found = (LYRS_DA_LEGENDA.indexOf(item.layer.id) >= 0);				
+
+				/* LayerInteractionMgr definido em when_view_ready.js, que deverá
+				*   ser carregado antes desta source.
+				*  Podem ser tentativamente carregadas todas as layers, 
+				*   as que não estiverem configuradas para a interacção
+				*   serão silenciosamente rejeitadas.
+				*/
+				if (typeof LayerInteractionMgr != 'undefined') {
+					LayerInteractionMgr.addLayer(item.layer.id, item.layer, true);
+				}
+
+				const lidx = LYRS_DA_LEGENDA.indexOf(item.layer.id);
+				const found = (lidx >= 0);				
 				if (found) {
+					item.visible = (lidx == 0);
 					item.panel = {
 						content: "legend",
-						open: true
+						open: (lidx == 0)
 					};
+					(function(p_item, p_this_layerid, p_rbli) {
+						p_item.watch("visible", function(visible){
+							for (let lyrId in p_rbli) {
+								if (!visible) {
+									if (lyrId != p_this_layerid && !p_rbli[lyrId].visible) {
+										p_rbli[lyrId].visible = true;
+										p_rbli[lyrId].panel.open = true;
+										break;
+									}
+								} else {
+									if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
+										p_rbli[lyrId].visible = false;
+										p_rbli[lyrId].panel.open = false;
+									}
+								}
+							}
+								
+						});
+					})(item, item.layer.id, radioButtonLayerItems);
+					radioButtonLayerItems[item.layer.id] = item;
+
 				} else {
 					item.layer.listMode = "hide";
 				}
@@ -354,6 +391,14 @@ require([
 		changeAtrribution(divattr);
 		hideLoaderImg();
     });	
+
+	watchUtils.whenTrue(view, "stationary", function() {
+		if (view.extent) {
+			for (let i=0; i<SCALE_LIMIT_FUNCS.length; i++) {
+				SCALE_LIMIT_FUNCS[i](view.scale);
+			}
+		}
+	});		
 	// ========================================================================
 	
 });
