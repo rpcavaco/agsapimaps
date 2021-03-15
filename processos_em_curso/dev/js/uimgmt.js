@@ -1,42 +1,28 @@
-/*
-function fadeout(element, heartbeat, finalcallback) {
-    var op = 1;  // initial opacity
-    var timer = setInterval(function () {
-        if (op <= 0.1){
-            clearInterval(timer);
-            element.style.display = 'none';
-            if (finalcallback) {
-				finalcallback();
-			}
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-    }, heartbeat);
-    return timer;
-} */
 
 function fadeoutAnimFrame(p_element, p_timeextent, p_finalcallback) {
 
 	let start = null;
 	let op = 1;
- 
+	
+	p_element.style.display = 'block';
+	p_element.style.filter = 'none';
+    p_element.style.opacity = 1;
+	
 	function step(timestamp) {
 
 		if (start==null) {
 			start = timestamp;
 		}
 		const elapsed = timestamp - start;
-
 		op = 1 - (elapsed / p_timeextent);
 
         p_element.style.opacity = op;
         p_element.style.filter = 'alpha(opacity=' + op * 100 + ")";
 
-		if (p_element < p_timeextent) { // Stop the animation after 2 seconds
+		if (elapsed < p_timeextent) { 
 			window.requestAnimationFrame(step);
 		} else {
-            element.style.display = 'none';
+            p_element.style.display = 'none';
             if (p_finalcallback) {
 				p_finalcallback();
 			}
@@ -47,16 +33,14 @@ function fadeoutAnimFrame(p_element, p_timeextent, p_finalcallback) {
 	window.requestAnimationFrame(step);
 }
 
-function DivFader(p_elemid, p_timeextent) { // p_fadingheartbeat) {
+function DivFader(p_elemid, p_timeextent, opt_ext_finalize) { // p_fadingheartbeat) {
 	
 	// Constantes
 	// MessagesControllerParams é especifico de cada aplicação, deve estar no init-xxxx.js
 	this.elemid = null;
-	//this.fadingHeartbeat = 0;
 	this.timeextent = 0;
 	
 	this.isvisible = false;
-	//this.timer = null;
 	this.inited = false;
 	this.init = function() {
 
@@ -73,46 +57,34 @@ function DivFader(p_elemid, p_timeextent) { // p_fadingheartbeat) {
 				}
 			);
 		}
-		
 		this.inited = true;
 	};
-	this.setup = function(p_elemid, p_timeextent) {  // p_fadingheartbeat) {
+	this.setup = function(p_elemid, p_timeextent, opt_ext_finalize) {  // p_fadingheartbeat) {
 		this.elemid = p_elemid;
-		var msgsdiv = document.getElementById(this.elemid);
-		//msgsdiv.style.display = 'none';
 		this.isvisible = true;
 		this.timeextent = p_timeextent;
-		// this.fadingHeartbeat = p_fadingheartbeat;
+		this.ext_finalize = opt_ext_finalize;
 		
 		this.init();
 	};
 	this.finalize = function() {
-		/* if (this.timer) {
-			clearTimeout(this.timer);
-			this.timer = null;
-		} */
 		this.isvisible = false;
+		if (this.ext_finalize) {
+			this.ext_finalize();
+		}
 	};
 	
 	this.hideMessage = function(do_fadeout) {
 		if (!this.isvisible) {
 			return;
 		}
-		/* if (this.timer) {
-			clearTimeout(this.timer);
-			this.timer = null;
-		} */
 		var msgsdiv = document.getElementById(this.elemid);
 
-		if (do_fadeout) 
-		{
-			//this.timer = fadeout(msgsdiv, 
+		if (do_fadeout) {
 			fadeoutAnimFrame(msgsdiv, 
-							this.fadingHeartbeat,
+							this.timeextent,
 							this.finalize);
-		} 
-		else 
-		{
+		} else {
 			if (msgsdiv!=null) {
 				msgsdiv.style.display = 'none';
 			}
@@ -120,9 +92,7 @@ function DivFader(p_elemid, p_timeextent) { // p_fadingheartbeat) {
 		}
 	};
 	
-	this.setup(p_elemid, p_timeextent); //p_fadingheartbeat);  
-	
-		
+	this.setup(p_elemid, p_timeextent, opt_ext_finalize);  
 }
 
 function changeAtrribution(p_nodes) {
@@ -198,7 +168,6 @@ function sizeWidgets() {
 			wdg.style.display = 'none';
 		}				
 	}
-
 }
 
 class Geocode_LocAutoCompleter extends LocAutoCompleter {
@@ -267,10 +236,7 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 }
 
 function init_ui() {
-
 	// Init UI não-ESRI
-
-
 	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
 		{
 			parentdiv: "loc_content",
@@ -286,11 +252,15 @@ function init_ui() {
 	sizeWidgets();
 
 	// Titulo que se desvanece
-	var titlefader = new DivFader("titlearea", 2000); // TITLE_FADING_MSECS);
+	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS, 
+		function() {
+			const lc = document.getElementById("loc_inputbox");
+			if (lc) {
+				lc.style.visibility = "visible";
+			}
+		}
+	);
 	titlefader.hideMessage(true);
-
-	
-
 }
 
 (function() {
