@@ -179,7 +179,14 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 
 		this.cleanSearch();
 
-		QueriesMgr.clearResults();
+		if (typeof QueriesMgr != 'undefined') {
+			QueriesMgr.clearResults();
+		}
+
+		if (typeof LayerInteractionMgr != 'undefined') {
+			LayerInteractionMgr.clearFunc();
+		}
+
 
 		// TODO
 		// this, clearPublishingWidge
