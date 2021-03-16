@@ -1,100 +1,4 @@
 
-function fadeoutAnimFrame(p_element, p_timeextent, p_finalcallback) {
-
-	let start = null;
-	let op = 1;
-	
-	p_element.style.display = 'block';
-	p_element.style.filter = 'none';
-    p_element.style.opacity = 1;
-	
-	function step(timestamp) {
-
-		if (start==null) {
-			start = timestamp;
-		}
-		const elapsed = timestamp - start;
-		op = 1 - (elapsed / p_timeextent);
-
-        p_element.style.opacity = op;
-        p_element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-
-		if (elapsed < p_timeextent) { 
-			window.requestAnimationFrame(step);
-		} else {
-            p_element.style.display = 'none';
-            if (p_finalcallback) {
-				p_finalcallback();
-			}
-		}	
-
-	}
-
-	window.requestAnimationFrame(step);
-}
-
-function DivFader(p_elemid, p_timeextent, opt_ext_finalize) { // p_fadingheartbeat) {
-	
-	// Constantes
-	// MessagesControllerParams é especifico de cada aplicação, deve estar no init-xxxx.js
-	this.elemid = null;
-	this.timeextent = 0;
-	
-	this.isvisible = false;
-	this.inited = false;
-	this.init = function() {
-
-		if (this.inited) {
-			return;
-		}
-		var msgsdiv = document.getElementById(this.elemid);
-		
-		if (msgsdiv) {
-			attEventHandler(msgsdiv, 'click',
-				function(evt) {
-					MessagesController.hideMessage(true);
-					return finishEvent(evt);
-				}
-			);
-		}
-		this.inited = true;
-	};
-	this.setup = function(p_elemid, p_timeextent, opt_ext_finalize) {  // p_fadingheartbeat) {
-		this.elemid = p_elemid;
-		this.isvisible = true;
-		this.timeextent = p_timeextent;
-		this.ext_finalize = opt_ext_finalize;
-		
-		this.init();
-	};
-	this.finalize = function() {
-		this.isvisible = false;
-		if (this.ext_finalize) {
-			this.ext_finalize();
-		}
-	};
-	
-	this.hideMessage = function(do_fadeout) {
-		if (!this.isvisible) {
-			return;
-		}
-		var msgsdiv = document.getElementById(this.elemid);
-
-		if (do_fadeout) {
-			fadeoutAnimFrame(msgsdiv, 
-							this.timeextent,
-							this.finalize);
-		} else {
-			if (msgsdiv!=null) {
-				msgsdiv.style.display = 'none';
-			}
-			this.finalize();
-		}
-	};
-	
-	this.setup(p_elemid, p_timeextent, opt_ext_finalize);  
-}
-
 function changeAtrribution(p_nodes) {
 	if (p_nodes!=null && p_nodes.length > 0) {
 		var node = p_nodes[0];
@@ -235,6 +139,155 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 
 }
 
+
+function initialAnimation () {
+	
+	this.winsize = {
+		width: window.innerWidth || document.body.clientWidth,
+		height: window.innerHeight || document.body.clientHeight,
+	};
+	
+	this.init_offset_x = 0.3;
+	this.hinge = {
+			x: 0.7, y: 0.98
+		};
+	this.m1 = - (1 - this.hinge.y) / (this.hinge.x - this.init_offset_x);
+	this.m2 = - this.hinge.y / (1 - this.hinge.x),
+	this.b1 = 1 - (m1 * this.init_offset_x), 
+	this.b2 = this.hinge.y - (m2 * this.hinge.x)
+	
+	this.rnd = function(p_val) {
+		return p_val; // Math.round(p_val * 100) / 100;
+	}
+	
+	this.stepperq = function(p_elapsedq) {
+		let ret = this.rnd(this.b1 + this.m1 * p_elapsedq);
+		if (ret <= this.hinge.y) {
+			ret =  this.rnd(this.b2 + this.m2 * p_elapsedq);
+		}
+		return ret;
+	};
+	
+	this.topfunc = function(p_elapsedq) {
+		const maxv = (this.winsize.height - (this.winsize.height / 4)) / 2.0;
+		const minv = 12;
+		
+		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
+		return (ret < minv ? minv : ret);		
+	};
+		
+	this.widfunc = function(p_elapsedq) {
+		const maxw = this.winsize.width / 6;
+		const minw = 130;
+		
+		let ret = minw + (maxw-minw) * this.stepperq(p_elapsedq);
+		return (ret < minw ? minw : ret);		
+	};
+
+	this.leftfunc = function(p_elapsedq) {
+		const maxv = (this.winsize.width - (this.winsize.width / 4)) / 2.0;
+		const minv = 60;
+		
+		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
+		return (ret < minv ? minv : ret);		
+	};
+
+	this.fntszfunc = function(p_elapsedq) {
+		const maxv = 42;
+		const minv = 22;
+		
+		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
+		return (ret < minv ? minv : ret);		
+	};
+
+	this.animItems = {
+		"logofloater": {
+			"top": function(p_elapsedq) {
+				return this.topfunc(p_elapsedq);
+			},
+			"left": function(p_elapsedq) {
+				return this.leftfunc(p_elapsedq);
+			},
+			"font-size": function(p_elapsedq) {
+				return this.fntszfunc(p_elapsedq);
+			}
+			
+		},
+		"logo": {
+			/* "top": function(p_elapsedq) {
+				return this.topfunc(p_elapsedq);
+			},
+			"left": function(p_elapsedq) {
+				return this.leftfunc(p_elapsedq);
+			}, */
+			"width": function(p_elapsedq) {
+				return this.widfunc(p_elapsedq);
+			}
+			
+		},
+
+	};
+		
+	
+	this.run = function() {
+		
+		let start = null;
+		const p_timeextent = INITIAL_ANIM_MSECS;
+
+		function execanimstep(p_elapsedq) {		
+			let f, wdg;
+			for (let k in this.animItems) {
+				wdg = document.getElementById(k);
+				if (wdg == null) {
+					break;
+				}
+				for (let prop in this.animItems[k]) {
+					f = this.animItems[k][prop];
+					wdg.style[prop] = f(p_elapsedq) + "px";
+				}
+			}
+		}
+		
+		function finalstep() {
+			execanimstep(1);
+			const l = [
+				["logotxt", false],
+				["gridDivContainer", true],
+				["loc_inputbox", true]
+			];
+			for (let w,i=0; i<l.length; i++) {
+				w = document.getElementById(l[i][0]); 
+				if (w) {
+					w.style.visibility = l[i][1] ? "visible" : "hidden";
+				}
+			}
+		}
+		
+		function animstep(timestamp) {
+			if (start==null) {
+				start = timestamp;
+			}
+			const elapsed = timestamp - start;
+			let elapsedq = elapsed / p_timeextent;
+			
+			elapsedq = (elapsedq <= 1 ? elapsedq : 1);		
+			execanimstep(elapsedq);
+
+			if (elapsed <= p_timeextent) { 
+				window.requestAnimationFrame(animstep);
+			} else {
+				finalstep();
+			}	
+
+		}
+		window.requestAnimationFrame(animstep);
+	};
+	
+	this.run();
+
+	
+}
+
 function init_ui() {
 	// Init UI não-ESRI
 	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
@@ -251,16 +304,10 @@ function init_ui() {
 	// ajustar ao tamanho disponível 
 	sizeWidgets();
 
-	// Titulo que se desvanece
-	var titlefader = new DivFader("titlearea", TITLE_FADING_MSECS, 
-		function() {
-			const lc = document.getElementById("loc_inputbox");
-			if (lc) {
-				lc.style.visibility = "visible";
-			}
-		}
-	);
-	titlefader.hideMessage(true);
+	initialAnimation();
+
+
+	
 }
 
 (function() {
