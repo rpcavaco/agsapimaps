@@ -71,7 +71,7 @@ body,
 	font-size: 36px;	
 }	
 
-#logo {
+#logofloater {
 	position: absolute;
 	/*top: 12px;
 	left: 60px;
@@ -142,7 +142,7 @@ body,
 }
 
 .attrs-list tr:nth-child(even) { 
-	background-color: #eee; 
+	background-color: #e0e0e080; 
 }
 
 /* .attrs-list li:nth-child(even) { 

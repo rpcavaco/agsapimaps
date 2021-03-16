@@ -113,7 +113,7 @@ var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistema
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
 
-var TITLE_FADING_MSECS = 250;
+var INITIAL_ANIM_MSECS = 6000;
 
 var HIGHLIGHT_OPTS = {
 	color: [255, 255, 0, 1],

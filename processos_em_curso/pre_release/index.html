@@ -15,7 +15,7 @@
 	
     <link rel="stylesheet" href="css/layout.css">
     <!--<link rel="stylesheet" href="/esri_js_api/4.18/dgrid/css/dgrid.css"> -->
-	<link rel="stylesheet" href="/esri_js_api/4.18/esri/themes/light/main.css" />
+	<link rel="stylesheet" href="/esri_js_api/4.18/esri/themes/light-twist/main.css" />
 
     <!-- <link rel="stylesheet" href="css/layout.css"/> -->
 
@@ -30,16 +30,19 @@
 
 </head> 
 <body> 
+	<div id="logofloater">
 	<img id="logo" src="media/splash-logo.png" />
-
-	<div id="titlearea" class="semi-square">
-		<p>Gestão de Operações Urbanísticas</p>
+		<div id="logotxt">Gestão de <br />Operações<br />Urbanísticas</div>
 	</div>
+
+	<!--<div id="titlearea" class="semi-square">
+		<p>Gestão de Operações Urbanísticas</p>
+	</div>-->
 
 	<div>
 		<!-- Autocomplete -->
 		<div id="loc_content">
-			<input id="loc_inputbox" type="text" autocomplete="off">
+			<input id="loc_inputbox" type="text" style="visibility: hidden" autocomplete="off">
 			<div style="visibility: hidden" id="loc_cleansearchbtn" class="semi-square unselectable">Limpar</div>
 			<div style="display: none;" id="loc_resultlistarea">
 			</div>
@@ -47,7 +50,7 @@
 	</div>
 
 	<div id="viewDiv">
-		<div class="esri-ui-bottom-right esri-ui-corner">
+		<div id="gridDivContainer" class="esri-ui-bottom-right esri-ui-corner" style="visibility: hidden">
 			<div id="gridDiv" class="esri-component esri-widget">
 				<h2>Processos em curso<span id="sp-emloteam">, em loteamento</span></h2>
 				<p id="zoominmsg">Faça 'zoom in' para ver lotes.</p>
