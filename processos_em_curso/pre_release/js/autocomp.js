@@ -776,7 +776,7 @@ class LocAutoCompleter extends AutoCompleter {
 	}	
 	
 	enterHandler(p_rec) {
-		let ret = false;
+		let len, ret = false;
 		if (p_rec) {
 			if (p_rec.cont !== undefined) {
 				len = this.setText(p_rec.cont);

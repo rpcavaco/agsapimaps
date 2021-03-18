@@ -22,18 +22,23 @@ var MAPLAYERS = {
 
 var FEATLAYERS = {
     lyr10_lotesProcEmCurso: {
-		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer",
 		layerId: 0
 	},
     lyr11_loteamProcEmCurso: {
-		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer",
 		layerId: 1
+	},
+    lyr12_locSRUProcEmCurso: {
+		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06/MapServer",
+		layerId: 2
 	}	
 }
 
 var LYR_TITLES = {
 	lyr10_lotesProcEmCurso: "Lotes com processos em curso",
-	lyr11_loteamProcEmCurso: "Loteamentos com processos em curso"
+	lyr11_loteamProcEmCurso: "Loteamentos com processos em curso",
+	lyr12_locSRUProcEmCurso: "Licenciamento SRU em curso"	
 }
 
 var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
@@ -75,13 +80,17 @@ var QUERIES_CFG = {
 
 var LYRS_SELECCAO_INTERACTIVA = [
 	"lyr10_lotesProcEmCurso",
-	"lyr11_loteamProcEmCurso"
+	"lyr11_loteamProcEmCurso",
+	"lyr12_locSRUProcEmCurso"
 ];
 
 var LYRS_DA_LEGENDA = [
 	"lyr10_lotesProcEmCurso",
-	"lyr11_loteamProcEmCurso"
+	"lyr11_loteamProcEmCurso",
+	"lyr12_locSRUProcEmCurso"
 ];
+
+VIEW_SRID = 3763;
 
 var VIEW_EXTENT = {
 	xmin: -47200.0,
@@ -89,7 +98,7 @@ var VIEW_EXTENT = {
 	xmax: -34700.0,
 	ymax: 169500.0,
 	spatialReference: {
-		wkid: 3763
+		wkid: VIEW_SRID
 	}
 };
 
@@ -134,17 +143,38 @@ var AJAX_ENDPOINTS = {
 //  ===========================================================================
 
 
-//  ===========================================================================
-//  Configuração específica
-//  ---------------------------------------------------------------------------
+
+// Ao ativar as layers indicadas nas chaves deste dict,
+//	 fazer-se-á zoom aos extents indicados, caso o extent
+//   corrente esteja fora.
 //
-//  A. Lista de atributos
+//	SE houver repetições / sobreposições de extents ativos para o 
+//	 mesmo contexto de layers, apenas o primeiro extent é aplicado.
 // 
+var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
+	lyr12_locSRUProcEmCurso: {
+		xmin: -41900.0,
+		ymin: 163200.0,
+		xmax: -39400.0, 
+		ymax: 164900.0,
+		spatialReference: {
+			wkid: VIEW_SRID
+		}
+	}
+}
+
+//  Lista de atributos
+// 
+
 var ATTRS_CFG = {
 	nud_capa: ["Processo", null],
+	n_processo: ["Processo", null],
 	// nud_reg: ["Documento",  null],
 	desc_tipo_proc:  ["Tipo de processo", null],
+	tipo_processo: ["Tipo de processo", null],
 	desc_oper_urb:  ["Operação urbanística", null],
+	op_urbanistica: ["Operação urbanística", null], 
+	uso: ["Uso", null], 
 	num_conservatoria:  ["Registo predial", null],
 	requerente: ["Requerente", null], 
 
@@ -160,6 +190,7 @@ var ATTRS_CFG = {
 	total:  ["Número total de fogos", null],
 	// abc:  ["Área bruta construção (m2)", null],
 	atc:  ["Área total construção (m2)", null],
+	atc2:  ["Área total construção (m2)", null],
 	// "estorcam:  ["Estimativa orçamental (€)", null],
 	volum_constr:  ["Volume construção", null],
 	area_implant:  ["Área implantação (m2)", null],
@@ -167,5 +198,6 @@ var ATTRS_CFG = {
 	pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
 	pisos_acima_csol:  ["Pisos acima cot.soleira", null],
 	prazo:  ["Prazo (dias)", null],
-	data_emissao:  ["Data emissão título", 'date']
+	data_emissao:  ["Data emissão título", 'date'],
+	aru: ["Área reabilitação urbana",null]
 };

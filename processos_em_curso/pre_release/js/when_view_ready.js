@@ -87,7 +87,7 @@ var LayerInteractionMgr = {
 })();
 
 
-function when_view_ready(p_view, p_griddiv) {
+function when_view_ready(p_view, p_griddiv, p_extclass) {
 
 	let hlight; //, grid;
 
@@ -97,18 +97,34 @@ function when_view_ready(p_view, p_griddiv) {
 		const rec_rps = new RecordPanelSwitcher();
 		rec_rps.max_attrs_per_page = 12;
 		rec_rps.registos_fmt = "Processo {0} de {1}"
+		
+		const growthOffset = 2 * (p_view.scale / 1000.0);
+		const srchEnv = new p_extclass({
+			xmin: pt.x - growthOffset,
+			ymin: pt.y - growthOffset,
+			xmax: pt.x + growthOffset,
+			ymax: pt.y + growthOffset,
+			spatialReference: {
+				wkid: VIEW_SRID
+			}
+		});
 
 		const selLayer = LayerInteractionMgr.getSelectedLayer();
 
 		selLayer.queryObjectIds({
-			geometry: pt,
+			geometry: srchEnv,
 			spatialRelationship: "intersects",
 			returnGeometry: false,
 			outFields: ["*"]
 		}).then(
-			function(objectIds) {
+			function(_objectIds) {
 				
-				if(objectIds==null || objectIds.length==0) { return; }
+				// console.log("objectIds:", _objectIds);
+				
+				if(_objectIds==null || _objectIds.length==0) { return; }
+				
+				// apenas um objectid de cada vez
+				objectIds = [_objectIds[0]];
 				
 				p_view.whenLayerView(selLayer).then(
 					function(layerView) {
@@ -244,3 +260,5 @@ function when_view_ready(p_view, p_griddiv) {
 			
 
 }
+
+

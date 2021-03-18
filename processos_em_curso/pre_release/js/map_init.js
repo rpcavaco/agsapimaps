@@ -220,7 +220,6 @@ require([
 	}
 	
 	layerorder.sort();
-	layerorder.reverse();
 
 	for (let i=0; i<layerorder.length; i++) {
 		layers.push(layerDict[layerorder[i]]);
@@ -293,24 +292,14 @@ require([
 						content: "legend",
 						open: (lidx == 0)
 					};
-					(function(p_item, p_this_layerid, p_rbli) {
+					(function(p_item, p_this_layerid, p_rbli, p_mapview) {
 						p_item.watch("visible", function(visible){
+							// evitar a repetição massiça causada pelo sucessivo firing deste evento
 							if (EventFire.checkEqLastValueChange("layerviz", p_this_layerid, visible)) {
 								return;
 							}
 							for (let lyrId in p_rbli) {
-								if (!visible) {
-									if (lyrId != p_this_layerid && !p_rbli[lyrId].visible) {
-										p_rbli[lyrId].visible = true;
-										p_rbli[p_this_layerid].panel.open = false;
-										p_rbli[lyrId].panel.open = true;
-
-										if (typeof LayerInteractionMgr != 'undefined') {
-											LayerInteractionMgr.select(lyrId);
-										}
-										break;
-									}
-								} else {
+								if (visible) {
 									if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
 										p_rbli[lyrId].visible = false;
 										p_rbli[lyrId].panel.open = false;
@@ -322,8 +311,20 @@ require([
 									}
 								}
 							}
+							
+							for (let lyrk in EXTENTS2CHK_ON_LYRVIZ_CHANGE) {
+								if (EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk] === undefined) {
+									continue;
+								}
+								const ext_to = new Extent(EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk]);
+								if (visible && p_this_layerid == lyrk && !p_mapview.extent.intersects(ext_to)) {
+									p_mapview.goTo({ target: ext_to });
+									break;
+								}
+							}
+
 						});
-					})(item, item.layer.id, radioButtonLayerItems);
+					})(item, item.layer.id, radioButtonLayerItems, view);
 					radioButtonLayerItems[item.layer.id] = item;
 
 				} else {
@@ -420,7 +421,7 @@ require([
 		QueriesMgr.mapView = view;
 
 		if (selLayer!=null && typeof when_view_ready === 'function') {	
-			when_view_ready(view, "queryResults");
+			when_view_ready(view, "queryResults", Extent);
 		}
 		
 	});

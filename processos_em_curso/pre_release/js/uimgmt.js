@@ -253,6 +253,7 @@ function initialAnimation () {
 			const l = [
 				["logotxt", false],
 				["gridDivContainer", true],
+				["loading", true],
 				["loc_inputbox", true]
 			];
 			for (let w,i=0; i<l.length; i++) {
