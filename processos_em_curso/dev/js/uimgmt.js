@@ -137,6 +137,27 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
         }*/
 	}
 
+	altQueriesHandler(p_trimmed_qrystr) {
+	
+		const notTopoRegEx = new RegExp("(nud|nup|p|\\d+)\/", 'i');
+		const nupRegEx = new RegExp("^(nud|nup|p)\/\\d{3,8}\/\\d{2,4}", 'i');
+		const alvSRUEx = new RegExp("^\\d{3,8}\/\\d{2,4}\/sru", 'i');
+		if (notTopoRegEx.test(p_trimmed_qrystr)) {
+			this.showRecordsArea(false);
+			if (nupRegEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ]);
+			}
+			if (alvSRUEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ]);
+			}
+			return false;
+			
+		}
+		return true;		
+	}
+					
+	
+
 }
 
 
@@ -173,7 +194,7 @@ function initialAnimation () {
 		const minv = 12;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
 	};
 		
 	this.widfunc = function(p_elapsedq) {
@@ -181,7 +202,7 @@ function initialAnimation () {
 		const minw = 130;
 		
 		let ret = minw + (maxw-minw) * this.stepperq(p_elapsedq);
-		return (ret < minw ? minw : ret);		
+		return (ret < minw ? minw : ret).toString() + "px";		
 	};
 
 	this.leftfunc = function(p_elapsedq) {
@@ -189,7 +210,7 @@ function initialAnimation () {
 		const minv = 60;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
 	};
 
 	this.fntszfunc = function(p_elapsedq) {
@@ -197,7 +218,21 @@ function initialAnimation () {
 		const minv = 22;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
+	};
+
+	this.clrfunc = function(p_elapsedq) {
+		const clr1 = "#fff";
+		const clr2 = "#6b80b5";
+		const clr3 = "#0f2f7e";
+		
+		if (this.stepperq(p_elapsedq) < 0.5) {
+			return clr3;
+		} else if (this.stepperq(p_elapsedq) < 0.8) {
+			return clr2;
+		} else {
+			return clr1;
+		}
 	};
 
 	this.animItems = {
@@ -225,6 +260,12 @@ function initialAnimation () {
 			}
 			
 		},
+		"logotxt": {
+			"color": function(p_elapsedq) {
+				return this.clrfunc(p_elapsedq);
+			}
+			
+		},
 
 	};
 		
@@ -243,7 +284,7 @@ function initialAnimation () {
 				}
 				for (let prop in this.animItems[k]) {
 					f = this.animItems[k][prop];
-					wdg.style[prop] = f(p_elapsedq) + "px";
+					wdg.style[prop] = f(p_elapsedq);
 				}
 			}
 		}
@@ -291,7 +332,7 @@ function initialAnimation () {
 
 function init_ui() {
 	// Init UI não-ESRI
-	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
+	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.locqry, VIEW_SRID, 
 		{
 			parentdiv: "loc_content",
 			textentry: "loc_inputbox",

@@ -16,21 +16,21 @@ var LYR_SELECCAO_INTERACTIVA = 4;
 // Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
-    base: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer" },
-    lyr99_top: { url: "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer" }
+    base: { url: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer" },
+    lyr99_top: { url: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer" }
 }
 
 var FEATLAYERS = {
     lyr10_lotesProcEmCurso: {
-		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 0
 	},
     lyr11_loteamProcEmCurso: {
-		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 1
 	},
     lyr12_locSRUProcEmCurso: {
-		url: "/arcgis/rest/services/GOU/GOU_ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 2
 	}	
 }
@@ -41,25 +41,32 @@ var LYR_TITLES = {
 	lyr12_locSRUProcEmCurso: "Licenciamento SRU em curso"	
 }
 
-var FEATURE_MAP = "/arcgis/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer";
+var AJAX_ENDPOINTS = {
+	locqry: "https://loc.cm-porto.net/loc/c/lq",
+	feature_map: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
+	spec_queries: "https://munisig.cm-porto.pt/riscobdt/doget"
+}
 
 var QUERIES_CFG = {
 
 	eixosVia: {
 		gtype: "ln",
-		url: FEATURE_MAP,
+		type: "onfeatlayer",
+		url: AJAX_ENDPOINTS.feature_map,
 		template: "cod_topo='{0}'",
 		layerId: 3,
 		symb: {
 			type: "simple-line",
 			width: 4,
 			color: [255, 100, 0]
-		}
+		},
+		expand: 1.5
 	},
 
 	numPol: {
 		gtype: "pt",
-		url: FEATURE_MAP,
+		type: "onfeatlayer",
+		url: AJAX_ENDPOINTS.feature_map,
 		template: "cod_topo='{0}' and n_policia='{1}'",
 		zoomscale: 800,
 		layerId: 2,
@@ -72,7 +79,25 @@ var QUERIES_CFG = {
               color: [ 255, 30, 30 ],
               width: 4  // points
             }
-		}
+		},
+		expand: 1.5
+	},
+	
+	byDoc: {
+		gtype: "pol",
+		url: AJAX_ENDPOINTS.spec_queries,
+		zoomscale: 800,
+		symb: {
+			type: "simple-line",
+			width: 4,
+			color: [176, 6, 108]
+		},
+		qrylyr2maplyr: {
+			nao_alv: "lyr10_lotesProcEmCurso",
+			alvara: "lyr11_loteamProcEmCurso",
+			alvsru: "lyr12_locSRUProcEmCurso"
+		},
+		expand: 4.0
 	}
 
 	
@@ -137,9 +162,7 @@ var ALT_EXPANSAO_PAINEL_DADOS = [
 	[20, "320px"] 
 ];
 
-var AJAX_ENDPOINTS = {
-	QRY: "https://loc.cm-porto.net/loc/c/lq"
-}
+
 //  ===========================================================================
 
 
@@ -153,13 +176,16 @@ var AJAX_ENDPOINTS = {
 // 
 var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
 	lyr12_locSRUProcEmCurso: {
+		env: {
 		xmin: -41900.0,
 		ymin: 163200.0,
 		xmax: -39400.0, 
 		ymax: 164900.0,
 		spatialReference: {
 			wkid: VIEW_SRID
-		}
+			},
+		},
+		scale: 2000 
 	}
 }
 
@@ -178,9 +204,9 @@ var ATTRS_CFG = {
 	num_conservatoria:  ["Registo predial", null],
 	requerente: ["Requerente", null], 
 
-	/* num_titulo:  ["Número de tí­tulo", null],
+	num_titulo:  ["Número de título", null],
 	
-	data_entrada:  ["Data entrada", 'date'], 
+	/* data_entrada:  ["Data entrada", 'date'], 
 
 	aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
 	aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'date'],

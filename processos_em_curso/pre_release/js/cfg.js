@@ -138,7 +138,7 @@ var ALT_EXPANSAO_PAINEL_DADOS = [
 ];
 
 var AJAX_ENDPOINTS = {
-	QRY: "https://servsig.cm-porto.net/loc/c/lq"
+	QRY: "https://servsig.cm-porto.pt/loc/c/lq"
 }
 //  ===========================================================================
 

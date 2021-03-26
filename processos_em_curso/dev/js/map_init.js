@@ -3,6 +3,7 @@ var QueriesMgr = {
 	
 	queries: {},
 	mapView: null,
+	xhr: null, 
 	resultsLayers: {
 		pt: null,
 		ln: null,
@@ -28,16 +29,27 @@ var QueriesMgr = {
         }
 	},
 	
-	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
+	displayResults: function(p_results, p_symb, p_qrykey, opt_where_txt, opt_adic_callback) {
 
-		const gtype = this.queries[p_qrykey]["gtype"];
-		this.clearResults(gtype);
 		const features = p_results.features.map(function(graphic) {
 			graphic.symbol = p_symb;
 			return graphic;
 		});
 
-		if (features.length > 0) {
+		if (opt_adic_callback) {
+			opt_adic_callback(p_qrykey, p_results);
+		}
+
+		this.displayFeats(features, p_qrykey, opt_where_txt)
+
+	},
+	
+	displayFeats: function(p_feats, p_qrykey, opt_where_txt) {
+
+		const gtype = this.queries[p_qrykey]["gtype"];
+		this.clearResults(gtype);
+		
+		if (p_feats.length > 0) {
 
 			if (this.mapView) {
 
@@ -46,47 +58,137 @@ var QueriesMgr = {
 					if (this.queries[p_qrykey]["zoomscale"] !== undefined) {
 						pzoom_scale = parseInt(this.queries[p_qrykey]["zoomscale"]);
 					}			
-                    this.mapView.goTo({ target: features, scale: pzoom_scale });
+                    this.mapView.goTo({ target: p_feats, scale: pzoom_scale });
 				} else {
 					let extent = null;
-					for (let i=0; i<features.length; i++) {
+					for (let i=0; i<p_feats.length; i++) {
 						if (extent) {
-							extent.union(features[i].geometry.extent);
+							extent.union(p_feats[i].geometry.extent);
 						} else {
-							extent = features[i].geometry.extent.clone();
+							extent = p_feats[i].geometry.extent.clone();
 						}
 					}
 			
-					extent = extent.clone().expand(1.5);
+					extent = extent.clone().expand(this.queries[p_qrykey]["expand"]);
 					this.mapView.goTo({ target: extent });
 				}
-				
 			}
-			this.resultsLayers[gtype].addMany(features);
+			this.resultsLayers[gtype].addMany(p_feats);
 
 		} else {
-			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", p_where_txt);
+			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", opt_where_txt);
 		}
+	},
 
+    abortPreviousSearchCall: function() {
+    	if (this.xhr != null) {
+    		this.xhr.abort();
+    		this.xhr = null;
+    	}
 	},
 	
-	executeQuery: function(p_qrykey, p_argslist) {
+	executeQuery: function(p_qrykey, p_argslist, opt_adic_callback) {
+		
+		if (this.queries[p_qrykey]["type"] == "onfeatlayer") {
+			
 		const fl = this.queries[p_qrykey]["flayer"];
 		const queryObj = fl.createQuery();
 		queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
-		(function(p_this, p_qryobj, p_symb) {
+			(function(p_this, p_qryobj, p_symb, opt_adic_callback) {
 			fl.queryFeatures(p_qryobj).then(function(qresults) {
-				p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where);
+					p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where, opt_adic_callback);
 			});
-		})(this, queryObj, this.queries[p_qrykey]["symb"]);
+			})(this, queryObj, this.queries[p_qrykey]["symb"], opt_adic_callback);
+			
+		} else {
+			
+			this.abortPreviousSearchCall();
+			(function(p_this, pp_qrykey, p_symb) {
+
+				p_this.xhr = ajaxSender(p_this.queries[pp_qrykey]["url"], function() { 
+
+					if (this.readyState === this.DONE) {
+
+						if (this.status == 200) {
+
+							if (this.responseText.length < 1) {
+								return;
+							}
+							let jresp;
+
+							try {
+								jresp = JSON.parse(this.responseText);
+							} catch(e) {
+								console.log(this.responseText);
+								console.error(e);
+								return;
+							}
+							
+							const resp_keys = Object.keys(jresp);
+							let maplayer;
+							// HARDCODED -- só vai ao primeiro resultado
+							if (resp_keys.length >= 1) {
+								
+								maplayer = p_this.queries[pp_qrykey]["qrylyr2maplyr"][resp_keys[0]];
+								if (maplayer) {
+									RadioButtonLayersControl.changeVisibilty(maplayer, true, true);
+								}					
+													
+								const _gtype0 = jresp[resp_keys[0]]['geomtype'].toLowerCase();
+								const _gtype1 = _gtype0.replace("st_", "")
+								const _gtype2 = _gtype1.replace("multi", "")
+								const gtype = _gtype2.replace("linestring", "polyline")
+								
+								const spref = jresp[resp_keys[0]]['srid'];
+								
+								let feat, geom, attrs, newGraphicMData, graphicsList = [];
+								
+								for (let i=0; i<jresp[resp_keys[0]].features.length; i++) {
+									
+									feat = jresp[resp_keys[0]].features[i];
+									geom = feat.geometry;
+									attrs = feat.attributes;
+
+									newGraphicMData = {
+										type: gtype,
+										rings: geom.paths,
+										spatialReference: { wkid:spref }
+									};
+
+									graphicsList.push(new QueriesMgr.graphicReference({
+										geometry: newGraphicMData,
+										symbol: p_symb,
+										attributes: attrs
+									}));
+								}
+								
+								p_this.displayFeats(graphicsList,  pp_qrykey, null);
+							} 
+						}
+					}
+					/* TODO - else mandar para a records area do autocomplete */
+					
+					
+				}, JSON.stringify({
+						alias:"pec_findbydoc",
+						filtervals: p_argslist, 
+						lang:"pt"
+					}), 
+					p_this.xhr
+				);
+			})(this, p_qrykey, this.queries[p_qrykey]["symb"]);
+		}
 	},
 	
 	init: function() {	
 		for (let k in QUERIES_CFG) {
 			this.queries[k] = {};
 			this.queries[k]["gtype"] = QUERIES_CFG[k]["gtype"];
+			this.queries[k]["type"] = QUERIES_CFG[k]["type"];
 			this.queries[k]["url"] = QUERIES_CFG[k]["url"];
+			if (QUERIES_CFG[k]["template"] !== undefined) {
 			this.queries[k]["template"] = QUERIES_CFG[k]["template"];
+            }			
 			this.queries[k]["symb"] = QUERIES_CFG[k]["symb"];
 			if (QUERIES_CFG[k]["layerId"] !== undefined) {
                 this.queries[k]["layerId"] = QUERIES_CFG[k]["layerId"];
@@ -94,6 +196,16 @@ var QueriesMgr = {
 			if (QUERIES_CFG[k]["zoomscale"] !== undefined) {
                 this.queries[k]["zoomscale"] = QUERIES_CFG[k]["zoomscale"];
             }
+			if (QUERIES_CFG[k]["qrylyr2maplyr"] !== undefined) {
+                this.queries[k]["qrylyr2maplyr"] = QUERIES_CFG[k]["qrylyr2maplyr"];
+            }
+			if (QUERIES_CFG[k]["expand"] !== undefined) {
+                this.queries[k]["expand"] = QUERIES_CFG[k]["expand"];
+            } else {
+                this.queries[k]["expand"] = 1.0;
+			}
+			
+			
 		}
 	}
 	
@@ -134,9 +246,38 @@ EventFire = {
 	}
 };
 
+RadioButtonLayersControl = {
+	layerItems: {},
+	set: function(p_key, p_value) {
+		this.layerItems[p_key] = p_value;
+	},
+	changeVisibilty(p_this_layerid, p_visible, opt_do_change) {
+		for (let lyrId in this.layerItems) {
+			if (p_visible) {
+				if (lyrId != p_this_layerid && this.layerItems[lyrId].visible) {
+					this.layerItems[lyrId].visible = false;
+					this.layerItems[lyrId].panel.open = false;
+					this.layerItems[p_this_layerid].panel.open = true;
+
+					if (typeof LayerInteractionMgr != 'undefined') {
+						LayerInteractionMgr.select(p_this_layerid);
+					}
+				}
+			}
+		}
+		if (opt_do_change) {
+			this.layerItems[p_this_layerid].visible = p_visible;
+			this.layerItems[p_this_layerid].panel.open = p_visible;
+		}
+	}
+
+	
+};
+
 require([
 	"esri/Map",
 	"esri/Basemap",
+	"esri/Graphic",
 	"esri/layers/MapImageLayer",
 	"esri/layers/FeatureLayer",
 	"esri/layers/GraphicsLayer",
@@ -152,6 +293,7 @@ require([
 ], function(
 	Map,
 	Basemap,
+	Graphic,
 	MapImageLayer,
 	FeatureLayer,
 	GraphicsLayer,
@@ -231,6 +373,9 @@ require([
         layers.push(QueriesMgr.resultsLayers[k]);
     }
 	
+	QueriesMgr.graphicReference = Graphic;
+	QueriesMgr.extn = Extent;
+	
 	const the_map = new Map({
 		basemap: basemap,
 		layers: layers
@@ -238,11 +383,13 @@ require([
 	
 	//  instanciar as FeatureLayer das pesquisas
 	for (let k in QueriesMgr.queries) {
+		if (QueriesMgr.queries[k]["type"] == "onfeatlayer") {
 		if (QueriesMgr.queries[k]["layerId"] !== undefined) {
 			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"], layerId: QueriesMgr.queries[k]["layerId"] });	
 		} else {
 			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"] });	
 		}	
+	}	
 	}	
 	
 	const view = new MapView({
@@ -259,7 +406,7 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-	const radioButtonLayerItems = {};
+	// const radioButtonLayerItems = {};
 
 	const layerList = new LayerList({
 		view: view,
@@ -292,40 +439,29 @@ require([
 						content: "legend",
 						open: (lidx == 0)
 					};
-					(function(p_item, p_this_layerid, p_rbli, p_mapview) {
+					(function(p_item, p_this_layerid, p_mapview) {
 						p_item.watch("visible", function(visible){
 							// evitar a repetição massiça causada pelo sucessivo firing deste evento
 							if (EventFire.checkEqLastValueChange("layerviz", p_this_layerid, visible)) {
 								return;
 							}
-							for (let lyrId in p_rbli) {
-								if (visible) {
-										if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
-										p_rbli[lyrId].visible = false;
-										p_rbli[lyrId].panel.open = false;
-										p_rbli[p_this_layerid].panel.open = true;
-
-										if (typeof LayerInteractionMgr != 'undefined') {
-											LayerInteractionMgr.select(p_this_layerid);
-										}
-									}
-								}
-							}
+							RadioButtonLayersControl.changeVisibilty(p_this_layerid, visible);
 							
 							for (let lyrk in EXTENTS2CHK_ON_LYRVIZ_CHANGE) {
 								if (EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk] === undefined) {
 									continue;
 								}
-								const ext_to = new Extent(EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk]);
-								if (visible && p_this_layerid == lyrk && !p_mapview.extent.intersects(ext_to)) {
+								const ext_to = new Extent(EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk].env);
+								const scale_to = EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk].scale;
+								if (visible && p_this_layerid == lyrk && (!p_mapview.extent.intersects(ext_to) || p_mapview.scale > (2.0 * scale_to))) {
 									p_mapview.goTo({ target: ext_to });
 									break;
 								}
 							}
 
 						});
-					})(item, item.layer.id, radioButtonLayerItems, view);
-					radioButtonLayerItems[item.layer.id] = item;
+					})(item, item.layer.id, view);
+					RadioButtonLayersControl.set(item.layer.id, item);
 
 				} else {
 					item.layer.listMode = "hide";

@@ -352,6 +352,11 @@ class AutoCompleter {
 		// para implementar			em classe estendida
 		throw new Error("afterSearchExec not implemented");	
 	}
+	
+	altQueriesHandler(p_trimmed_qrystr) {
+		// para implementar			em classe estendida
+		throw new Error("altQueriesHandler not implemented");	
+	}
 
 	bindEventHandlers() {
 
@@ -466,9 +471,17 @@ class AutoCompleter {
 						p_this.deleteHandler();
 					}	
 					
-					if (this.prevEnteredText == usabletxt.trim()) {
+					const trimmed = usabletxt.trim();
+					if (this.prevEnteredText == trimmed) {
 						return false;
 					}
+					
+					// Outras pesquisas ----------------------------
+					if (!p_this.altQueriesHandler(trimmed)) {
+						return false;
+					}
+
+					// Final outras pesquisas ----------------------
 
 					if (p_this.checkInputTimerID != null) {
 						clearInterval(p_this.checkInputTimerID);
