@@ -1,22 +1,4 @@
 
-function valCount(p_rows, p_attrs_cfg) {
-    let maxcnt=0, valcount;
-    for (let i=0; i<p_rows.length; i++) {  
-        valcount = 0;
-        for (let fld in p_attrs_cfg) {
-            let preval = p_rows[i][fld];
-            if (preval == null || preval.length==0) {
-                continue;
-            }
-            valcount++;
-        }
-        if (valcount > maxcnt) {
-            maxcnt = valcount;
-        }
-    }   
-    return maxcnt;
-}
-
 var LayerInteractionMgr = {
 	interactionLayersIds: [],
 	selectedLayerId: null,
@@ -93,11 +75,7 @@ function when_view_ready(p_view, p_griddiv, p_extclass) {
 
 	function qryFeats(scrPt) {
 
-		const pt = p_view.toMap(scrPt);
-		const rec_rps = new RecordPanelSwitcher();
-		rec_rps.max_attrs_per_page = 12;
-		rec_rps.registos_fmt = "Processo {0} de {1}"
-		
+		const pt = p_view.toMap(scrPt);	
 		const growthOffset = 2 * (p_view.scale / 1000.0);
 		const srchEnv = new p_extclass({
 			xmin: pt.x - growthOffset,
@@ -164,53 +142,25 @@ function when_view_ready(p_view, p_griddiv, p_extclass) {
 				if (!relatedFeatureSetByObjectId) { return; }
 				// Create a grid with the data
 
-				rec_rps.clear();
+				RecordsViewMgr.clear("main");
 
 				Object.keys(relatedFeatureSetByObjectId)
 				.every(function(objectId){
 
 					// get the attributes of the FeatureSet
 					const relatedFeatureSet = relatedFeatureSetByObjectId[objectId];
+
+					if (!relatedFeatureSet.features.length) {
+						return;
+					}
+
 					const rows = relatedFeatureSet.features.map(function(feature) {
 						// console.log(feature.attributes);
 						return feature.attributes;
 					});
 
-					if (!rows.length) {
-						return;
-					}
 
-					// esconder msg introdutória
-					const mainmsgDiv = document.getElementById("mainmsg");
-					if (mainmsgDiv) {
-						mainmsgDiv.style.display = "none"
-					}
-					
-					const spEmLoteam = document.getElementById("sp-emloteam");
-					if (spEmLoteam) {
-						if (LayerInteractionMgr.selectedLayerId.indexOf("_loteam") > 1) {
-							spEmLoteam.style.visibility = 'visible';
-						} else {
-							spEmLoteam.style.visibility = 'hidden';
-						}
-					}
-
-					// expandir gridDiv
-					let valcount, heightv=null;
-
-					valcount = valCount(rows, ATTRS_CFG);
-					for (let i=0; i<ALT_EXPANSAO_PAINEL_DADOS.length; i++) {
-						if (ALT_EXPANSAO_PAINEL_DADOS[i][0] >= valcount) {
-							heightv = ALT_EXPANSAO_PAINEL_DADOS[i][1];
-							break;
-						}
-					}
-					if (heightv == null) {
-						// se heightv nao tiver sido definida, colocar valor mais alto
-						heightv = ALT_EXPANSAO_PAINEL_DADOS[ALT_EXPANSAO_PAINEL_DADOS.length-1][1];
-					}
-					rec_rps.generatePanels(rows, ATTRS_CFG, "queryResults", heightv);
-
+					RecordsViewMgr.show("main", rows);
 					// apenas o primeiro registo
 					return false;
 

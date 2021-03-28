@@ -1,19 +1,6 @@
 //  ===========================================================================
-//  Configuração geral
+//  Configuração 
 //  ---------------------------------------------------------------------------
-
-// Para modo WEBMAP -----------------------------------------------------------
-/*
-var WEBMAP_SOURCE = "https://portalsig.cm-porto.pt/portal";
-var PORTALITEM_ID = "8c75c44b8e734aa5aba643598f3c8c9e";
-
-var LYRS_DA_LEGENDA = [ 4 ];
-var LYR_SELECCAO_INTERACTIVA = 4;
-*/
-// ----------------------------------------------------------------------------
-
-
-// Para acesso direto a serviços ----------------------------------------------
 
 var MAPLAYERS = {
     base: { url: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_BW_SemFregs_PTTM06/MapServer" },
@@ -57,7 +44,7 @@ var LAYERVIZ_MODE = 'radiobutton'; // null ou 'radiobutton' -- visibilidade das 
 
 var AJAX_ENDPOINTS = {
 	locqry: "https://loc.cm-porto.net/loc/c/lq",
-	feature_map: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
+	qry_map: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
 	spec_queries: "https://munisig.cm-porto.pt/riscobdt/doget"
 }
 
@@ -66,7 +53,7 @@ var QUERIES_CFG = {
 	eixosVia: {
 		type: "onfeatlayer",
 		gtypes: ["polyline"],
-		url: AJAX_ENDPOINTS.feature_map,
+		url: AJAX_ENDPOINTS.qry_map,
 		template: "cod_topo='{0}'",
 		layerId: 3,
 		symb: {
@@ -82,7 +69,7 @@ var QUERIES_CFG = {
 	numPol: {
 		type: "onfeatlayer",
 		gtypes: ["point"],
-		url: AJAX_ENDPOINTS.feature_map,
+		url: AJAX_ENDPOINTS.qry_map,
 		template: "cod_topo='{0}' and n_policia='{1}'",
 		zoomscale: 800,
 		layerId: 2,
@@ -131,6 +118,54 @@ var QUERIES_CFG = {
 	}
 }
 
+var RECORD_PANELS_CFG = {
+	main: {
+		type: "switcher", // para já só 'switcher'
+		max_attrs_per_page: 10,
+		rotator_msg: "Processo {0} de {1}",
+		attr_cfg: {
+			nud_capa: ["Processo", null],
+			n_processo: ["Processo", null],
+			// nud_reg: ["Documento",  null],
+			desc_tipo_proc:  ["Tipo de processo", null],
+			tipo_processo: ["Tipo de processo", null],
+			desc_oper_urb:  ["Operação urbanística", null],
+			op_urbanistica: ["Operação urbanística", null], 
+			uso: ["Uso", null], 
+			num_conservatoria:  ["Registo predial", null],
+			requerente: ["Requerente", null], 
+
+			num_titulo:  ["Número de título", null],
+			
+			/* data_entrada:  ["Data entrada", 'epoch'], 
+
+			aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
+			aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'epoch'],
+
+			entrada:  ["Em 'entrada'", null], */
+
+			total:  ["Número total de fogos", null],
+			// abc:  ["Área bruta construção (m2)", null],
+			atc:  ["Área total construção (m2)", null],
+			atc2:  ["Área total construção (m2)", null],
+			// "estorcam:  ["Estimativa orçamental (€)", null],
+			volum_constr:  ["Volume construção", null],
+			area_implant:  ["Área implantação (m2)", null],
+			cercea:  ["Cércea",  null],
+			pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
+			pisos_acima_csol:  ["Pisos acima cot.soleira", null],
+			prazo:  ["Prazo (dias)", null],
+			data_emissao:  ["Data emissão título", 'epoch'],
+			aru: ["Área reabilitação urbana",null]
+		},
+		height_limits: [  // por numero de registos
+			//até num linhas, altura
+			[5, "140px"], 
+			[10, "280px"], 
+			[20, "380px"] 
+		]		
+	}
+};
 
 VIEW_SRID = 3763;
 
@@ -170,14 +205,6 @@ var HIGHLIGHT_OPTS = {
 	fillOpacity: 0.2
   }		
 
-var ALT_EXPANSAO_PAINEL_DADOS = [
-	//até num linhas, altura
-	[5, "180px"], 
-	[10, "280px"], 
-	[20, "320px"] 
-];
-
-
 // Ao ativar as layers indicadas nas chaves deste dict,
 //	 fazer-se-á zoom aos extents indicados, caso o extent
 //   corrente esteja fora.
@@ -200,41 +227,3 @@ var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
 	}
 }
 
-//  Lista de atributos
-// 
-
-var ATTRS_CFG = {
-	nud_capa: ["Processo", null],
-	n_processo: ["Processo", null],
-	// nud_reg: ["Documento",  null],
-	desc_tipo_proc:  ["Tipo de processo", null],
-	tipo_processo: ["Tipo de processo", null],
-	desc_oper_urb:  ["Operação urbanística", null],
-	op_urbanistica: ["Operação urbanística", null], 
-	uso: ["Uso", null], 
-	num_conservatoria:  ["Registo predial", null],
-	requerente: ["Requerente", null], 
-
-	num_titulo:  ["Número de título", null],
-	
-	/* data_entrada:  ["Data entrada", 'date'], 
-
-	aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
-	aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'date'],
-
-	entrada:  ["Em 'entrada'", null], */
-
-	total:  ["Número total de fogos", null],
-	// abc:  ["Área bruta construção (m2)", null],
-	atc:  ["Área total construção (m2)", null],
-	atc2:  ["Área total construção (m2)", null],
-	// "estorcam:  ["Estimativa orçamental (€)", null],
-	volum_constr:  ["Volume construção", null],
-	area_implant:  ["Área implantação (m2)", null],
-	cercea:  ["Cércea",  null],
-	pisos_abaixo_csol:  ["Pisos abaixo cot.soleira",  null],
-	pisos_acima_csol:  ["Pisos acima cot.soleira", null],
-	prazo:  ["Prazo (dias)", null],
-	data_emissao:  ["Data emissão título", 'date'],
-	aru: ["Área reabilitação urbana",null]
-};

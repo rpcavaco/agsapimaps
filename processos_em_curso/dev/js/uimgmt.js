@@ -139,12 +139,16 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 
 	altQueriesHandler(p_trimmed_qrystr) {
 	
-		const notTopoRegEx = new RegExp("(nud|nup|p|\\d+)\/", 'i');
+		const notTopoRegEx = new RegExp("(nud|nup|p|alv|\\d+)\/", 'i');
 		const nupRegEx = new RegExp("^(nud|nup|p)\/\\d{3,8}\/\\d{2,4}", 'i');
+		const alvCMPEx = new RegExp("^alv\/\\d{3,8}\/\\d{2,4}\/(dmu|cmp)", 'i');
 		const alvSRUEx = new RegExp("^\\d{3,8}\/\\d{2,4}\/sru", 'i');
 		if (notTopoRegEx.test(p_trimmed_qrystr)) {
 			this.showRecordsArea(false);
 			if (nupRegEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ]);
+			}
+			if (alvCMPEx.test(p_trimmed_qrystr)) {
 				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ]);
 			}
 			if (alvSRUEx.test(p_trimmed_qrystr)) {
