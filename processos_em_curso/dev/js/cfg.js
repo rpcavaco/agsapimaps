@@ -41,68 +41,6 @@ var LYR_TITLES = {
 	lyr12_locSRUProcEmCurso: "Licenciamento SRU em curso"	
 }
 
-var AJAX_ENDPOINTS = {
-	locqry: "https://loc.cm-porto.net/loc/c/lq",
-	feature_map: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
-	spec_queries: "https://munisig.cm-porto.pt/riscobdt/doget"
-}
-
-var QUERIES_CFG = {
-
-	eixosVia: {
-		gtype: "ln",
-		type: "onfeatlayer",
-		url: AJAX_ENDPOINTS.feature_map,
-		template: "cod_topo='{0}'",
-		layerId: 3,
-		symb: {
-			type: "simple-line",
-			width: 4,
-			color: [255, 100, 0]
-		},
-		expand: 1.5
-	},
-
-	numPol: {
-		gtype: "pt",
-		type: "onfeatlayer",
-		url: AJAX_ENDPOINTS.feature_map,
-		template: "cod_topo='{0}' and n_policia='{1}'",
-		zoomscale: 800,
-		layerId: 2,
-		symb: {
-			type: "simple-marker",  
-            style: "x",
-            color: "red",
-            size: "16px",  // pixels
-            outline: {  // autocasts as new SimpleLineSymbol()
-              color: [ 255, 30, 30 ],
-              width: 4  // points
-            }
-		},
-		expand: 1.5
-	},
-	
-	byDoc: {
-		gtype: "pol",
-		url: AJAX_ENDPOINTS.spec_queries,
-		zoomscale: 800,
-		symb: {
-			type: "simple-line",
-			width: 4,
-			color: [176, 6, 108]
-		},
-		qrylyr2maplyr: {
-			nao_alv: "lyr10_lotesProcEmCurso",
-			alvara: "lyr11_loteamProcEmCurso",
-			alvsru: "lyr12_locSRUProcEmCurso"
-		},
-		expand: 4.0
-	}
-
-	
-}
-
 var LYRS_SELECCAO_INTERACTIVA = [
 	"lyr10_lotesProcEmCurso",
 	"lyr11_loteamProcEmCurso",
@@ -114,6 +52,85 @@ var LYRS_DA_LEGENDA = [
 	"lyr11_loteamProcEmCurso",
 	"lyr12_locSRUProcEmCurso"
 ];
+
+var LAYERVIZ_MODE = 'radiobutton'; // null ou 'radiobutton' -- visibilidade das FEATLAYERS é mutuamente exclusiva, ligar uma apaga  as outras
+
+var AJAX_ENDPOINTS = {
+	locqry: "https://loc.cm-porto.net/loc/c/lq",
+	feature_map: "/public/rest/services/INFORMACAO_BASE/ENQUADRAMENTO_Top_PTTM06/MapServer",
+	spec_queries: "https://munisig.cm-porto.pt/riscobdt/doget"
+}
+
+var QUERIES_CFG = {
+
+	eixosVia: {
+		type: "onfeatlayer",
+		gtypes: ["polyline"],
+		url: AJAX_ENDPOINTS.feature_map,
+		template: "cod_topo='{0}'",
+		layerId: 3,
+		symb: {
+			line: {
+			type: "simple-line",
+			width: 4,
+			color: [255, 100, 0]
+			}
+		},
+		expand: 1.5
+	},
+
+	numPol: {
+		type: "onfeatlayer",
+		gtypes: ["point"],
+		url: AJAX_ENDPOINTS.feature_map,
+		template: "cod_topo='{0}' and n_policia='{1}'",
+		zoomscale: 800,
+		layerId: 2,
+		symb: {
+			marker: {
+			type: "simple-marker",  
+            style: "x",
+            color: "red",
+            size: "16px",  // pixels
+            outline: {  // autocasts as new SimpleLineSymbol()
+              color: [ 255, 30, 30 ],
+              width: 4  // points
+            }
+			}
+		},
+		expand: 1.5
+	},
+	
+	byDoc: {
+		url: AJAX_ENDPOINTS.spec_queries,
+		gtypes: ["polygon", "point"],
+		zoomscale: 800,
+		symb: {
+			line: {
+			type: "simple-line",
+			width: 4,
+			color: [176, 6, 108]
+		},
+			marker: {
+				type: "simple-marker",
+				style: "x",
+				color: [176, 6, 108],
+				size: "16px",  // pixels
+				outline: {  // autocasts as new SimpleLineSymbol()
+				  color: [176, 6, 108],
+				  width: 4  // points
+				}
+			}
+		},
+		qrylyr2maplyr: {
+			nao_alv: "lyr10_lotesProcEmCurso",
+			alvara: "lyr11_loteamProcEmCurso",
+			alvsru: "lyr12_locSRUProcEmCurso"
+		},
+		expand: 4.0
+	}
+}
+
 
 VIEW_SRID = 3763;
 
@@ -140,9 +157,7 @@ var SCALE_LIMIT_FUNCS = [
 	}
 ];
 
-
 var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / PT-TM06";
-
 
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;
@@ -161,10 +176,6 @@ var ALT_EXPANSAO_PAINEL_DADOS = [
 	[10, "280px"], 
 	[20, "320px"] 
 ];
-
-
-//  ===========================================================================
-
 
 
 // Ao ativar as layers indicadas nas chaves deste dict,
