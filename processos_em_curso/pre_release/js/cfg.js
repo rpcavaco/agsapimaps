@@ -12,11 +12,11 @@ var FEATLAYERS = {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06/MapServer",
 		layerId: 0
 	},
-    lyr11_loteamProcEmCurso: {
+    lyr12_loteamProcEmCurso: {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06/MapServer",
 		layerId: 1
 	},
-    lyr12_locSRUProcEmCurso: {
+    lyr13_locSRUProcEmCurso: {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06/MapServer",
 		layerId: 2
 	},
@@ -229,4 +229,4 @@ var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
 
 var INTRO_MSG = "Introduza um topónimo, uma morada, um número de processo ou documento (NUP/NUD/ALV) ou número de alvará SRU.<br/><br/> Deve clicar num dos polígonos do mapa para ver os dados associados.";
 var MSG_TIMEOUT_SECS = 7;
-var HELP_MSG = "<b>Processos de operações urbanistas em curso</b> referem-se aos processos que se encontram a decorrer nos serviços do Departamento Municipal de Gestão Urbanística ainda sem decisão final emitida<br/><br/><b>Alvarás de obras SRU em curso</b> - alvarás emitidos pela Porto Vivo, SRU que se encontram em fase de obra;<br/><br/><b>Alvarás de loteamento em curso</b> – esta informação agrega alvarás para novas operações de loteamento, operações de loteamento com obras de urbanização e obras de urbanização que ainda não foram concretizados;<br/><br/><b>Alvarás de obras em curso</b> - alvarás emitidos pela Câmara Municipal do Porto que se encontram em fase de obra;<br/><br/><b>Num. processos em curso / Nº alvarás em curso para o local</b> – identifica no nº de processos/alvarás que se encontram a decorrer para o local<br/><br/>(clique com o rato nesta mensagem para a fechar)";
+var HELP_MSG = "<b>Processos de operações urbanísticas em curso</b> referem-se aos processos que se encontram a decorrer nos serviços do Departamento Municipal de Gestão Urbanística ainda sem decisão final emitida<br/><br/><b>Alvarás de obras SRU em curso</b> - alvarás emitidos pela Porto Vivo, SRU que se encontram em fase de obra;<br/><br/><b>Alvarás de loteamento em curso</b> – esta informação agrega alvarás para novas operações de loteamento, operações de loteamento com obras de urbanização e obras de urbanização que ainda não foram concretizados;<br/><br/><b>Alvarás de obras em curso</b> - alvarás emitidos pela Câmara Municipal do Porto que se encontram em fase de obra;<br/><br/><b>Num. processos em curso / Nº alvarás em curso para o local</b> – identifica no nº de processos/alvarás que se encontram a decorrer para o local<br/><br/>(clique com o rato nesta mensagem para a fechar)";

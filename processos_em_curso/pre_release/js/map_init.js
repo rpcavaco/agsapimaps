@@ -1,4 +1,24 @@
 
+function sizeWidgetsMode() {
+	
+	let ret, winsize = {
+		width: window.innerWidth || document.body.clientWidth,
+		height: window.innerHeight || document.body.clientHeight,
+	};
+
+	if (parseInt(winsize.width) > 1200) {       
+		ret = 4;
+	} else if (parseInt(winsize.width) > 530) {       
+		ret = 3;
+	} else if (parseInt(winsize.width) > 430) {       
+		ret = 2;
+	} else {       
+		ret = 1;
+	}       
+	
+	return ret;
+}
+
 RecordsViewMgr.show = function(p_key, p_records) {
 	
 	if (p_key == "main") {
@@ -224,8 +244,10 @@ require([
 	// ------------------------------------------------------------------------
 	//var ccExpand, 
 	let ccwdg, scalebar;
+	let szmode = sizeWidgetsMode();
 
-	if (COORDSDISPLAY_SHOW) {
+
+	if (COORDSDISPLAY_SHOW && szmode > 2) {
 
 		ccwdg = new CoordinateConversion({
 			view: view,

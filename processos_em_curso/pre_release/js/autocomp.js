@@ -815,14 +815,16 @@ class LocAutoCompleter extends AutoCompleter {
 					loc.push(p_rec.pt[1]);
 				}
 
-				if (p_rec.env !== undefined) {
+				QueriesMgr.executeQuery("eixosVia", [p_rec.cod_topo], false);
+
+				/*if (p_rec.env !== undefined) {
 					let env = new Envelope2D();
 					env.setMinsMaxs(p_rec.env[0], p_rec.env[1], p_rec.env[2], p_rec.env[3]);
 					env.expand(1.2);
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", env.getArray(), loc, false);
 				} else {
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", null, loc, false);
-				}
+				}*/
 				this.showRecordsArea(false);
 			}
 			ret = true;

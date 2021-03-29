@@ -18,37 +18,39 @@ function hideLoaderImg() {
 
 function sizeWidgets() {
 
-	let winsize = {
-		width: window.innerWidth || document.body.clientWidth,
-		height: window.innerHeight || document.body.clientHeight,
-	};
-	//var minified_boxes = false;
+	let mode = sizeWidgetsMode();
 
-	MessagesController.reshape();
-
-	const width_limit = 490;
-	
 	let wdg = document.getElementById("loc_inputbox");
-	let wdg2 = document.getElementById("loc_resultlistarea");
+	let wdg3, wdg2 = document.getElementById("loc_resultlistarea");
 
 	if (wdg!=null && wdg2!=null) {       
 		let w;
-		if (parseInt(winsize.width) > 1200) {       
+		if (mode == 4) {       
 			w = '450px';
-		} else if (parseInt(winsize.width) > 530) {       
+		} else if (mode == 3) {       
 			w = '350px';
-		} else if (parseInt(winsize.width) > 430) {       
+		} else if (mode == 2) {       
 			w = '265px';
 		} else {       
 			w = '180px';
 		}       
 		wdg.style.width = w;
 		wdg2.style.width = w;
+
+		wdg3 = document.getElementById("msgsdiv");
+		if (wdg3) {
+			const sz = (parseInt(w) + 60) + 'px';
+			console.log(sz, "sz");
+			wdg3.style.width = sz;
+		}       
 	}       
+
+
+	MessagesController.reshape();
 
 	wdg = document.getElementById("loc_cleansearchbtn");	
 	if (wdg) {
-		if (parseInt(winsize.width) > width_limit) {
+		if (mode > 2) {
 			wdg.style.fontSize = '14px';
 			wdg.style.width = '90px';
 		} else {
@@ -59,7 +61,7 @@ function sizeWidgets() {
 	
 	wdg = document.getElementById("loc_content");	
 	if (wdg)  {
-		if (parseInt(winsize.width) > width_limit) {
+		if (mode > 2) {
 			wdg.style.left = '170px';
 		} else {
 			wdg.style.left = '40px';
@@ -68,10 +70,19 @@ function sizeWidgets() {
 	
 	wdg = document.getElementById("logo");	
 	if (wdg)  {
-		if (parseInt(winsize.width) > width_limit) {
+		if (mode > 2) {
 			wdg.style.display = 'block';
 		} else {
 			wdg.style.display = 'none';
+		}				
+	}
+
+	wdg = document.getElementById("gridDiv");	
+	if (wdg)  {
+		if (mode > 2) {
+			wdg.style.width = '485px';
+		} else {
+			wdg.style.width = '260px';
 		}				
 	}
 }
@@ -143,10 +154,10 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
 	
 		const notTopoRegEx = new RegExp("(nud|nup|p|alv|\\d+)\/", 'i');
 		const nupRegEx = new RegExp("^(nud|nup|p)\/\\d{3,8}\/\\d{2,4}", 'i');
-		const alvCMPEx = new RegExp("^alv\/\\d{3,8}\/\\d{2,4}\/(dmu|cmp)", 'i');
+		const alvCMPEx = new RegExp("^alv\/\\d{1,8}\/\\d{2,4}\/(dmu|cmp)", 'i');
 		const alvSRUEx = new RegExp("^\\d{3,8}\/\\d{2,4}\/sru", 'i');
 		if (notTopoRegEx.test(p_trimmed_qrystr)) {
-			this.showRecordsArea(false);
+			this.emptyCurrentRecords();
 			if (nupRegEx.test(p_trimmed_qrystr)) {
 				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ], true);
 			}
@@ -381,7 +392,7 @@ var MessagesController = {
 		msgsdiv.style.width = this.width + 'px';
 		//msgsdiv.style.height = this.height + 'px';
 		//msgsdiv.style.top = this.top + 'px';
-		//msgsdiv.style.left = this.left + 'px';
+		msgsdiv.style.left = this.left + 'px';
 	},
 	
 	
