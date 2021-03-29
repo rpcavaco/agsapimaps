@@ -29,7 +29,7 @@ var QueriesMgr = {
         }
 	},
 
-	displayResults: function(p_results, p_symb, p_qrykey, opt_where_txt, opt_adic_callback) {
+	displayResults: function(p_results, p_symb, p_qrykey, b_show_attrs, opt_where_txt, opt_adic_callback) {
 
 		/*if (p_results.features.length > 0) {
 			console.log(p_results.features[0]);
@@ -50,11 +50,11 @@ var QueriesMgr = {
 			opt_adic_callback(p_qrykey, p_results);
 		}
 
-		this.displayFeats(features, p_qrykey, opt_where_txt)
+		this.displayFeats(features, p_qrykey, b_show_attrs, opt_where_txt)
 
 	},
 	
-	displayFeats: function(p_feats, p_qrykey, opt_where_txt) {
+	displayFeats: function(p_feats, p_qrykey, b_show_attrs, opt_where_txt) {
 		
 		let maingtype = null, featsPerGeomType = {};
 
@@ -106,7 +106,9 @@ var QueriesMgr = {
 				return feature.attributes;
 			});
 			
-			RecordsViewMgr.show("main", rows);
+			if (b_show_attrs) {
+				RecordsViewMgr.show("main", rows);
+			}
 
 		} else {
 			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", opt_where_txt);
@@ -120,7 +122,7 @@ var QueriesMgr = {
     	}
     },	
 	
-	executeQuery: function(p_qrykey, p_argslist, opt_adic_callback) {
+	executeQuery: function(p_qrykey, p_argslist, b_show_attrs, opt_adic_callback) {
 		
 		if (this.queries[p_qrykey]["type"] == "onfeatlayer") {
 			
@@ -129,14 +131,14 @@ var QueriesMgr = {
 			queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
 			(function(p_this, p_qryobj, p_symb, opt_adic_callback) {
 				fl.queryFeatures(p_qryobj).then(function(qresults) {
-					p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where, opt_adic_callback);
+					p_this.displayResults(qresults, p_symb, p_qrykey, b_show_attrs, queryObj.where, opt_adic_callback);
 				});
 			})(this, queryObj, this.queries[p_qrykey]["symb"], opt_adic_callback);
 			
 		} else {
 			
 			this.abortPreviousSearchCall();
-			(function(p_this, pp_qrykey, p_symb) {
+			(function(p_this, pp_qrykey, p_symb, pb_show_attrs) {
 
 				p_this.xhr = ajaxSender(p_this.queries[pp_qrykey]["url"], function() { 
 
@@ -215,7 +217,7 @@ var QueriesMgr = {
 									}));
 								}
 								
-								p_this.displayFeats(graphicsList,  pp_qrykey, null);
+								p_this.displayFeats(graphicsList,  pp_qrykey, pb_show_attrs, null);
 							} 
 						}
 					}
@@ -229,7 +231,7 @@ var QueriesMgr = {
 					}), 
 					p_this.xhr
 				);
-			})(this, p_qrykey, this.queries[p_qrykey]["symb"]);
+			})(this, p_qrykey, this.queries[p_qrykey]["symb"], b_show_attrs);
 		}
 	},
 	

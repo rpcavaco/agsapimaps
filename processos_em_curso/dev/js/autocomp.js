@@ -152,6 +152,14 @@ class AutoCompleter {
 
 	activateCleanButton(do_enable) {
 		//console.log('activateCleanWidgetDisplay '+name+' enable:'+do_enable);
+	    if (this.widgets["textentry"]!=null) {
+			if (do_enable) {
+				this.widgets["textentry"].style.backgroundImage = 'none';
+			} else {
+				this.widgets["textentry"].style.backgroundImage = '';
+			}
+		}
+		
 	    if (this.widgets["cleanbutton"]) {
 			if (this.widgets["cleanbutton"].tagName.toLowerCase() == 'div') {
 				if (do_enable) {
@@ -577,7 +585,7 @@ class LocAutoCompleter extends AutoCompleter {
 			(function(p_tr, p_rec) {
 				attEventHandler(p_tr, 'mouseover', function(e) {	
 					
-					QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol]);
+					QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol], false);
 
 					/*
 					sel_num(p_rec.cod_topo, p_rec.toponimo, p_rec.npol, p_rec.npoldata.areaespecial, 
@@ -604,14 +612,14 @@ class LocAutoCompleter extends AutoCompleter {
 					sel_toponimo(p_rec.cont, p_rec.cod_topo, "", null, [], false);
 				}*/
 
-				QueriesMgr.executeQuery("eixosVia", [p_rec.cod_topo]);
+				QueriesMgr.executeQuery("eixosVia", [p_rec.cod_topo], false);
 
 			}
 			
 			//this.send();
 		} else {
 
-			QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol]);
+			QueriesMgr.executeQuery("numPol", [p_rec.cod_topo, p_rec.npol], false);
 
 			/*
 			sel_num(p_rec.cod_topo, p_rec.toponimo, p_rec.npol, p_rec.npoldata.areaespecial, p_rec.npoldata.freguesia, p_rec.npoldata.cod_freg, false, p_rec.pt, true);
@@ -743,7 +751,7 @@ class LocAutoCompleter extends AutoCompleter {
 
 				if (recs.length == 1) {
 					//this.setText(recs[0].toponimo, false);
-					QueriesMgr.executeQuery("eixosVia", [recs[0].cod_topo]);
+					QueriesMgr.executeQuery("eixosVia", [recs[0].cod_topo], false);
 				}
 				
 
@@ -778,8 +786,8 @@ class LocAutoCompleter extends AutoCompleter {
 					cod_topo = ot.npoldata.cod_topo_np;
 				}	
 				
-				QueriesMgr.executeQuery("eixosVia", [cod_topo]);
-				QueriesMgr.executeQuery("numPol", [cod_topo, ot.npol]);
+				QueriesMgr.executeQuery("eixosVia", [cod_topo], false);
+				QueriesMgr.executeQuery("numPol", [cod_topo, ot.npol], false);
 
 				/*
 				sel_num(cod_topo, ot.toponym, ot.npol, ot.npoldata.areaespecial, ot.npoldata.freguesia, ot.npoldata.cod_freg, false, ot.loc, true);
@@ -820,7 +828,7 @@ class LocAutoCompleter extends AutoCompleter {
 			ret = true;
 		}
 		return ret;
-	};	
+	}
 
 }
 

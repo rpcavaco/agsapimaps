@@ -12,33 +12,35 @@ var FEATLAYERS = {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 0
 	},
-    lyr11_loteamProcEmCurso: {
+    lyr12_loteamProcEmCurso: {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 1
 	},
-    lyr12_locSRUProcEmCurso: {
+    lyr13_locSRUProcEmCurso: {
 		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
 		layerId: 2
+	},
+    lyr11_entradasProcEmCurso: {
+		url: "/public/rest/services/GOU/ProcEmCurso_Pub_Final_PTTM06_Dev/MapServer",
+		layerId: 3
 	}	
 }
 
 var LYR_TITLES = {
-	lyr10_lotesProcEmCurso: "Lotes com processos em curso",
-	lyr11_loteamProcEmCurso: "Loteamentos com processos em curso",
-	lyr12_locSRUProcEmCurso: "Licenciamento SRU em curso"	
+	lyr10_lotesProcEmCurso: "Alvarás de obras em curso",
+	lyr12_loteamProcEmCurso: "Alvarás de loteamento em curso",
+	lyr13_locSRUProcEmCurso: "Alvarás de obras SRU em curso",
+	lyr11_entradasProcEmCurso: "Operações urbanísticas em curso"
 }
 
 var LYRS_SELECCAO_INTERACTIVA = [
 	"lyr10_lotesProcEmCurso",
-	"lyr11_loteamProcEmCurso",
-	"lyr12_locSRUProcEmCurso"
+	"lyr12_loteamProcEmCurso",
+	"lyr11_entradasProcEmCurso",
+	"lyr13_locSRUProcEmCurso"
 ];
 
-var LYRS_DA_LEGENDA = [
-	"lyr10_lotesProcEmCurso",
-	"lyr11_loteamProcEmCurso",
-	"lyr12_locSRUProcEmCurso"
-];
+var LYRS_DA_LEGENDA = LYRS_SELECCAO_INTERACTIVA;
 
 var LAYERVIZ_MODE = 'radiobutton'; // null ou 'radiobutton' -- visibilidade das FEATLAYERS é mutuamente exclusiva, ligar uma apaga  as outras
 
@@ -111,8 +113,9 @@ var QUERIES_CFG = {
 		},
 		qrylyr2maplyr: {
 			nao_alv: "lyr10_lotesProcEmCurso",
-			alvara: "lyr11_loteamProcEmCurso",
-			alvsru: "lyr12_locSRUProcEmCurso"
+			alvara: "lyr12_loteamProcEmCurso",
+			entrada: "lyr11_entradasProcEmCurso",
+			alvsru: "lyr13_locSRUProcEmCurso"
 		},
 		expand: 4.0
 	}
@@ -124,9 +127,9 @@ var RECORD_PANELS_CFG = {
 		max_attrs_per_page: 10,
 		rotator_msg: "Processo {0} de {1}",
 		attr_cfg: {
+			
 			nud_capa: ["Processo", null],
 			n_processo: ["Processo", null],
-			// nud_reg: ["Documento",  null],
 			desc_tipo_proc:  ["Tipo de processo", null],
 			tipo_processo: ["Tipo de processo", null],
 			desc_oper_urb:  ["Operação urbanística", null],
@@ -134,21 +137,17 @@ var RECORD_PANELS_CFG = {
 			uso: ["Uso", null], 
 			num_conservatoria:  ["Registo predial", null],
 			requerente: ["Requerente", null], 
-
 			num_titulo:  ["Número de título", null],
 			
 			/* data_entrada:  ["Data entrada", 'epoch'], 
-
 			aprov_arq_despacho:  ["Despacho aprovação arq.ª", null],
 			aprov_arq_data_despacho:  ["Data despacho aprov.arq.ª", 'epoch'],
-
 			entrada:  ["Em 'entrada'", null], */
 
 			total:  ["Número total de fogos", null],
 			// abc:  ["Área bruta construção (m2)", null],
 			atc:  ["Área total construção (m2)", null],
 			atc2:  ["Área total construção (m2)", null],
-			// "estorcam:  ["Estimativa orçamental (€)", null],
 			volum_constr:  ["Volume construção", null],
 			area_implant:  ["Área implantação (m2)", null],
 			cercea:  ["Cércea",  null],
@@ -157,11 +156,12 @@ var RECORD_PANELS_CFG = {
 			prazo:  ["Prazo (dias)", null],
 			data_emissao:  ["Data emissão título", 'epoch'],
 			aru: ["Área reabilitação urbana",null]
+			
 		},
 		height_limits: [  // por numero de registos
 			//até num linhas, altura
-			[5, "140px"], 
-			[10, "280px"], 
+			[5, "180px"], 
+			[10, "300px"], 
 			[20, "380px"] 
 		]		
 	}
@@ -213,7 +213,7 @@ var HIGHLIGHT_OPTS = {
 //	 mesmo contexto de layers, apenas o primeiro extent é aplicado.
 // 
 var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
-	lyr12_locSRUProcEmCurso: {
+	lyr13_locSRUProcEmCurso: {
 		env: {
 		xmin: -41900.0,
 		ymin: 163200.0,
@@ -227,3 +227,6 @@ var EXTENTS2CHK_ON_LYRVIZ_CHANGE = {
 	}
 }
 
+var INTRO_MSG = "Introduza um topónimo, uma morada, um número de processo ou documento (NUP/NUD/ALV) ou número de alvará SRU.<br/><br/> Deve clicar num dos polígonos do mapa para ver os dados associados.";
+var MSG_TIMEOUT_SECS = 7;
+var HELP_MSG = "<b>Processos de operações urbanistas em curso</b> referem-se aos processos que se encontram a decorrer nos serviços do Departamento Municipal de Gestão Urbanística ainda sem decisão final emitida<br/><br/><b>Alvarás de obras SRU em curso</b> - alvarás emitidos pela Porto Vivo, SRU que se encontram em fase de obra;<br/><br/><b>Alvarás de loteamento em curso</b> – esta informação agrega alvarás para novas operações de loteamento, operações de loteamento com obras de urbanização e obras de urbanização que ainda não foram concretizados;<br/><br/><b>Alvarás de obras em curso</b> - alvarás emitidos pela Câmara Municipal do Porto que se encontram em fase de obra;<br/><br/><b>Num. processos em curso / Nº alvarás em curso para o local</b> – identifica no nº de processos/alvarás que se encontram a decorrer para o local<br/><br/>(clique com o rato nesta mensagem para a fechar)";

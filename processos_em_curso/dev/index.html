@@ -17,6 +17,37 @@
     <!--<link rel="stylesheet" href="/esri_js_api/4.18/dgrid/css/dgrid.css"> -->
 	<link rel="stylesheet" href="/esri_js_api/4.18/esri/themes/light-twist/main.css" />
 
+	<style>
+	/* tweak esri ui */
+	.esri-widget {
+		line-height: 1em;
+	}
+
+	.esri-layer-list-panel__content--legend .esri-legend__service {
+		padding: 0;
+	}
+	
+	.esri-legend__layer-table {
+		margin-bottom: 0;
+	}
+	
+   .esri-layer-list-panel {
+		margin: 0 15px 10px 30px;
+   }
+   
+    .esri-layer-list__item-title {
+		font-weight: 600;
+	}
+	
+	.esri-layer-list__item-container {
+		padding: 12px 4px 12px 8px;
+	}
+	
+	.esri-ui-corner .esri-expand .esri-widget--panel, .esri-ui-corner .esri-expand .esri-widget--panel-height-only, .esri-ui-corner .esri-component > .esri-widget--panel, .esri-ui-corner .esri-component.esri-widget--panel {
+		width: auto;
+	}
+	</style>
+
     <!-- <link rel="stylesheet" href="css/layout.css"/> -->
 
 	<script src="/esri_js_api/4.18/init.js"></script>
@@ -36,9 +67,8 @@
 		<div id="logotxt">Gestão de <br />Operações<br />Urbanísticas</div>
 	</div>
 
-	<!--<div id="titlearea" class="semi-square">
-		<p>Gestão de Operações Urbanísticas</p>
-	</div>-->
+	<div id="msgsdiv" class="semi-square" style="display: none;">
+	</div>
 
 	<div>
 		<!-- Autocomplete -->
@@ -51,17 +81,19 @@
 	</div>
 
 	<div id="viewDiv">
-		<div id="gridDivContainer" class="esri-ui-bottom-right esri-ui-corner" style="visibility: hidden">
-			<div id="gridDiv" class="esri-component esri-widget">
+	</div>
+
+	<div id="gridDivContainer" style="visibility: hidden">
+		<div id="gridDiv">
+			<img id="help_icon" src="media/q-32.png" />
 				<h2>Processos em curso<span id="sp-emloteam">, em loteamento</span></h2>
 				<p id="zoominmsg">Faça 'zoom in' para ver lotes e locais de licenciamento SRU.</p>
-				<p id="mainmsg">Faça click num lote ou local de licenciamento SRU para saber quais os processos em curso no mesmo.</p>
+			<p id="mainmsg">Faça click num polígono ou local de licenciamento SRU para saber quais os processos em curso no mesmo.</p>
 				<div id="queryResults"></div>
-				<button id="clearButton" class="esri-component esri-widget">Limpar</button>
-			</div>
+			<!-- <button id="clearButton" class="esri-component esri-widget">Limpar</button> -->
 		</div>
-		<img id="loading" src="media/816.gif"  style="visibility: hidden"/>
 	</div>
+	<img id="loading" src="media/816.gif"  style="visibility: hidden"/>
 
 	<script src="js/autocomp.js"></script>
 	<script src="js/uimgmt.js"></script>
