@@ -1,142 +1,30 @@
 
-var QueriesMgr = {
+RecordsViewMgr.show = function(p_key, p_records) {
 	
-	queries: {},
-	mapView: null,
-	resultsLayers: {
-		pt: null,
-		ln: null,
-		pol: null
-	},
-
-	clearResults: function(opt_type) {
-		let lyr;
-		if (opt_type != null) {
-            if (Object.keys(this.resultsLayers).indexOf(opt_type) >= 0) {
-                lyr = this.resultsLayers[opt_type];
-                if (lyr) {
-                    lyr.removeAll();
+	if (p_key == "main") {
+	// esconder msg introdutória
+		const mainmsgDiv = document.getElementById("mainmsg");
+		if (mainmsgDiv) {
+			mainmsgDiv.style.display = "none"
                 }
-            }
-        } else {
-            for (let k in this.resultsLayers) {
-                lyr = this.resultsLayers[k];
-                if (lyr) {
-					lyr.removeAll();
-                }
-            }
-        }
-	},
 	
-	displayResults: function(p_results, p_symb, p_qrykey, p_where_txt) {
-
-		const gtype = this.queries[p_qrykey]["gtype"];
-		this.clearResults(gtype);
-		const features = p_results.features.map(function(graphic) {
-			graphic.symbol = p_symb;
-			return graphic;
-		});
-
-		if (features.length > 0) {
-
-			if (this.mapView) {
-
-				if (gtype == 'pt') {
-					let pzoom_scale = 1000;
-					if (this.queries[p_qrykey]["zoomscale"] !== undefined) {
-						pzoom_scale = parseInt(this.queries[p_qrykey]["zoomscale"]);
-					}			
-                    this.mapView.goTo({ target: features, scale: pzoom_scale });
+		const spEmLoteam = document.getElementById("sp-emloteam");
+		if (spEmLoteam) {
+			if (LayerInteractionMgr.selectedLayerId.indexOf("_loteam") > 1) {
+				spEmLoteam.style.visibility = 'visible';
 				} else {
-					let extent = null;
-					for (let i=0; i<features.length; i++) {
-						if (extent) {
-							extent.union(features[i].geometry.extent);
-						} else {
-							extent = features[i].geometry.extent.clone();
+				spEmLoteam.style.visibility = 'hidden';
 						}
 					}
-			
-					extent = extent.clone().expand(1.5);
-					this.mapView.goTo({ target: extent });
 				}
 				
-			}
-			this.resultsLayers[gtype].addMany(features);
-
-		} else {
-			console.warn("zero features encontradas na query", p_qrykey, ", filtro:", p_where_txt);
-		}
-
-	},
-	
-	executeQuery: function(p_qrykey, p_argslist) {
-		const fl = this.queries[p_qrykey]["flayer"];
-		const queryObj = fl.createQuery();
-		queryObj.where = String.format(this.queries[p_qrykey]["template"], ...p_argslist);
-		(function(p_this, p_qryobj, p_symb) {
-			fl.queryFeatures(p_qryobj).then(function(qresults) {
-				p_this.displayResults(qresults, p_symb, p_qrykey, queryObj.where);
-			});
-		})(this, queryObj, this.queries[p_qrykey]["symb"]);
-	},
-	
-	init: function() {	
-		for (let k in QUERIES_CFG) {
-			this.queries[k] = {};
-			this.queries[k]["gtype"] = QUERIES_CFG[k]["gtype"];
-			this.queries[k]["url"] = QUERIES_CFG[k]["url"];
-			this.queries[k]["template"] = QUERIES_CFG[k]["template"];
-			this.queries[k]["symb"] = QUERIES_CFG[k]["symb"];
-			if (QUERIES_CFG[k]["layerId"] !== undefined) {
-                this.queries[k]["layerId"] = QUERIES_CFG[k]["layerId"];
-            }			
-			if (QUERIES_CFG[k]["zoomscale"] !== undefined) {
-                this.queries[k]["zoomscale"] = QUERIES_CFG[k]["zoomscale"];
-            }
-		}
-	}
-	
-	// precisa de inicialização de feat. layers com isto, dentro de view.when:
-	/*
-	{
-		for (let k in QueriesMgr.queries) {
-		QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"] });		
-	}
-	*/
-
-	
-};
-
-(function() {
-	QueriesMgr.init();
-})();
-
-// Evitar a repetição inutil nos listeners de alterações
-EventFire = {
-	registry: {},
-	checkEqLastValueChange: function(p_type, p_key, p_value) {
-		
-		let ret = false;
-		if (this.registry[p_type] === undefined) {
-			this.registry[p_type] = {};
-		}
-		if (this.registry[p_type][p_key] === undefined) {
-			this.registry[p_type][p_key] = p_value;
-		} else {
-			ret = (this.registry[p_type][p_key] == p_value);
-			if (!ret) {
-				this.registry[p_type][p_key] = p_value;
-			}
-		}
-
-		return ret;
-	}
+	RecordsViewMgr.generatePanels(p_key, p_records, "queryResults");	
 };
 
 require([
 	"esri/Map",
 	"esri/Basemap",
+	"esri/Graphic",
 	"esri/layers/MapImageLayer",
 	"esri/layers/FeatureLayer",
 	"esri/layers/GraphicsLayer",
@@ -152,6 +40,7 @@ require([
 ], function(
 	Map,
 	Basemap,
+	Graphic,
 	MapImageLayer,
 	FeatureLayer,
 	GraphicsLayer,
@@ -231,6 +120,9 @@ require([
         layers.push(QueriesMgr.resultsLayers[k]);
     }
 	
+	QueriesMgr.graphicReference = Graphic;
+	QueriesMgr.extn = Extent;
+	
 	const the_map = new Map({
 		basemap: basemap,
 		layers: layers
@@ -238,11 +130,13 @@ require([
 	
 	//  instanciar as FeatureLayer das pesquisas
 	for (let k in QueriesMgr.queries) {
+		if (QueriesMgr.queries[k]["type"] == "onfeatlayer") {
 		if (QueriesMgr.queries[k]["layerId"] !== undefined) {
 			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"], layerId: QueriesMgr.queries[k]["layerId"] });	
 		} else {
 			QueriesMgr.queries[k]["flayer"] = new FeatureLayer({ id: k, url: QueriesMgr.queries[k]["url"] });	
 		}	
+	}	
 	}	
 	
 	const view = new MapView({
@@ -259,7 +153,6 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-	const radioButtonLayerItems = {};
 
 	const layerList = new LayerList({
 		view: view,
@@ -292,40 +185,29 @@ require([
 						content: "legend",
 						open: (lidx == 0)
 					};
-					(function(p_item, p_this_layerid, p_rbli, p_mapview) {
+					(function(p_item, p_this_layerid, p_mapview) {
 						p_item.watch("visible", function(visible){
 							// evitar a repetição massiça causada pelo sucessivo firing deste evento
 							if (EventFire.checkEqLastValueChange("layerviz", p_this_layerid, visible)) {
 								return;
 							}
-							for (let lyrId in p_rbli) {
-								if (visible) {
-									if (lyrId != p_this_layerid && p_rbli[lyrId].visible) {
-										p_rbli[lyrId].visible = false;
-										p_rbli[lyrId].panel.open = false;
-										p_rbli[p_this_layerid].panel.open = true;
-
-										if (typeof LayerInteractionMgr != 'undefined') {
-											LayerInteractionMgr.select(p_this_layerid);
-										}
-									}
-								}
-							}
+							LayervizMgr.changeVisibilty(p_this_layerid, visible);
 							
 							for (let lyrk in EXTENTS2CHK_ON_LYRVIZ_CHANGE) {
 								if (EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk] === undefined) {
 									continue;
 								}
-								const ext_to = new Extent(EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk]);
-								if (visible && p_this_layerid == lyrk && !p_mapview.extent.intersects(ext_to)) {
+								const ext_to = new Extent(EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk].env);
+								const scale_to = EXTENTS2CHK_ON_LYRVIZ_CHANGE[lyrk].scale;
+								if (visible && p_this_layerid == lyrk && (!p_mapview.extent.intersects(ext_to) || p_mapview.scale > (2.0 * scale_to))) {
 									p_mapview.goTo({ target: ext_to });
 									break;
 								}
 							}
 
 						});
-					})(item, item.layer.id, radioButtonLayerItems, view);
-					radioButtonLayerItems[item.layer.id] = item;
+					})(item, item.layer.id, view);
+					LayervizMgr.set(item.layer.id, item);
 
 				} else {
 					item.layer.listMode = "hide";

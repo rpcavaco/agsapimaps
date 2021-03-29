@@ -158,9 +158,11 @@ function RecordPanelSwitcher() {
 	this.recordorder = [],
 	this.iterator_current_key = null,
 	this.rotator_current_key = null,
-	this.registos_fmt = "";
+	this.rotator_msg = "";
 	this.max_attrs_per_page = 20;
 	this.max_val_str_length = -1;
+	this.attr_cfg = {};
+	this.height_limits = [];
 	this.records = {
 	};
 
@@ -385,7 +387,7 @@ function RecordPanelSwitcher() {
 		return num;
 	};
 
-	this.generatePanels = function(p_records, p_attrs_cfg, p_parentdiv_id, p_heightv) {
+	this.generatePanels = function(p_records, p_parentdiv_id, p_heightv) {
 	
 		if (!p_records.length) {
 			return;
@@ -426,7 +428,7 @@ function RecordPanelSwitcher() {
 						const num = p_rec_rps.rotatePrev();
 						const el = document.getElementById("rec-nav-nums");
 						if (el) {
-							el.textContent = String.format(p_rec_rps.registos_fmt, num, p_nrows);
+							el.textContent = String.format(p_rec_rps.rotator_msg, num, p_nrows);
 						}
 					}
 				);							
@@ -435,7 +437,7 @@ function RecordPanelSwitcher() {
 			spEl = document.createElement("div");
 			spEl.setAttribute("id", "rec-nav-nums");
 			navInnerDiv.appendChild(spEl);
-			spEl.textContent = String.format(this.registos_fmt, 1, p_records.length);
+			spEl.textContent = String.format(this.rotator_msg, 1, p_records.length);
 
 			btEl = document.createElement("button");
             btEl.setAttribute("class", "right-arrow");
@@ -448,7 +450,7 @@ function RecordPanelSwitcher() {
                         const num = p_rec_rps.rotateNext();
                         const el = document.getElementById("rec-nav-nums");
                         if (el) {
-                            el.textContent = String.format(p_rec_rps.registos_fmt, num, p_nrows);
+                            el.textContent = String.format(p_rec_rps.rotator_msg, num, p_nrows);
                         }
                     }
                 );                           
@@ -469,20 +471,24 @@ function RecordPanelSwitcher() {
 			pagekey = this.pageKey(pageNum+1)
 			this.newRecord(reckey);
 			
-			for (let fld in p_attrs_cfg) {
+			for (let fld in this.attr_cfg) {
 
-				lbl = p_attrs_cfg[fld][0];
-				fmt = p_attrs_cfg[fld][1];
+				lbl = this.attr_cfg[fld][0];
+				fmt = this.attr_cfg[fld][1];
 				preval = p_records[i][fld];
 
 				if (preval == null || preval.length==0) {
 					continue;
 				}
 				switch (fmt) {
-					case 'date':
+					case 'epoch':
+						if (!isNaN(preval)) {
 						d = new Date(0);
 						d.setUTCSeconds(preval / 1000);
 						val = d.toLocaleDateString();
+						} else {
+							val = preval;
+						}
 						break;
 
 					default:

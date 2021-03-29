@@ -9,11 +9,16 @@ url('/wa/font/Regular-Regular.ttf') format('truetype'); font-weight: normal;font
 html,
 body,
 #viewDiv {
+  font-family: "Regular-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 0;
   margin: 0;
   height: 100%;
   width: 100%;
   background: radial-gradient(#b6c3cc, #6aa5cc);
+}
+
+#viewDiv h2 {
+  font-family: "Regular-Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .esri-legend__message {
@@ -29,16 +34,29 @@ body,
 }
 
 #gridDiv {
-	/* position: absolute; */
+	background-color: white;
+	position: absolute;
+	z-index: 900;
 	padding: 10px;
-	margin-right: 20px;
-	margin-bottom: 40px;
+	right: 20px;
+	bottom: 30px;
 	width: 485px;
+	box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+}
+
+#gridDiv img {
+	float: right;
+	width: 22px;
 }
 
 #clearButton {
 	margin-top:5px;
 	display: none;
+}
+
+#mainmsg {
+	font-size: 18px;
+	line-height: 1.2em;
 }
 
 .dgrid {
@@ -120,13 +138,12 @@ body,
 	margin-right: auto;
 }
 
-
-
 .attrs-list {
 	border-left-width: 2px;
 	border-left-style: solid;
 	border-left-color: #999;
 	padding-left: 8px;
+	line-height: 1.3em;
 }
 
 .attrs-list td {
@@ -220,8 +237,8 @@ body,
     margin: 0px 40px 0px 30px;
     position: absolute;
     z-index: 900;
-    top: 20px;
-    left: 180px;
+    top: 12px;
+    /* left: 150px; */
 }
 
 #loc_content input {
@@ -236,6 +253,10 @@ body,
     line-height: 34px;
     display: inline-block;
     vertical-align: top;
+	background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 10 12%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Ccircle fill=%22none%22 stroke=%22gray%22 cx=%225%22 cy=%224.6%22 r=%224%22 /%3E %3Cpath fill=%22none%22 stroke=%22gray%22 line-width=%222%22 d=%22M1,11.6L3.2,8.1%22 /%3E%3C/svg%3E');
+	background-repeat: no-repeat;
+	background-size: 16px;
+	background-position: 98% 33%;
 }
 
 #loc_cleansearchbtn {
@@ -248,7 +269,7 @@ body,
 	color: #000;
     height: 28px;
 	 width: 90px;
-	padding: 3px 4px 3px 4px;
+	padding: 5px 4px 3px 4px;
 	margin: 0;
 	font-family: "Regular-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
@@ -281,4 +302,32 @@ body,
 }
 #loc_resultlistarea td + td {
 	width: 399px;
+}
+
+#msgsdiv {
+	font-family: "Regular-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+	position: absolute;
+	left: 200px;
+	top: 50px;
+	background-color: rgba(255, 255, 255, 0.86);
+	color: #000;
+	width: 400px;
+	padding: 12px 18px 12px 16px;
+	margin: 0;
+	font-size: 14px;
+	z-index: 1000;
+	text-align: left;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.6);
+}
+
+#msgsdiv img {
+	padding-top: 6px;
+	padding-right: 14px;
+	display: block;
+	float: left;
+    margin: 20px 10px 10px 16px;
+}
+
+#msgsdiv p {
+	font-size: 1.2rem;
 }

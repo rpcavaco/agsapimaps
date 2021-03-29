@@ -24,6 +24,8 @@ function sizeWidgets() {
 	};
 	//var minified_boxes = false;
 
+	MessagesController.reshape();
+
 	const width_limit = 490;
 	
 	let wdg = document.getElementById("loc_inputbox");
@@ -58,7 +60,7 @@ function sizeWidgets() {
 	wdg = document.getElementById("loc_content");	
 	if (wdg)  {
 		if (parseInt(winsize.width) > width_limit) {
-			wdg.style.left = '180px';
+			wdg.style.left = '170px';
 		} else {
 			wdg.style.left = '40px';
 		}				
@@ -137,6 +139,31 @@ class Geocode_LocAutoCompleter extends LocAutoCompleter {
         }*/
 	}
 
+	altQueriesHandler(p_trimmed_qrystr) {
+	
+		const notTopoRegEx = new RegExp("(nud|nup|p|alv|\\d+)\/", 'i');
+		const nupRegEx = new RegExp("^(nud|nup|p)\/\\d{3,8}\/\\d{2,4}", 'i');
+		const alvCMPEx = new RegExp("^alv\/\\d{3,8}\/\\d{2,4}\/(dmu|cmp)", 'i');
+		const alvSRUEx = new RegExp("^\\d{3,8}\/\\d{2,4}\/sru", 'i');
+		if (notTopoRegEx.test(p_trimmed_qrystr)) {
+			this.showRecordsArea(false);
+			if (nupRegEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ], true);
+			}
+			if (alvCMPEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ], true);
+			}
+			if (alvSRUEx.test(p_trimmed_qrystr)) {
+				QueriesMgr.executeQuery("byDoc", [ p_trimmed_qrystr ], true);
+			}
+			return false;
+			
+		}
+		return true;		
+	}
+					
+	
+
 }
 
 
@@ -173,7 +200,7 @@ function initialAnimation () {
 		const minv = 12;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
 	};
 		
 	this.widfunc = function(p_elapsedq) {
@@ -181,7 +208,7 @@ function initialAnimation () {
 		const minw = 130;
 		
 		let ret = minw + (maxw-minw) * this.stepperq(p_elapsedq);
-		return (ret < minw ? minw : ret);		
+		return (ret < minw ? minw : ret).toString() + "px";		
 	};
 
 	this.leftfunc = function(p_elapsedq) {
@@ -189,7 +216,7 @@ function initialAnimation () {
 		const minv = 60;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
 	};
 
 	this.fntszfunc = function(p_elapsedq) {
@@ -197,7 +224,21 @@ function initialAnimation () {
 		const minv = 22;
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
-		return (ret < minv ? minv : ret);		
+		return (ret < minv ? minv : ret).toString() + "px";		
+	};
+
+	this.clrfunc = function(p_elapsedq) {
+		const clr1 = "#fff";
+		const clr2 = "#6b80b5";
+		const clr3 = "#0f2f7e";
+		
+		if (this.stepperq(p_elapsedq) < 0.5) {
+			return clr3;
+		} else if (this.stepperq(p_elapsedq) < 0.8) {
+			return clr2;
+		} else {
+			return clr1;
+		}
 	};
 
 	this.animItems = {
@@ -225,6 +266,12 @@ function initialAnimation () {
 			}
 			
 		},
+		"logotxt": {
+			"color": function(p_elapsedq) {
+				return this.clrfunc(p_elapsedq);
+			}
+			
+		},
 
 	};
 		
@@ -243,7 +290,7 @@ function initialAnimation () {
 				}
 				for (let prop in this.animItems[k]) {
 					f = this.animItems[k][prop];
-					wdg.style[prop] = f(p_elapsedq) + "px";
+					wdg.style[prop] = f(p_elapsedq);
 				}
 			}
 		}
@@ -262,6 +309,8 @@ function initialAnimation () {
 					w.style.visibility = l[i][1] ? "visible" : "hidden";
 				}
 			}
+			
+			MessagesController.setMessage(INTRO_MSG, true);
 		}
 		
 		function animstep(timestamp) {
@@ -289,9 +338,114 @@ function initialAnimation () {
 	
 }
 
+var MessagesController = {
+	
+	// Constantes
+	elemid: "msgsdiv",
+	minwidth: 300,
+	maxwidth: 550,
+	messageTimeout: MSG_TIMEOUT_SECS * 1000,
+	charwidth: 10,
+	padding: 26,
+	rowheight: 28,
+	
+	messageText: "",
+	lines: 0,
+	width: 0,
+	height: 0,
+	isvisible: false,
+	timer: null,
+	
+	
+	reshape: function() {
+		
+		if (!this.isvisible) {
+			return;
+		}
+		var winsize = {
+			width: window.innerWidth || document.body.clientWidth,
+			//height: window.innerHeight || document.body.clientHeight,
+		};
+		if (winsize.width < (2.8 * this.minwidth)) {
+			this.width = this.minwidth;
+		} else {
+			this.width = this.maxwidth;
+		}
+		//this.top = 100;
+		//var totlen = this.messageText.length * this.charwidth;
+		//this.left = (winsize.width - this.width) / 2.0;
+		var msgsdiv = document.getElementById(this.elemid);
+
+		// this.height = msgsdiv.clientHeight;
+
+		msgsdiv.style.width = this.width + 'px';
+		//msgsdiv.style.height = this.height + 'px';
+		//msgsdiv.style.top = this.top + 'px';
+		//msgsdiv.style.left = this.left + 'px';
+	},
+	
+	
+	setMessage: function(p_msg_txt, p_is_timed, p_is_warning) {
+		this.messageText = p_msg_txt;
+		var iconimg=null, msgsdiv = document.getElementById(this.elemid);
+		if (this.timer != null) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
+		if (msgsdiv!=null) {
+
+			while (msgsdiv.firstChild) {
+				msgsdiv.removeChild(msgsdiv.firstChild);
+			}			
+			iconimg = document.createElement("img");
+			if (p_is_warning) {
+				iconimg.src = "media/warning-5-32.png";
+			} else {
+				iconimg.src = "media/info-3-32.png";
+			}
+
+			msgsdiv.appendChild(iconimg);
+			
+			var p = document.createElement("p");
+			//var cont = document.createTextNode(this.messageText);
+			//p.appendChild(cont);
+			p.insertAdjacentHTML('afterBegin', this.messageText);
+			msgsdiv.appendChild(p);
+			
+			msgsdiv.style.display = '';
+			msgsdiv.style.opacity = 1;
+			this.isvisible = true;
+		}
+		this.reshape();
+
+		if (p_is_timed) {
+			this.timer = setTimeout(function() { MessagesController.hideMessage(true); }, this.messageTimeout);
+		}
+	},
+	
+	hideMessage: function(do_fadeout) {
+		if (!this.isvisible) {
+			return;
+		}
+		this.timer = null;
+		var msgsdiv = document.getElementById(this.elemid);
+		this.isvisible = false;
+		if (do_fadeout) 
+		{
+			fadeout(msgsdiv);
+		} 
+		else 
+		{
+			if (msgsdiv!=null) {
+				msgsdiv.style.display = 'none';
+			}
+		}
+	}  	
+}
+
 function init_ui() {
 	// Init UI não-ESRI
-	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.QRY, 3763, 
+	AutocompleteObjMgr.add(new Geocode_LocAutoCompleter(AJAX_ENDPOINTS.locqry, VIEW_SRID, 
 		{
 			parentdiv: "loc_content",
 			textentry: "loc_inputbox",
@@ -302,12 +456,25 @@ function init_ui() {
 
 	AutocompleteObjMgr.bindEventHandlers();
 
+	// mouse click sobre a mensagem flutuante fecha-a
+	attEventHandler('msgsdiv', 'click',
+		function(evt) {
+			MessagesController.hideMessage(true);
+		}
+	);
+
+	attEventHandler('help_icon', 'click',
+		function(evt) {
+			MessagesController.setMessage(HELP_MSG, false);
+		}
+	);
+		
+		
+
 	// ajustar ao tamanho disponível 
 	sizeWidgets();
 
 	initialAnimation();
-
-	
 
 }
 
