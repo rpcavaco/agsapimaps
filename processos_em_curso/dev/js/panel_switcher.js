@@ -483,9 +483,9 @@ function RecordPanelSwitcher() {
 				switch (fmt) {
 					case 'epoch':
 						if (!isNaN(preval)) {
-						d = new Date(0);
-						d.setUTCSeconds(preval / 1000);
-						val = d.toLocaleDateString();
+							d = new Date(0);
+							d.setUTCSeconds(preval / 1000);
+							val = d.toLocaleDateString();
 						} else {
 							val = preval;
 						}

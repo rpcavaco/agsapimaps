@@ -153,7 +153,6 @@ require([
 	// ========================================================================
 	//  Layerlist / legenda + funcionalidade relacionada layers
 	// ------------------------------------------------------------------------	
-	// const radioButtonLayerItems = {};
 
 	const layerList = new LayerList({
 		view: view,

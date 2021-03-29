@@ -77,14 +77,14 @@ var QUERIES_CFG = {
 		layerId: 2,
 		symb: {
 			marker: {
-			type: "simple-marker",  
-            style: "x",
-            color: "red",
-            size: "16px",  // pixels
-            outline: {  // autocasts as new SimpleLineSymbol()
-              color: [ 255, 30, 30 ],
-              width: 4  // points
-            }
+				type: "simple-marker",  
+				style: "x",
+				color: "red",
+				size: "16px",  // pixels
+				outline: {  // autocasts as new SimpleLineSymbol()
+					color: [ 255, 30, 30 ],
+					width: 4  // points
+				}
 			}
 		},
 		expand: 1.5
