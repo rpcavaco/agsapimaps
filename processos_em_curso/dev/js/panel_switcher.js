@@ -418,7 +418,7 @@ function RecordPanelSwitcher() {
 			navInnerDiv.setAttribute("class", "graybtn recnav-container");
 			
 			let btEl = document.createElement("button");
-			btEl.setAttribute("class", "left-arrow");
+			btEl.setAttribute("class", "left-arrow unselectable");
 			navInnerDiv.appendChild(btEl);
 			let spEl = document.createElement("div");
 			btEl.appendChild(spEl);
@@ -440,7 +440,7 @@ function RecordPanelSwitcher() {
 			spEl.textContent = String.format(this.rotator_msg, 1, p_records.length);
 
 			btEl = document.createElement("button");
-            btEl.setAttribute("class", "right-arrow");
+            btEl.setAttribute("class", "right-arrow unselectable");
             navInnerDiv.appendChild(btEl);
             spEl = document.createElement("div");
             btEl.appendChild(spEl);
@@ -568,7 +568,7 @@ function RecordPanelSwitcher() {
 					largerbtnDiv1.setAttribute("class", "graybtn larger-button-pagenav-left");	
 					
 					btEl = document.createElement("button");
-					btEl.setAttribute("class", "left-arrow");
+					btEl.setAttribute("class", "left-arrow unselectable");
 					largerbtnDiv1.appendChild(btEl);
 					spEl = document.createElement("div");
 					btEl.appendChild(spEl);
@@ -598,7 +598,7 @@ function RecordPanelSwitcher() {
 					spEl.textContent = "Página seguinte";
 					
 					btEl = document.createElement("button");
-					btEl.setAttribute("class", "right-arrow");
+					btEl.setAttribute("class", "right-arrow unselectable");
 					largerbtnDiv2.appendChild(btEl);
 					spEl = document.createElement("div");
 					btEl.appendChild(spEl);

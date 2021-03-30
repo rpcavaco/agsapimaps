@@ -1,4 +1,24 @@
 
+function sizeWidgetsMode() {
+	
+	let ret, winsize = {
+		width: window.innerWidth || document.body.clientWidth,
+		height: window.innerHeight || document.body.clientHeight,
+	};
+
+	if (parseInt(winsize.width) > 1200) {       
+		ret = 4;
+	} else if (parseInt(winsize.width) > 530) {       
+		ret = 3;
+	} else if (parseInt(winsize.width) > 430) {       
+		ret = 2;
+	} else {       
+		ret = 1;
+	}       
+	
+	return ret;
+}
+
 RecordsViewMgr.show = function(p_key, p_records) {
 	
 	if (p_key == "main") {
@@ -34,8 +54,9 @@ require([
 	"esri/core/watchUtils",
 	"esri/widgets/LayerList",
 	"esri/widgets/ScaleBar",
+	"esri/widgets/Home",
+	"esri/widgets/Compass",
 	"esri/widgets/CoordinateConversion"
-	//"esri/widgets/Expand",
 	//"dgrid/Grid",
 ], function(
 	Map,
@@ -50,8 +71,9 @@ require([
 	watchUtils,
 	LayerList,
 	ScaleBar,
+	Home,
+	Compass,
 	CoordinateConversion
-	//Expand,
 	//Grid,
 ) {
 
@@ -156,6 +178,7 @@ require([
 
 	const layerList = new LayerList({
 		view: view,
+		container: "legDiv",
 		listItemCreatedFunction: function(event) {
 			const item = event.item;
 			if (item.layer.type != "group") {
@@ -215,7 +238,18 @@ require([
 			}
 		}
 	});
-	view.ui.add(layerList, "top-right");
+	//view.ui.add(layerList, "top-right");
+
+	let homeBtn = new Home({
+	  view: view
+	});
+	view.ui.add(homeBtn, "top-left");
+
+	let cmpss = new Compass({
+	  view: view
+	});
+	view.ui.add(cmpss, "top-left");
+	
 	// ========================================================================
 	
 
@@ -224,8 +258,10 @@ require([
 	// ------------------------------------------------------------------------
 	//var ccExpand, 
 	let ccwdg, scalebar;
+	let szmode = sizeWidgetsMode();
 
-	if (COORDSDISPLAY_SHOW) {
+
+	if (COORDSDISPLAY_SHOW && szmode > 2) {
 
 		ccwdg = new CoordinateConversion({
 			view: view,
@@ -268,21 +304,6 @@ require([
 
 
 	view.popup.autoOpenEnabled = false;
-/*view.on("click", function(event) {
-  // Get the coordinates of the click on the view
-  // around the decimals to 3 decimals
-  for (var v in event.mapPoint) {
-	  console.log(v);
-  }
-  var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-  var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
-  view.popup.open({
-    // Set the popup's title to the coordinates of the clicked location
-    title: "Reverse geocode: [" + lon + ", " + lat + "], " + event.mapPoint.x + ", " + event.y,
-    location: event.mapPoint // Set the location of the popup to the clicked location
-  });
-});	
-*/
 	view.when(function() {
 
 		const selLyrId = LYRS_SELECCAO_INTERACTIVA[0];

@@ -147,6 +147,7 @@ var QueriesMgr = {
 						if (this.status == 200) {
 
 							if (this.responseText.length < 1) {
+								MessagesController.setMessage("Não encontrado", true, true);
 								return;
 							}
 							let jresp;
