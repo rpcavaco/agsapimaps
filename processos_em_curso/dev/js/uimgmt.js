@@ -10,7 +10,7 @@ function changeAtrribution(p_nodes) {
 				}
 			} else {
 				if (ATTR_TEXT != null) {
-			node.innerText = ATTR_TEXT;
+					node.innerText = ATTR_TEXT;
 				}
 			}
 		}
@@ -58,7 +58,7 @@ function sizeWidgets() {
 		v = 200;
 	} else {
 		v = 55;
-		}
+	}
 	MessagesController.left = v;
 	wdg3.style.left = v + "px";
 

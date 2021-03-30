@@ -123,17 +123,17 @@ function when_view_ready(p_view, p_griddiv, p_extclass) {
                     if (scrPt.x > hlim) {
                         let newPt;
 						
-						if (szwm < 3) {
-							newPt = {
-								x: scrPt.x,
-								y: scrPt.y + (p_view.size[1] / 4),
-							}
-						} else {
-							newPt = {
-                            x: scrPt.x + (p_view.size[0] / 6),
-                            y: scrPt.y,
-                        }
-						}						
+			if (szwm < 3) {
+				newPt = {
+					x: scrPt.x,
+					y: scrPt.y + (p_view.size[1] / 4),
+				}
+			} else {
+				newPt = {
+		                    x: scrPt.x + (p_view.size[0] / 6),
+		                    y: scrPt.y,
+		                }
+			}						
 						
                         const newMapPt = p_view.toMap(newPt);
                         p_view.goTo(newMapPt);
