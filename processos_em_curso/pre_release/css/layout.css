@@ -17,10 +17,6 @@ body,
   background: radial-gradient(#b6c3cc, #6aa5cc);
 }
 
-#viewDiv h2 {
-  font-family: "Regular-Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
 .esri-legend__message {
 	display: none;
 }
@@ -31,6 +27,48 @@ body,
 	top: 50%;
 	left: 50%;
 	margin-right: -50%;
+}
+
+#legDivCloser {
+	background-repeat: no-repeat;
+	background-size: 10px 50px;
+	background-position: 60% 40%;
+	background-color: #f8f8f8;
+	position: absolute;
+	z-index: 900;
+	padding: 2px;
+	margin: 0;
+	right: 4px;
+	top: 12px;
+	height: 56px;
+	width: 12px;
+}
+
+#legDivCloser.opened {
+    background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 12 50%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22grey%22 line-width=%222%22 stroke-width=%222%22 stroke-linejoin=%22round%22 d=%22M1,49L9,25 1,1%22 /%3E%3C/svg%3E');
+}
+
+#legDivCloser.closed {
+    background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg viewBox=%220 0 12 50%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill=%22none%22 stroke=%22grey%22 line-width=%222%22 stroke-width=%222%22 stroke-linejoin=%22round%22 d=%22M9,49L1,25 9,1%22 /%3E%3C/svg%3E');
+}
+
+#legDiv {
+	background-color: #f8f8f8;
+	position: absolute;
+	z-index: 900;
+	padding: 10px;
+	right: 20px;
+	top: 12px;
+	width: 285px;
+}
+
+@media (max-width: 430px) {
+	#legDivCloser {
+		top: 48px;
+	}	
+	#legDiv {
+		top: 48px;
+	}	
 }
 
 #gridDiv {
@@ -49,6 +87,13 @@ body,
 	width: 22px;
 }
 
+@media (max-width: 430px) {
+	#gridDiv h2 {
+	  font-size: 18px;
+	  margin-bottom: 6px;
+	}	
+}
+
 #clearButton {
 	margin-top:5px;
 	display: none;
@@ -57,6 +102,14 @@ body,
 #mainmsg {
 	font-size: 18px;
 	line-height: 1.2em;
+}
+
+@media (max-width: 430px) {
+	#mainmsg {
+		font-size: 16px;
+		line-height: 1.1em;
+		margin: 4px 0 4px 0;
+	}	
 }
 
 .dgrid {
@@ -144,6 +197,13 @@ body,
 	border-left-color: #999;
 	padding-left: 8px;
 	line-height: 1.3em;
+}
+
+@media (max-width: 430px) {
+	.attrs-list {
+		font-size: 14px;
+		line-height: 1.1em;
+	}	
 }
 
 .attrs-list td {
@@ -234,11 +294,10 @@ body,
 }
 
 #loc_content {
-    margin: 0px 40px 0px 30px;
+    margin: 0;
     position: absolute;
     z-index: 900;
     top: 12px;
-    /* left: 150px; */
 }
 
 #loc_content input {
@@ -307,11 +366,9 @@ body,
 #msgsdiv {
 	font-family: "Regular-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
 	position: absolute;
-	left: 200px;
 	top: 50px;
 	background-color: rgba(255, 255, 255, 0.86);
 	color: #000;
-	width: 400px;
 	padding: 12px 18px 12px 16px;
 	margin: 0;
 	font-size: 14px;
@@ -330,4 +387,10 @@ body,
 
 #msgsdiv p {
 	font-size: 1.2rem;
+}
+
+@media (max-width: 430px) {
+	#msgsdiv p {
+		font-size: 0.9rem;
+	}	
 }

@@ -193,6 +193,7 @@ var SCALE_LIMIT_FUNCS = [
 ];
 
 var ATTR_TEXT = "2021 CM-Porto / Dados: DM Gestão Urbanística, dev: DM Sistemas Informação / PT-TM06";
+var ATTR_TEXT_MIN = "2021 CM-Porto";
 
 var SCALEBAR_SHOW = false;
 var COORDSDISPLAY_SHOW = true;

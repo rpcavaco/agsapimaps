@@ -98,6 +98,7 @@ function when_view_ready(p_view, p_griddiv, p_extclass) {
 			function(_objectIds) {
 				
 				// console.log("objectIds:", _objectIds);
+				const szwm = sizeWidgetsMode();
 				
 				if(_objectIds==null || _objectIds.length==0) { return; }
 				
@@ -120,10 +121,20 @@ function when_view_ready(p_view, p_griddiv, p_extclass) {
                     const gdiv_w = parseInt(sty.width, 10);
                     const hlim = p_view.size[0] - gdiv_w;
                     if (scrPt.x > hlim) {
-                        const newPt = {
-                            x: scrPt.x + (p_view.size[0] / 6),
-                            y: scrPt.y,
-                        }
+                        let newPt;
+						
+			if (szwm < 3) {
+				newPt = {
+					x: scrPt.x,
+					y: scrPt.y + (p_view.size[1] / 4),
+				}
+			} else {
+				newPt = {
+		                    x: scrPt.x + (p_view.size[0] / 6),
+		                    y: scrPt.y,
+		                }
+			}						
+						
                         const newMapPt = p_view.toMap(newPt);
                         p_view.goTo(newMapPt);
                     }

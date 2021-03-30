@@ -127,19 +127,9 @@ class AutoCompleter {
 		this.prevEnteredText = this.enteredtext;
 	}
 
-	/*send() {
-		if (this.checkInputTimerID != null) {
-			clearInterval(this.checkInputTimerID);
-			this.checkInputTimerID = null;
-		}
-		this.prepareSend(true);
-	}*/
-
 	checkInputTimer() {
 
 		this.checkInputCnt++;
-
-		console.log("133: "+this.checkInputCnt+" >= "+this.maxCheckInputCnt);
 
 		if (this.checkInputCnt >= this.maxCheckInputCnt) {
 			this.checkInputCnt = 0;
@@ -198,7 +188,7 @@ class AutoCompleter {
 					} else if (w > 300) {
 						wd.style.fontSize = '14px';
 					} else if (w > 190) {
-						wd.style.fontSize = '11px';
+						wd.style.fontSize = '12px';
 					}
 				}
 				this.activateCleanButton(true);

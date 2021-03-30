@@ -1,9 +1,18 @@
 
 function changeAtrribution(p_nodes) {
+	let mode = sizeWidgetsMode();
 	if (p_nodes!=null && p_nodes.length > 0) {
 		var node = p_nodes[0];
-		if (ATTR_TEXT != null && node.innerText.indexOf("ower") > 0) {
-			node.innerText = ATTR_TEXT;
+		if (node.innerText.indexOf("ower") > 0) {
+			if (mode < 3) {
+				if (ATTR_TEXT_MIN != null) {
+					node.innerText = ATTR_TEXT_MIN;
+				}
+			} else {
+				if (ATTR_TEXT != null) {
+					node.innerText = ATTR_TEXT;
+				}
+			}
 		}
 	}
 }
@@ -22,29 +31,36 @@ function sizeWidgets() {
 
 	let wdg = document.getElementById("loc_inputbox");
 	let wdg3, wdg2 = document.getElementById("loc_resultlistarea");
+	wdg3 = document.getElementById("loc_content");
 
 	if (wdg!=null && wdg2!=null) {       
-		let w;
+		let mcw, w;
 		if (mode == 4) {       
 			w = '450px';
+			mcw = '480';
 		} else if (mode == 3) {       
 			w = '350px';
+			mcw = '400';
 		} else if (mode == 2) {       
-			w = '265px';
+			w = '280px';
+			mcw = '280';
 		} else {       
-			w = '180px';
+			w = '270px';
+			mcw = '250';
 		}       
 		wdg.style.width = w;
 		wdg2.style.width = w;
+		MessagesController.width = mcw;
+	} 
 
-		wdg3 = document.getElementById("msgsdiv");
-		if (wdg3) {
-			const sz = (parseInt(w) + 60) + 'px';
-			console.log(sz, "sz");
-			wdg3.style.width = sz;
+	let v;
+	if (mode > 2) {
+		v = 200;
+	} else {
+		v = 55;
 		}       
-	}       
-
+	MessagesController.left = v;
+	wdg3.style.left = v + "px";
 
 	MessagesController.reshape();
 
@@ -55,16 +71,7 @@ function sizeWidgets() {
 			wdg.style.width = '90px';
 		} else {
 			wdg.style.fontSize = '12px';
-			wdg.style.width = '40px';	
-		}				
-	}
-	
-	wdg = document.getElementById("loc_content");	
-	if (wdg)  {
-		if (mode > 2) {
-			wdg.style.left = '170px';
-		} else {
-			wdg.style.left = '40px';
+			wdg.style.width = '46px';	
 		}				
 	}
 	
@@ -82,7 +89,7 @@ function sizeWidgets() {
 		if (mode > 2) {
 			wdg.style.width = '485px';
 		} else {
-			wdg.style.width = '260px';
+			wdg.style.width = '270px';
 		}				
 	}
 }
@@ -223,16 +230,30 @@ function initialAnimation () {
 	};
 
 	this.leftfunc = function(p_elapsedq) {
-		const maxv = (this.winsize.width - (this.winsize.width / 4)) / 2.0;
-		const minv = 60;
+		let mode = sizeWidgetsMode();
+		let maxv, minv;
+		if (mode > 2) {
+			maxv = (this.winsize.width - (this.winsize.width / 4)) / 2.0;
+			minv = 60;
+		} else {
+			maxv = 70;
+			minv = 60;
+		}
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
 		return (ret < minv ? minv : ret).toString() + "px";		
 	};
 
 	this.fntszfunc = function(p_elapsedq) {
-		const maxv = 42;
+		let maxv;
 		const minv = 22;
+		
+		let mode = sizeWidgetsMode();
+		if (mode > 2) {
+			maxv = 42;
+		} else {
+			maxv = 34;
+		}
 		
 		let ret = minv + (maxv-minv) * this.stepperq(p_elapsedq);
 		return (ret < minv ? minv : ret).toString() + "px";		
@@ -310,6 +331,8 @@ function initialAnimation () {
 			execanimstep(1);
 			const l = [
 				["logotxt", false],
+				["legDiv", true],
+				["legDivCloser", true],
 				["gridDivContainer", true],
 				["loading", true],
 				["loc_inputbox", true]
@@ -356,6 +379,7 @@ var MessagesController = {
 	minwidth: 300,
 	maxwidth: 550,
 	messageTimeout: MSG_TIMEOUT_SECS * 1000,
+	shortMessageTimeout: MSG_TIMEOUT_SECS * 500,
 	charwidth: 10,
 	padding: 26,
 	rowheight: 28,
@@ -367,24 +391,12 @@ var MessagesController = {
 	isvisible: false,
 	timer: null,
 	
-	
 	reshape: function() {
 		
 		if (!this.isvisible) {
 			return;
 		}
-		var winsize = {
-			width: window.innerWidth || document.body.clientWidth,
-			//height: window.innerHeight || document.body.clientHeight,
-		};
-		if (winsize.width < (2.8 * this.minwidth)) {
-			this.width = this.minwidth;
-		} else {
-			this.width = this.maxwidth;
-		}
-		//this.top = 100;
-		//var totlen = this.messageText.length * this.charwidth;
-		//this.left = (winsize.width - this.width) / 2.0;
+		
 		var msgsdiv = document.getElementById(this.elemid);
 
 		// this.height = msgsdiv.clientHeight;
@@ -429,8 +441,14 @@ var MessagesController = {
 		}
 		this.reshape();
 
+		let tmo;
 		if (p_is_timed) {
-			this.timer = setTimeout(function() { MessagesController.hideMessage(true); }, this.messageTimeout);
+			if (p_is_warning) {
+				tmo = this.shortMessageTimeout;
+			} else {
+				tmo = this.messageTimeout;
+			}
+			this.timer = setTimeout(function() { MessagesController.hideMessage(true); }, tmo);
 		}
 	},
 	
@@ -452,6 +470,27 @@ var MessagesController = {
 			}
 		}
 	}  	
+}
+
+function legend_viz(p_doshow) {
+	const w1 = document.getElementById("legDivCloser");
+	const w2 = document.getElementById("legDiv");
+	if (w1!=null && w2!=null) {
+		if (p_doshow) {
+			w1.classList.remove("closed");
+			w1.classList.add("opened");
+			w2.style.visibility = "visible";
+		} else {
+			w1.classList.remove("opened");
+			w1.classList.add("closed");
+			w2.style.visibility = "hidden";
+		}
+	}
+}
+
+function legend_viz_toggle(p_this_elem) {
+	const doshow = ! p_this_elem.classList.contains("opened"); 
+	legend_viz(doshow);
 }
 
 function init_ui() {
@@ -480,6 +519,11 @@ function init_ui() {
 		}
 	);
 		
+	attEventHandler('legDivCloser', 'click',
+		function(evt) {
+			legend_viz_toggle(this); 
+		}
+	);
 		
 
 	// ajustar ao tamanho disponível 
